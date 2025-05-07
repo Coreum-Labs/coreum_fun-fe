@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
  
 // This function can be marked `async` if using `await` inside
 export default function middleware(request: NextRequest) {
-  if (request.url === "https://coreum.fun/") {
+  if (request.url === "https://www.coreum.fun/") {
     return NextResponse.redirect(new URL("/workshop", request.url));
   }
 }
