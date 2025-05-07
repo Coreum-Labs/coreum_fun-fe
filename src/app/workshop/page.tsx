@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Workshop() {
   return (
-    <main className="mt-30 col-span-2 flex items-center justify-center min-h-[500px]">
+    <main className="md:mt-30 col-span-2 flex items-center justify-center min-h-[500px]">
       <div className="bg-white/10 rounded-xl p-8 col-span-2 h-full min-h-[400px] border-white/10 border w-full max-w-xl flex flex-col items-center justify-center shadow-lg">
         <div className="flex flex-col gap-4 items-center text-center w-full">
           <Image
@@ -51,6 +51,18 @@ export default function Workshop() {
               Users withdraw their collateral
             </li>
           </ul>
+          <p className="mt-6 text-sm text-white/80">
+            Join the{" "}
+            <a
+              href="https://t.me/coreum_labs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-300 hover:opacity-80 transition-opacity"
+            >
+              Coreum Labs telegram
+            </a>{" "}
+            for more information
+          </p>
         </div>
       </div>
     </main>

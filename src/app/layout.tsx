@@ -5,6 +5,7 @@ import dollar_sign from "../../public/dollar_sign.gif";
 import xIcon from "../../public/x.svg";
 import telegramIcon from "../../public/telegram.svg";
 import questionIcon from "../../public/question-mark.svg";
+import ClientModalWrapper from "../components/ClientModalWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable}  min-h-screen bg-gradient-to-bl from-[#0f172a] via-[#1e1a78] to-[#0f172a]`}
       >
         <div className="flex items-center justify-center min-h-full p-4 pb-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 lg:flex-row  gap-4 w-full max-w-[1000px]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 lg:flex-row gap-4 w-full max-w-[1000px]">
             {/* Header section */}
             <div className="flex flex-col sm:flex-row items-center justify-between w-full col-span-1 lg:col-span-2 gap-4">
               {/* Logo and title */}
@@ -54,16 +55,10 @@ export default function RootLayout({
 
                 {/* Social icons for mobile */}
                 <div className="flex sm:hidden gap-2 items-center">
-                  <div
-                    // onClick={() => setModalOpen(true)}
-                    className="text-white bg-white/20 rounded-lg p-2 h-fit border-white/10 border cursor-pointer"
-                  >
-                    <img
-                      src={questionIcon.src}
-                      alt="Question Mark"
-                      className="w-4 h-4 bg-white rounded-3xl"
-                    />
-                  </div>
+                  <ClientModalWrapper
+                    questionIconSrc={questionIcon.src}
+                    isMobile={true}
+                  />
                   <div className="text-white bg-white/20 rounded-lg p-2 h-fit border-white/10 border">
                     <a
                       href="https://x.com/coreum_labs"
@@ -99,16 +94,10 @@ export default function RootLayout({
               <div className="flex items-center gap-2 w-full sm:w-auto">
                 {/* Social icons for desktop */}
                 <div className="hidden sm:flex gap-2 items-center">
-                  <div
-                    // onClick={() => setModalOpen(true)}
-                    className="text-white bg-white/20 rounded-lg p-2 sm:p-4 h-fit border-white/10 border cursor-pointer"
-                  >
-                    <img
-                      src={questionIcon.src}
-                      alt="Question Mark"
-                      className="w-4 h-4 sm:w-6 sm:h-6 bg-white rounded-3xl"
-                    />
-                  </div>
+                  <ClientModalWrapper
+                    questionIconSrc={questionIcon.src}
+                    isMobile={false}
+                  />
                   <div className="text-white bg-white/20 rounded-lg p-2 sm:p-4 h-fit border-white/10 border">
                     <a
                       href="https://x.com/coreum_labs"
@@ -140,7 +129,7 @@ export default function RootLayout({
                 </div>
 
                 <button
-                  className="w-full sm:w-auto text-white bg-white/20 rounded-lg p-4 text-center border-white/10 border hover:bg-white/30 transition-colors"
+                  className="sm:w-auto text-white bg-white/20 rounded-lg p-4 text-center border-white/10 border hover:bg-white/30 transition-colors"
                   // onClick={() => handleConnect()}
                 >
                   <span className="text-center">Connect Wallet</span>
