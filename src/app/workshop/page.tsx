@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Workshop() {
   return (
-    <main className="md:mt-30 col-span-2 flex items-center justify-center min-h-[500px]">
+    <main className=" col-span-2 flex items-center justify-center min-h-[500px]">
       <div className="bg-white/10 rounded-xl p-8 col-span-2 h-full min-h-[400px] border-white/10 border w-full max-w-xl flex flex-col items-center justify-center shadow-lg">
         <div className="flex flex-col gap-4 items-center text-center w-full">
           <Image
