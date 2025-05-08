@@ -38,10 +38,14 @@ const Modal = ({
               <h3 className="font-bold">How It Works:</h3>
               <ul className="list-disc pl-5 space-y-2 text-sm md:text-base">
                 <li>500 tickets are available at a price of 200 COREUM each</li>
+                <li>
+                  If you miss the initial buy-in, you can still purchase tickets
+                  on the DEX (if someone is willing to sell)
+                </li>
                 <li>Maximum 3 tickets per wallet</li>
                 <li>
-                  For each COREUM spent, you receive an equal amount of $SHARE
-                  tokens (e.g., 2 tickets = 400 $SHARES)
+                  For each ticket bought, you receive an equal amount of $SHARE
+                  tokens (e.g., 2 tickets = 2 $SHARES)
                 </li>
                 <li>
                   Your COREUM is automatically staked to the Coreum Labs
@@ -121,7 +125,7 @@ const Modal = ({
                       You purchase 2 tickets for 400 COREUM total
                     </div>
                     <div className="p-2 bg-black/20 rounded-lg">
-                      You receive 400 $SHARE tokens
+                      You receive 2 $SHARE tokens
                     </div>
                     <div className="p-2 bg-black/20 rounded-lg">
                       Your 400 COREUM is staked to the Coreum Labs validator
