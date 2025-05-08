@@ -13,7 +13,7 @@ export default function Workshop() {
             className="mb-2"
           />
           <h1 className="text-2xl font-bold bg-gradient-to-r from-green-400 via-green-300 to-green-500 bg-clip-text text-transparent">
-            The 'No-Loss' Crypto Lottery
+            The 'No-Loss' Crypto Draft
           </h1>
           <ul className="text-left text-white/90 text-base flex flex-col gap-3 mt-4 w-full max-w-md mx-auto">
             <li>

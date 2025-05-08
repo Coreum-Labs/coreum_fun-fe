@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Coreum.fun",
-  description: "The 'No-Loss' Crypto Lottery on Coreum",
+  description: "The 'No-Loss' Crypto Draft on Coreum",
 };
 
 export default function RootLayout({
