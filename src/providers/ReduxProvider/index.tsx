@@ -1,11 +1,10 @@
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
-import { FC } from "react";
 
-interface ReduxProviderProps {
-  children: React.ReactNode;
-}
+type ReduxProviderProps = {
+  children: any;
+};
 
-export const ReduxProvider: FC<ReduxProviderProps> = ({ children }) => {
+export const ReduxProvider = ({ children }: ReduxProviderProps) => {
   return <Provider store={store}>{children}</Provider>;
 };

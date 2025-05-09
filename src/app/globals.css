@@ -1,14 +1,39 @@
 @import "tailwindcss";
 
-
-
 @theme {
   --color-primary: #35F0D0;
-  --color-secondary: #0EBEA0;
+  --color-secondary: #F79D84;
   --color-tertiary: #000000;
   --color-quaternary: #000000;
   --color-quinary: #000000;
   --color-senary: #000000;
   --color-septenary: #000000;
+}
+
+body {
+  background-color: #1f1b4d;
+  color: white;
+}
+
+:root {
+  --color-primary: #35F0D0;
+  --color-secondary: #F79D84;
+}
+
+/* Define Tailwind custom colors */
+.text-primary {
+  color: var(--color-primary);
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.text-secondary {
+  color: var(--color-secondary);
+}
+
+.bg-secondary {
+  background-color: var(--color-secondary);
 }
 

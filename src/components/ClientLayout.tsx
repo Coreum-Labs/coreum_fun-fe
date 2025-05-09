@@ -8,6 +8,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { setIsConnectModalOpen } from "@/features/general";
 import { ReduxProvider } from "@/providers/ReduxProvider";
 import { useAccount, useDisconnect } from "graz";
+import BuyTicketModal from "./BuyTicketModal";
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -37,6 +38,7 @@ export default function ClientLayout({
   return (
     <div className="flex items-center justify-center min-h-full p-4 pb-4">
       <ConnectWalletModal />
+      <BuyTicketModal />
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:flex-row gap-4 w-full max-w-[1000px]">
         {/* Header section */}
         <div className="flex flex-col sm:flex-row items-center justify-between w-full col-span-1 lg:col-span-2 gap-4">

@@ -59,7 +59,7 @@ export const WalletProvider: FC<WalletProviderProps> = ({ children }) => {
   const grazOptions: ConfigureGrazArgs = {
     chains: [coreumtestnet],
     autoReconnect: true,
-    defaultWalletType: WalletType.KEPLR,
+    defaultWallet: WalletType.KEPLR,
   };
 
   return <GrazProvider grazOptions={grazOptions}>{children}</GrazProvider>;
