@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Modal from "./Modal";
+import InfoModal from "./InfoModal";
 
 interface ClientModalWrapperProps {
   questionIconSrc: string;
@@ -17,7 +17,7 @@ export default function ClientModalWrapper({
 
   return (
     <>
-      <Modal
+      <InfoModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         isExampleExpanded={isExampleExpanded}
