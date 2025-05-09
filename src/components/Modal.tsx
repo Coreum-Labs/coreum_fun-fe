@@ -44,8 +44,8 @@ const Modal = ({
                 </li>
                 <li>Maximum 3 tickets per wallet</li>
                 <li>
-                  For each ticket bought, you receive an equal amount of $SHARE
-                  tokens (e.g., 2 tickets = 2 $SHARES)
+                  For each ticket bought, you receive an equal amount of $TICKET
+                  tokens (e.g., 2 tickets = 2 $TICKET)
                 </li>
                 <li>
                   Your COREUM is automatically staked to the Coreum Labs
@@ -60,14 +60,14 @@ const Modal = ({
             </div>
 
             <div className="space-y-2">
-              <h3 className="font-bold">$SHARE Tokens:</h3>
+              <h3 className="font-bold">$TICKET Tokens:</h3>
               <ul className="list-disc pl-5 space-y-2 text-sm md:text-base">
                 <li>
-                  $SHARE tokens can be traded on the Coreum Native Orderbook DEX
-                  at your desired price
+                  $TICKET tokens can be traded on the Coreum Native Orderbook
+                  DEX at your desired price
                 </li>
                 <li>
-                  At the end of the draft, you can burn your $SHARES to reclaim
+                  At the end of the draft, you can burn your $TICKET to reclaim
                   your COREUM (7-day undelegation process)
                 </li>
               </ul>
@@ -123,7 +123,7 @@ const Modal = ({
                       You purchase 2 tickets for 400 COREUM total
                     </div>
                     <div className="p-2 bg-black/20 rounded-lg">
-                      You receive 2 $SHARE tokens
+                      You receive 2 $TICKET tokens
                     </div>
                     <div className="p-2 bg-black/20 rounded-lg">
                       Your 400 COREUM is staked to the Coreum Labs validator
@@ -135,9 +135,9 @@ const Modal = ({
                       <li>
                         • Wait for the draft and potentially win the prize pool
                       </li>
-                      <li>• Trade your $SHARE tokens on the DEX</li>
+                      <li>• Trade your $TICKET tokens on the DEX</li>
                       <li>
-                        • After the draft, burn your $SHARE tokens to reclaim
+                        • After the draft, burn your $TICKET tokens to reclaim
                         your 400 COREUM
                       </li>
                     </ul>

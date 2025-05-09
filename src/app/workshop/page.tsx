@@ -20,35 +20,41 @@ export default function Workshop() {
               <span role="img" aria-label="deposit">
                 🏠
               </span>{" "}
-              Users deposit into the network and receive{" "}
-              <span className="font-semibold text-blue-200">$SHARES</span>
+              500 tickets are for sale at the price of 200 $COREUM
             </li>
             <li>
               <span role="img" aria-label="yield">
                 ☑️
               </span>{" "}
-              Yield accrues on all deposits
+              The yield accrues on all deposits
+            </li>
+            <li>
+              <span role="img" aria-label="countdown">
+                ⏱️
+              </span>{" "}
+              When the 500 tickets are bought up, the countdown starts
             </li>
             <li>
               <span role="img" aria-label="trade">
                 🔁
               </span>{" "}
               Users can trade their{" "}
-              <span className="font-semibold text-blue-200">$SHARES</span> on
-              the DEX
+              <span className="font-semibold text-blue-200">$TICKET</span> on
+              the Coreum DEX
             </li>
             <li>
               <span role="img" aria-label="prize">
                 🏆
               </span>{" "}
-              The yield is randomly awarded as prizes to a user holding{" "}
-              <span className="font-semibold text-blue-200">$SHARES</span>
+              The yield is randomly awarded as prizes to a user holding a{" "}
+              <span className="font-semibold text-blue-200">$TICKET</span>
             </li>
             <li>
               <span role="img" aria-label="withdraw">
                 ✅
               </span>{" "}
-              Users withdraw their collateral
+              Users withdraw their collateral (the 200 $COREUM they used to buy
+              the ticket)
             </li>
           </ul>
           <p className="mt-6 text-sm text-white/80">
