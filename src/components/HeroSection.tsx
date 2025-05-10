@@ -16,7 +16,9 @@ const HeroSection = () => {
       <h1 className="text-3xl font-bold mb-1">
         Win up to <span className="text-primary">$600</span>
       </h1>
-      <p className="text-sm mb-4">100 Ticket left</p>
+      <p className="text-md mb-4 font-semibold">
+        <span className="text-primary">100</span> Ticket left
+      </p>
       <button
         onClick={handleOpenModal}
         className="bg-primary hover:bg-primary/80 text-black font-medium py-3 px-8 rounded-md flex items-center gap-2 mb-8"

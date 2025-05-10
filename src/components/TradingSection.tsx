@@ -1,12 +1,20 @@
 import React from "react";
 import Chart from "./Chart";
 import TradingPanel from "./TradingPanel";
+import TokenSelector from "./TokenSelector";
+import TokenBalance from "./TokenBalance";
 
 const TradingSection = () => {
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-      <Chart />
-      <TradingPanel />
+    <div className="w-full flex flex-col gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <TokenSelector />
+        <TokenBalance ticketBalance={2} coreumBalance={1000} />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Chart />
+        <TradingPanel />
+      </div>
     </div>
   );
 };

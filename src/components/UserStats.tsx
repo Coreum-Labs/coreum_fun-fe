@@ -2,14 +2,21 @@ import React from "react";
 
 const UserStats = () => {
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 bg-indigo-900/50 p-4 rounded-lg">
+    <div className="w-full flex flex-col gap-4 mb-6 bg-indigo-900/50 p-4 rounded-lg">
       <div className="flex justify-between items-center">
-        <span className="text-gray-300">Your Balance...</span>
-        <div className="bg-primary/80 text-black py-1 px-4 rounded-md">$60</div>
+        <span className="text-gray-300 font-semibold">Your Balance...</span>
+        <div className="flex gap-2">
+          <div className="border-2 border-primary/40 text-primary font-semibold py-1 px-4 rounded-full">
+            $60
+          </div>
+          <div className="border-2 border-secondary/40 text-secondary font-semibold py-1 px-4 rounded-full">
+            2 $TICKET
+          </div>
+        </div>
       </div>
       <div className="flex justify-between items-center">
-        <span className="text-gray-300">Your Win Rate...</span>
-        <div className="bg-gray-500/60 py-1 px-4 rounded-md">
+        <span className="text-gray-300 font-semibold">Your Win Rate...</span>
+        <div className="border-2 border-primary/40 py-1 px-4 rounded-full text-primary font-semibold">
           2 in 500 (0.4%)
         </div>
       </div>
