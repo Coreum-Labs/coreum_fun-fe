@@ -1,51 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Coreum.fun: The No Loss Draft
 
-## Getting Started
+[![Website](https://img.shields.io/badge/Website-coreum.fun-blue)](https://coreum.fun)
 
-First, run the development server:
+This repository contains the code for the Coreum.fun website and Smart Contract - a simple and easy-to-understand implementation of a No Loss Draft on Coreum, leveraging the Coreum Orderbook DEX and Smart Tokens.
+
+## 📋 Overview
+
+### 🎯 Why We Built This
+
+- Create a simple implementation leveraging Coreum Orderbook DEX (released in v5)
+- Build a fun and engaging community application
+- Increase exposure to the [Coreum Labs](https://coreum.com/labs) [validator node](https://validator.info/coreum/corevaloper14e0slqpzhgsakm6fwnh5sk6mu2dmdc9ghxhuw5)
+
+### 🎲 What is a No Loss Draft?
+
+A No Loss Draft is a system where:
+
+- Participants buy tickets at a fixed price
+- All participants get their tokens back at the end of the draw
+- The yield generated is used to pay winners
+
+### ⚙️ How It Works
+
+1. **Ticket Purchase**
+
+   - Each ticket is a Smart Token
+   - Fixed price: 200 COREUM per ticket
+   - Limited supply: 500 tickets total
+
+2. **Token Management**
+
+   - COREUM is staked to Coreum Labs validator node
+   - Tickets represent claims on the token pool
+   - Yield from staking is used for payouts
+
+3. **Trading**
+
+   - Tickets can be traded on Coreum Orderbook DEX
+   - Secondary market allows price discovery
+   - Tickets can be burned to reclaim COREUM
+
+4. **Draw Process**
+   - Countdown starts when all tickets are sold
+   - Random number generation selects winner
+   - Participants can burn tickets to reclaim COREUM
+
+## 🔍 Key Concepts
+
+### No Loss Draft
+
+- Inspired by PoolTogether (2017, Ethereum)
+- Participants get their tokens back after the draw
+- Yield generated through validator staking
+- More efficient implementation on Coreum's PoS network
+
+### Coreum Orderbook DEX
+
+A permissionless Orderbook built at the protocol level of Coreum blockchain.
+[Learn more about Coreum Orderbook DEX](https://github.com/CoreumFoundation/coreum/tree/master/x/dex/spec)
+
+### Trading Pairs Explained
+
+#### Base Token
+
+- The token being bought/sold
+- Quantity shown on the left side of orderbook
+- Example: "100 TICKET" means trading 100 TICKET
+
+#### Quote Token
+
+- The token used for pricing
+- Price shown on the right side of orderbook
+- Example: "1.5 COREUM" means price is 1.5 COREUM per TICKET
+
+#### Example: TICKET/COREUM Pair
+
+- Buy TICKET → Pay in COREUM
+- Sell TICKET → Receive COREUM
+- Price expressed in COREUM per TICKET
+
+## 🚀 Getting Started
+
+### Frontend Development
 
 ```bash
+# Clone the repository
+git clone [repository-url]
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Access the application
+# Open http://localhost:3000 in your browser
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Smart Contract Development
 
-## Currency Pair: Concept of Base and Quote Tokens
+```bash
+# Clone the repository
+git clone [repository-url]
 
-In a trading pair (like TICKET/COREUM), there are two important concepts to understand:
+# Install dependencies
+npm install
 
-### Base Token
+# Start development server
+npm run dev
 
-- This is the token you're actually buying or selling
-- The amount of base token is what you're trading
-- In the orderbook, this is the token whose quantity is shown on the left side
-- For example, if you see "100 TICKET" in an order, it means someone wants to buy/sell 100 TICKET
+# Access the application
+# Open http://localhost:3000 in your browser
+```
 
-### Quote Token
+## 📄 License
 
-- This is the token you're using to price the base token
-- It's the currency you're using to buy or sell the base token
-- In the orderbook, this is the token whose price is shown on the right side
-- For example, if you see "1.5 COREUM" in an order, it means the price is 1.5 COREUM per TICKET
-
-### Example
-
-In our TICKET/COREUM pair:
-
-- If you want to buy TICKET, you'll pay in COREUM
-- If you want to sell TICKET, you'll receive COREUM
-- The price is always expressed as how many COREUM you need to pay for 1 TICKET
-
-When we swap the pair (COREUM/TICKET):
-
-- COREUM becomes the base token (what you're trading)
-- TICKET becomes the quote token (what you're using to price)
-- The price would then be expressed as how many TICKET you need to pay for 1 COREUM
-
-# coreum.fun
+This project is licensed under the Apache 2.0 License.
