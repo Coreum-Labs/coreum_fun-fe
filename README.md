@@ -16,22 +16,36 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Currency Pair: Concept of Base and Quote Tokens
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+In a trading pair (like TICKET/COREUM), there are two important concepts to understand:
 
-## Learn More
+### Base Token
 
-To learn more about Next.js, take a look at the following resources:
+- This is the token you're actually buying or selling
+- The amount of base token is what you're trading
+- In the orderbook, this is the token whose quantity is shown on the left side
+- For example, if you see "100 TICKET" in an order, it means someone wants to buy/sell 100 TICKET
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Quote Token
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- This is the token you're using to price the base token
+- It's the currency you're using to buy or sell the base token
+- In the orderbook, this is the token whose price is shown on the right side
+- For example, if you see "1.5 COREUM" in an order, it means the price is 1.5 COREUM per TICKET
 
-## Deploy on Vercel
+### Example
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+In our TICKET/COREUM pair:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- If you want to buy TICKET, you'll pay in COREUM
+- If you want to sell TICKET, you'll receive COREUM
+- The price is always expressed as how many COREUM you need to pay for 1 TICKET
+
+When we swap the pair (COREUM/TICKET):
+
+- COREUM becomes the base token (what you're trading)
+- TICKET becomes the quote token (what you're using to price)
+- The price would then be expressed as how many TICKET you need to pay for 1 COREUM
+
 # coreum.fun
