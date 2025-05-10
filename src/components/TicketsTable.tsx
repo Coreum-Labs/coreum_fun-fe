@@ -20,7 +20,7 @@ const TradingTabs = () => {
           }`}
           onClick={() => setActiveTab("holders")}
         >
-          Holders
+          Holders (450)
         </button>
         <button
           className={`px-4 py-2 rounded-md font-semibold ${
@@ -30,7 +30,7 @@ const TradingTabs = () => {
           }`}
           onClick={() => setActiveTab("openOrders")}
         >
-          Open Orders
+          Open Orders (10)
         </button>
         <button
           className={`px-4 py-2 rounded-md font-semibold ${
@@ -40,7 +40,7 @@ const TradingTabs = () => {
           }`}
           onClick={() => setActiveTab("orderHistory")}
         >
-          Order History
+          Order History (10)
         </button>
       </div>
       <div className="bg-indigo-900/50 rounded-b-lg p-4">
