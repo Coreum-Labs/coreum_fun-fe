@@ -117,7 +117,7 @@ const Chart = () => {
   }, []);
 
   return (
-    <div className="bg-indigo-900/50 p-4 rounded-lg">
+    <div className="bg-indigo-900/50 rounded-lg h-full w-full">
       <div
         ref={chartContainerRef}
         className="h-full w-full bg-indigo-900/30 rounded"
