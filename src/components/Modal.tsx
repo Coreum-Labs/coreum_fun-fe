@@ -56,7 +56,7 @@ export const Modal: FC<ModalProps> = ({
     >
       <div
         className={classNames(
-          "flex flex-col w-[640px] max-w-full max-h-full overflow-y-auto p-8 bg-white/40 border-white/10 border rounded-2xl backdrop-blur-sm gap-8",
+          "flex flex-col w-[640px] max-w-full max-h-full overflow-y-auto p-8 bg-indigo-900/70 border-primary/60 border rounded-2xl backdrop-blur-sm gap-8",
           wrapperClassName
         )}
       >
@@ -72,7 +72,7 @@ export const Modal: FC<ModalProps> = ({
               className="flex flex-col items-center justify-center !cursor-pointer text-white"
               onClick={handleCloseModal}
             >
-              <Cross1Icon />
+              <Cross1Icon className="w-4 h-4" color="#F79D84" />
             </div>
           )}
         </div>
