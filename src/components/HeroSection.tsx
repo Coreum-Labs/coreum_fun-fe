@@ -1,14 +1,23 @@
 "use client";
 
-import { setIsBuyTicketModalOpen } from "@/features/general";
+import {
+  setIsBuyTicketModalOpen,
+  setIsConnectModalOpen,
+} from "@/features/general";
 import { useAppDispatch } from "@/store/hooks";
 import React from "react";
+import { useAccount } from "graz";
 
 const HeroSection = () => {
   const dispatch = useAppDispatch();
+  const { isConnected } = useAccount();
 
   const handleOpenModal = () => {
-    dispatch(setIsBuyTicketModalOpen(true));
+    if (isConnected) {
+      dispatch(setIsBuyTicketModalOpen(true));
+    } else {
+      dispatch(setIsConnectModalOpen(true));
+    }
   };
 
   return (
