@@ -14,7 +14,7 @@ const HeroSection = () => {
   return (
     <div className="flex flex-col items-center mb-8 w-full">
       <h1 className="text-3xl font-bold mb-1">
-        Win up to <span className="text-primary">$600</span>
+        Win up to <span className="text-shadow-xs text-primary">$600</span>
       </h1>
       <p className="text-md mb-4 font-semibold">
         <span className="text-primary">100</span> Ticket left

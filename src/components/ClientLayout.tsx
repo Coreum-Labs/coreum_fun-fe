@@ -2,11 +2,9 @@
 
 import React from "react";
 import ClientModalWrapper from "./ClientModalWrapper";
-import { WalletProvider } from "@/providers/WalletProvider";
 import { ConnectWalletModal } from "./ConnectWalletModal";
 import { useAppDispatch } from "@/store/hooks";
 import { setIsConnectModalOpen } from "@/features/general";
-import { ReduxProvider } from "@/providers/ReduxProvider";
 import { useAccount, useDisconnect } from "graz";
 import BuyTicketModal from "./BuyTicketModal";
 
@@ -50,13 +48,14 @@ export default function ClientLayout({
                 alt="Prediction Market"
                 className="rounded-lg w-20 sm:w-32 h-20 sm:h-32"
               />
-              <span className="text-lg sm:text-xl font-bold text-white mx-2">
-                Coreum.fun
-              </span>
-              {/* <span className="text-lg sm:text-xl font-bold text-white mx-2">
-                <span className="text-2xl sm:text-3xl">ℂ</span>ore
-                <span className="text-2xl sm:text-3xl">ℂ</span>ast
-              </span> */}
+              <div className="flex flex-col ml-2">
+                <span className="text-lg sm:text-xl font-bold text-white">
+                  Coreum.fun
+                </span>
+                <span className="text-xs sm:text-sm text-primary font-bol mt-1">
+                  The No Loss Crypto Draft
+                </span>
+              </div>
             </div>
 
             {/* Social icons for mobile */}
@@ -65,7 +64,7 @@ export default function ClientLayout({
                 questionIconSrc={questionIconSrc}
                 isMobile={true}
               />
-              <div className="text-white bg-white/20 rounded-lg p-2 h-fit border-white/10 border">
+              <div className="text-white  rounded-lg p-2 h-fit border-white/10 border">
                 <a
                   href="https://x.com/coreum_labs"
                   target="_blank"
@@ -75,7 +74,7 @@ export default function ClientLayout({
                   <img src={xIconSrc} alt="X (Twitter)" className="w-4 h-4" />
                 </a>
               </div>
-              <div className="text-white bg-white/20 rounded-lg p-2 h-fit border-white/10 border">
+              <div className="text-white  rounded-lg p-2 h-fit border-white/10 border">
                 <a
                   href="https://t.me/coreum_labs"
                   target="_blank"
@@ -100,7 +99,7 @@ export default function ClientLayout({
                 questionIconSrc={questionIconSrc}
                 isMobile={false}
               />
-              <div className="text-white bg-white/20 rounded-lg p-2 sm:p-4 h-fit border-white/10 border">
+              <div className="text-white rounded-lg p-2 sm:p-4 h-fit border-white/10 border">
                 <a
                   href="https://x.com/coreum_labs"
                   target="_blank"
@@ -114,7 +113,7 @@ export default function ClientLayout({
                   />
                 </a>
               </div>
-              <div className="text-white bg-white/20 rounded-lg p-2 sm:p-4 h-fit border-white/10 border">
+              <div className="text-white  rounded-lg p-2 sm:p-4 h-fit border-white/10 border">
                 <a
                   href="https://t.me/coreum_labs"
                   target="_blank"
@@ -133,7 +132,7 @@ export default function ClientLayout({
             {isConnected ? (
               <div
                 onClick={() => disconnect()}
-                className="text-white bg-white/20 rounded-lg p-2 sm:p-4 h-fit border-white/10 border"
+                className="text-white bg-indigo-900/50 rounded-lg p-2 sm:p-4 h-fit"
               >
                 <span className="text-center">
                   {address?.slice(0, 6)}...{address?.slice(-10)}
@@ -141,7 +140,7 @@ export default function ClientLayout({
               </div>
             ) : (
               <button
-                className="w-full sm:w-auto text-white bg-white/20 rounded-lg p-4 text-center border-white/10 border hover:bg-white/30 transition-colors"
+                className="w-full sm:w-auto text-white bg-indigo-900/50 rounded-lg p-4 text-center hover:bg-indigo-900/80 transition-colors"
                 onClick={() => handleConnect()}
               >
                 <span className="text-center">Connect Wallet</span>

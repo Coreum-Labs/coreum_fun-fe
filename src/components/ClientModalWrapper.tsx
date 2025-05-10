@@ -25,7 +25,7 @@ export default function ClientModalWrapper({
       />
       <div
         onClick={() => setModalOpen(true)}
-        className={`text-white bg-white/20 rounded-lg ${
+        className={`text-white rounded-lg ${
           isMobile ? "p-2" : "p-2 sm:p-4"
         } h-fit border-white/10 border cursor-pointer`}
       >
