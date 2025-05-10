@@ -50,7 +50,9 @@ const TradingPanel = () => {
       <div className="grid grid-cols-2 gap-2 mb-4">
         <button
           className={`py-2 rounded-md font-semibold ${
-            side === "buy" ? "bg-primary text-black" : "bg-gray-700 text-white"
+            side === "buy"
+              ? "bg-primary text-black"
+              : "bg-primary/40 text-white"
           }`}
           onClick={() => setSide("buy")}
         >
@@ -58,7 +60,9 @@ const TradingPanel = () => {
         </button>
         <button
           className={`py-2 rounded-md font-semibold ${
-            side === "sell" ? "bg-primary text-black" : "bg-gray-700 text-white"
+            side === "sell"
+              ? "bg-secondary text-black"
+              : "bg-secondary/40 text-white"
           }`}
           onClick={() => setSide("sell")}
         >
@@ -96,8 +100,8 @@ const TradingPanel = () => {
               key={p}
               className={`py-1 px-2 rounded-md text-xs font-semibold ${
                 percent === p
-                  ? "bg-primary text-black"
-                  : "bg-gray-700 text-white"
+                  ? "bg-secondary/40 text-whiteee"
+                  : "border-secondary/50 border text-white"
               }`}
               onClick={() => setPercent(p)}
             >
@@ -213,7 +217,7 @@ const TradingPanel = () => {
         </div>
       )}
       <button className="w-full bg-primary text-black py-2 rounded-md mb-4 font-semibold">
-        Confirm Order
+        Review {side === "buy" ? "Buy" : "Sell"} Order
       </button>
       <div className="flex justify-between">
         <p className="text-xs text-gray-400">Total:</p>
