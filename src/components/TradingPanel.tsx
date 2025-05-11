@@ -6,7 +6,7 @@ import { RootState } from "../store/store";
 import Image from "next/image";
 const TradingPanel = () => {
   const { base, quote } = useSelector(
-    (state: RootState) => state.general.tokenPair
+    (state: RootState) => state.dex.tokenPair
   );
 
   // State for buy/sell and order type

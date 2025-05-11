@@ -3,12 +3,12 @@ import React from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { swapTokenPair } from "../features/general";
+import { swapTokenPair } from "../features/dex";
 
 const TokenSelector = () => {
   const dispatch = useDispatch();
   const { base, quote } = useSelector(
-    (state: RootState) => state.general.tokenPair
+    (state: RootState) => state.dex.tokenPair
   );
 
   const handleClick = () => {

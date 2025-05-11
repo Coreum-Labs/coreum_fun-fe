@@ -13,7 +13,7 @@ const TokenBalance = ({
   coreumBalance = 1000,
 }: TokenBalanceProps) => {
   const { base, quote } = useSelector(
-    (state: RootState) => state.general.tokenPair
+    (state: RootState) => state.dex.tokenPair
   );
 
   // Map balances to symbols
