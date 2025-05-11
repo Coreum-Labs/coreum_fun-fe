@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import Image from "next/image";
@@ -26,11 +26,36 @@ const TradingPanel = () => {
   const [amount, setAmount] = useState<string>("");
   const [price, setPrice] = useState<string>("");
 
+  // Update amount when percent changes
+  useEffect(() => {
+    if (percent === null) return;
+
+    const balance = side === "buy" ? quoteBalance : baseBalance;
+    const balanceNum = parseFloat(balance);
+    if (isNaN(balanceNum)) return;
+
+    let newAmount: number;
+    if (percent === 100) {
+      // For MAX, use the entire balance
+      newAmount = balanceNum;
+    } else {
+      // For other percentages, calculate based on the balance
+      newAmount = (balanceNum * percent) / 100;
+    }
+
+    setAmount(newAmount.toString());
+  }, [percent, side, baseBalance, quoteBalance]);
+
   // Calculate total value for limit orders
   const calculateTotal = () => {
     if (!amount || !price) return 0;
     const total = parseFloat(amount) * parseFloat(price);
     return isNaN(total) ? 0 : total;
+  };
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(e.target.value);
+    setPercent(null); // Clear percentage when manually entering amount
   };
 
   return (
@@ -104,7 +129,7 @@ const TradingPanel = () => {
               key={p}
               className={`py-1 px-2 rounded-md text-xs font-semibold ${
                 percent === p
-                  ? "bg-secondary/40 text-whiteee"
+                  ? "bg-secondary/40 text-white"
                   : "border-secondary/50 border text-white"
               }`}
               onClick={() => setPercent(p)}
@@ -126,7 +151,7 @@ const TradingPanel = () => {
                 placeholder={`Enter Amount`}
                 className="bg-transparent w-full outline-none text-white"
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                onChange={handleAmountChange}
               />
               <span className="ml-2 text-white font-semibold">
                 {base.symbol}
@@ -160,6 +185,8 @@ const TradingPanel = () => {
               type="number"
               placeholder="Enter Amount"
               className="bg-transparent w-full outline-none text-white"
+              value={amount}
+              onChange={handleAmountChange}
             />
             <span className="ml-2 text-white font-semibold">{base.symbol}</span>
           </div>
