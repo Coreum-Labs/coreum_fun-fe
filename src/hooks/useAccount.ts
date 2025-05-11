@@ -23,9 +23,7 @@ export const useConnectedAccount = () => {
 
       if (isConnected && data?.bech32Address) {
         dispatch(setAccount(data?.bech32Address));
-      } else {
-        dispatch(setAccount(''));
-      }
+      } 
     }
-  }, [isAccountConnected, isConnected, data?.bech32Address]);
+  }, [isAccountConnected, isConnected, data?.bech32Address,account]);
 };

@@ -1,4 +1,5 @@
-import { fetchBalancesByAccount, shouldRefetchBalances } from "@/features/balances/";
+import { fetchBalancesByAccount, setBalances, shouldRefetchBalances } from "@/features/balances/";
+import { setAccount } from "@/features/general";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useEffect } from "react";
 
@@ -17,7 +18,7 @@ export const useAccountBalances = () => {
   useEffect(() => {
     if (isConnected && account.length && !isLoading  && !isBalancesFetched && !balances.length) {
       dispatch(fetchBalancesByAccount({ account }));
-    }
+    } 
   }, [account, balances.length, dispatch, isBalancesFetched, isConnected, isLoading, network]);
 
   useEffect(() => {

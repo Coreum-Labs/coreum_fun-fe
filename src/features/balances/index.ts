@@ -116,13 +116,15 @@ export const selectTokenByDenom = (denom: string) => (state: { balances: Balance
 export const selectFormattedBalanceByDenom = (denom: string) => (state: { balances: BalancesState }) => {
   const token = state.balances.list.find(b => b.denom === denom);
   if (!token?.amount) return '0';
+
+  console.log('token', token);
   
   const amount = token.amount;
-  const subunit = typeof token.subunit === 'number' ? token.subunit : 6; // Default to 6 decimals if not specified
+  const precision = typeof token.precision === 'number' ? token.precision : 6; // Default to 6 decimals if not specified
   
   // Convert to decimal
-  const whole = amount.slice(0, -subunit) || '0';
-  const fraction = amount.slice(-subunit).padStart(subunit, '0');
+  const whole = amount.slice(0, -precision) || '0';
+  const fraction = amount.slice(-precision).padStart(precision, '0');
   
   // Remove trailing zeros from fraction
   const trimmedFraction = fraction.replace(/0+$/, '');

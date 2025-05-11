@@ -3,6 +3,7 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { selectFormattedBalanceByDenom } from "../features/balances";
+import { useAppSelector } from "@/store/hooks";
 
 const TokenBalance = () => {
   const { base, quote } = useSelector(
