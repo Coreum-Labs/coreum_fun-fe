@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { Modal } from "./Modal";
 import { WalletType } from "@/types/Wallet";
-import { chainName, WalletOption } from "@/config/default";
+import { WalletOption } from "@/config/default";
 import { WalletItem } from "./WalletItem";
 import { CONNECT_WALLET_OPTIONS } from "@/config/default";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";

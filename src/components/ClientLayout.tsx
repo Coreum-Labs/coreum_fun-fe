@@ -7,6 +7,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { setIsConnectModalOpen } from "@/features/general";
 import { useAccount, useDisconnect } from "graz";
 import BuyTicketModal from "./BuyTicketModal";
+import Link from "next/link";
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -42,21 +43,23 @@ export default function ClientLayout({
         <div className="flex flex-col sm:flex-row items-center justify-between w-full col-span-1 lg:col-span-2 gap-4">
           {/* Logo and title */}
           <div className="flex items-center justify-between w-full sm:w-auto">
-            <div className="flex items-center">
-              <img
-                src={dollarSignSrc}
-                alt="Prediction Market"
-                className="rounded-lg w-20 sm:w-32 h-20 sm:h-32"
-              />
-              <div className="flex flex-col ml-2">
-                <span className="text-lg sm:text-xl font-bold text-white">
-                  Coreum.fun
-                </span>
-                <span className="text-xs sm:text-sm text-primary font-bol mt-1">
-                  The No Loss Crypto Draft
-                </span>
+            <Link href="/" className="flex items-center">
+              <div className="flex items-center">
+                <img
+                  src={dollarSignSrc}
+                  alt="Prediction Market"
+                  className="rounded-lg w-20 sm:w-32 h-20 sm:h-32"
+                />
+                <div className="flex flex-col ml-2">
+                  <span className="text-lg sm:text-xl font-bold text-white">
+                    Coreum.fun
+                  </span>
+                  <span className="text-xs sm:text-sm text-primary font-bol mt-1">
+                    The No Loss Crypto Draft
+                  </span>
+                </div>
               </div>
-            </div>
+            </Link>
 
             {/* Social icons for mobile */}
             <div className="flex sm:hidden gap-2 items-center">
