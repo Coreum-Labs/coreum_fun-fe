@@ -5,6 +5,7 @@ import ticketLogo from "../../../public/ticket.svg";
 
 export interface Token {
   symbol: 'TICKET' | 'COREUM';
+  denom: string;
   logo: string;
 }
 
@@ -40,10 +41,12 @@ export const initialGeneralState: GeneralState = {
   tokenPair: {
     base: {
       symbol: 'TICKET',
+      denom: 'lone-testcore1zgdprlr3hz5hhke9ght8mq723a8wlnzqcepjcd',
       logo: ticketLogo
     },
     quote: {
       symbol: 'COREUM',
+      denom: 'utestcore',
       logo: coreumLogo
     }
   },
