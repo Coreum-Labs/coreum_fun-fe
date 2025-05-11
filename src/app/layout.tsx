@@ -11,6 +11,7 @@ import { WalletProvider } from "@/providers/WalletProvider";
 import ClientLayout from "@/components/ClientLayout";
 import { ReduxProvider } from "@/providers/ReduxProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AppProvider } from "@/providers/AppProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,14 +38,16 @@ export default function RootLayout({
         <ReduxProvider>
           <QueryClientProvider client={contractQueryClient}>
             <WalletProvider>
-              <ClientLayout
-                dollarSignSrc={dollar_sign.src}
-                xIconSrc={xIcon.src}
-                telegramIconSrc={telegramIcon.src}
-                questionIconSrc={questionIcon.src}
-              >
-                {children}
-              </ClientLayout>
+              <AppProvider>
+                <ClientLayout
+                  dollarSignSrc={dollar_sign.src}
+                  xIconSrc={xIcon.src}
+                  telegramIconSrc={telegramIcon.src}
+                  questionIconSrc={questionIcon.src}
+                >
+                  {children}
+                </ClientLayout>
+              </AppProvider>
             </WalletProvider>
           </QueryClientProvider>
         </ReduxProvider>
