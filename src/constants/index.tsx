@@ -1,6 +1,6 @@
 import { Token } from "@/shared/types";
-import coreumLogo from "../../../public/coreum.svg";
-import ticketLogo from "../../../public/ticket.svg";
+import coreumLogo from "../../public/coreum.svg";
+import ticketLogo from "../../public/ticket.svg";
 
 export const COREUM_TOKEN_TESTNET: Token = {
   denom: "utestcore",
@@ -17,3 +17,5 @@ export const TICKET_TOKEN_TESTNET: Token = {
   precision: 1,
   logo: ticketLogo,
 };
+
+export const CHAIN_ID = "coreum-testnet-1";
