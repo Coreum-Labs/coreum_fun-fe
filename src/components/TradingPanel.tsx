@@ -30,21 +30,31 @@ const TradingPanel = () => {
   useEffect(() => {
     if (percent === null) return;
 
-    const balance = side === "buy" ? quoteBalance : baseBalance;
-    const balanceNum = parseFloat(balance);
-    if (isNaN(balanceNum)) return;
-
-    let newAmount: number;
-    if (percent === 100) {
-      // For MAX, use the entire balance
-      newAmount = balanceNum;
+    if (side === "buy") {
+      // For buy, need price to calculate how much base token can be bought
+      const quote = parseFloat(quoteBalance);
+      const p = percent;
+      const priceNum = parseFloat(price);
+      if (isNaN(quote) || quote === 0 || isNaN(priceNum) || priceNum === 0) {
+        setAmount("");
+        return;
+      }
+      // (quoteBalance * percent / 100) / price
+      const maxSpend = (quote * p) / 100;
+      const newAmount = maxSpend / priceNum;
+      setAmount(newAmount > 0 ? newAmount.toString() : "");
     } else {
-      // For other percentages, calculate based on the balance
-      newAmount = (balanceNum * percent) / 100;
+      // For sell, just use base balance
+      const base = parseFloat(baseBalance);
+      const p = percent;
+      if (isNaN(base) || base === 0) {
+        setAmount("");
+        return;
+      }
+      const newAmount = (base * p) / 100;
+      setAmount(newAmount > 0 ? newAmount.toString() : "");
     }
-
-    setAmount(newAmount.toString());
-  }, [percent, side, baseBalance, quoteBalance]);
+  }, [percent, side, baseBalance, quoteBalance, price]);
 
   // Calculate total value for limit orders
   const calculateTotal = () => {
