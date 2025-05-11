@@ -116,8 +116,6 @@ export const selectTokenByDenom = (denom: string) => (state: { balances: Balance
 export const selectFormattedBalanceByDenom = (denom: string) => (state: { balances: BalancesState }) => {
   const token = state.balances.list.find(b => b.denom === denom);
   if (!token?.amount) return '0';
-
-  console.log('token', token);
   
   const amount = token.amount;
   const precision = typeof token.precision === 'number' ? token.precision : 6; // Default to 6 decimals if not specified

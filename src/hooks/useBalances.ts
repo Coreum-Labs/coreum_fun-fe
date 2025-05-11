@@ -16,10 +16,15 @@ export const useAccountBalances = () => {
   const balances = useAppSelector(state => state.balances.list);
 
   useEffect(() => {
-    if (isConnected && account.length && !isLoading  && !isBalancesFetched && !balances.length) {
+    if (!isConnected) {
+      // Reset balances when disconnected
+      dispatch(setBalances([]));
+    } else if (isConnected && account.length && !isLoading) {
+      // Fetch balances when connected and account is available
+      // This will trigger on both initial connection and reconnection
       dispatch(fetchBalancesByAccount({ account }));
-    } 
-  }, [account, balances.length, dispatch, isBalancesFetched, isConnected, isLoading, network]);
+    }
+  }, [account, dispatch, isConnected, isLoading, network]);
 
   useEffect(() => {
     if (shouldRefetch && !isLoading && account.length) {
