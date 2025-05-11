@@ -7,6 +7,10 @@ import { setIsTxExecuting, setIsBuyTicketModalOpen } from "@/features/general";
 import Image from "next/image";
 import dollorSign from "../../public/dollar_sign.gif";
 import ticketIcon from "../assets/ticket.webp";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { COREUM_TOKEN_TESTNET } from "@/constants";
+import { selectFormattedBalanceByDenom } from "../features/balances";
 
 export const BuyTicketModal: React.FC = () => {
   const [ticketCount, setTicketCount] = useState<number>(1);
@@ -15,6 +19,9 @@ export const BuyTicketModal: React.FC = () => {
   const isConnected = useAppSelector((state: any) => state.general.isConnected);
   const isBuyTicketModalOpen = useAppSelector(
     (state) => state.general.isBuyTicketModalOpen
+  );
+  const coreumBalance = useSelector(
+    selectFormattedBalanceByDenom(COREUM_TOKEN_TESTNET.denom)
   );
 
   // Update amount whenever ticket count changes

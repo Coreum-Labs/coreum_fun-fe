@@ -2,25 +2,15 @@
 
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
+import { selectFormattedBalanceByDenom } from "../features/balances";
 
-interface TokenBalanceProps {
-  ticketBalance: number;
-  coreumBalance: number;
-}
-
-const TokenBalance = ({
-  ticketBalance = 2,
-  coreumBalance = 1000,
-}: TokenBalanceProps) => {
+const TokenBalance = () => {
   const { base, quote } = useSelector(
     (state: RootState) => state.dex.tokenPair
   );
 
-  // Map balances to symbols
-  const balances: Record<string, number> = {
-    TICKET: ticketBalance,
-    COREUM: coreumBalance,
-  };
+  const baseBalance = useSelector(selectFormattedBalanceByDenom(base.denom));
+  const quoteBalance = useSelector(selectFormattedBalanceByDenom(quote.denom));
 
   return (
     <div className="flex justify-between bg-indigo-900/50 p-4 rounded-lg">
@@ -29,16 +19,14 @@ const TokenBalance = ({
         <span className="text-white font-semibold text-font">
           {base.symbol} balance
         </span>
-        <span className="text-primary text-2xl font-bold">
-          {balances[base.symbol]}
-        </span>
+        <span className="text-primary text-2xl font-bold">{baseBalance}</span>
       </div>
       {/* Quote token (dimmed, always right) */}
       <div className="flex flex-col items-end">
         <span className="text-white/60 font-semibold">
           {quote.symbol} Balance
         </span>
-        <span className="text-white/60 text-2xl">{balances[quote.symbol]}</span>
+        <span className="text-white/60 text-2xl">{quoteBalance}</span>
       </div>
     </div>
   );

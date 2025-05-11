@@ -4,10 +4,15 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import Image from "next/image";
+import { selectFormattedBalanceByDenom } from "../features/balances";
+
 const TradingPanel = () => {
   const { base, quote } = useSelector(
     (state: RootState) => state.dex.tokenPair
   );
+
+  const baseBalance = useSelector(selectFormattedBalanceByDenom(base.denom));
+  const quoteBalance = useSelector(selectFormattedBalanceByDenom(quote.denom));
 
   // State for buy/sell and order type
   const [side, setSide] = useState<"buy" | "sell">("buy");
@@ -28,12 +33,6 @@ const TradingPanel = () => {
     return isNaN(total) ? 0 : total;
   };
 
-  // Placeholder balances (replace with real balances as needed)
-  const balances: Record<string, number> = {
-    [base.symbol]: 0.0004,
-    [quote.symbol]: 0,
-  };
-
   return (
     <div className="bg-indigo-900/50 p-4 rounded-lg">
       {/* Balances row */}
@@ -42,17 +41,13 @@ const TradingPanel = () => {
           <span className="text-xs text-white/60 mr-2">
             {base.symbol} Available
           </span>
-          <span className="text-xs text-white font-mono">
-            {balances[base.symbol]}
-          </span>
+          <span className="text-xs text-white font-mono">{baseBalance}</span>
         </div>
         <div>
           <span className="text-xs text-white/60 mr-2">
             {quote.symbol} Available
           </span>
-          <span className="text-xs text-white font-mono">
-            {balances[quote.symbol]}
-          </span>
+          <span className="text-xs text-white font-mono">{quoteBalance}</span>
         </div>
       </div>
       {/* Buy/Sell buttons */}
