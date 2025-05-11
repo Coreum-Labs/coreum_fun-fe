@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
-
+import Image from "next/image";
 const TradingPanel = () => {
   const { base, quote } = useSelector(
     (state: RootState) => state.general.tokenPair
@@ -18,6 +18,15 @@ const TradingPanel = () => {
   const [execution, setExecution] = useState<"standard" | "passive">(
     "standard"
   );
+  const [amount, setAmount] = useState<string>("");
+  const [price, setPrice] = useState<string>("");
+
+  // Calculate total value for limit orders
+  const calculateTotal = () => {
+    if (!amount || !price) return 0;
+    const total = parseFloat(amount) * parseFloat(price);
+    return isNaN(total) ? 0 : total;
+  };
 
   // Placeholder balances (replace with real balances as needed)
   const balances: Record<string, number> = {
@@ -114,10 +123,15 @@ const TradingPanel = () => {
           <>
             {/* Amount (base token) */}
             <div className="bg-indigo-800/50 p-2 rounded-md flex items-center mb-2">
+              <div className="relative w-11 h-11 z-10 mr-2">
+                <Image src={base.logo} alt={`${base.symbol} Logo`} fill />
+              </div>
               <input
                 type="number"
                 placeholder={`Enter Amount`}
                 className="bg-transparent w-full outline-none text-white"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
               />
               <span className="ml-2 text-white font-semibold">
                 {base.symbol}
@@ -125,10 +139,15 @@ const TradingPanel = () => {
             </div>
             {/* Price (quote token) */}
             <div className="bg-indigo-800/50 p-2 rounded-md flex items-center mb-2">
+              <div className="relative w-11 h-11 z-10 mr-2">
+                <Image src={quote.logo} alt={`${quote.symbol} Logo`} fill />
+              </div>
               <input
                 type="number"
                 placeholder={`Enter Price`}
                 className="bg-transparent w-full outline-none text-white"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
               />
               <span className="ml-2 text-white font-semibold">
                 {quote.symbol}
@@ -139,7 +158,9 @@ const TradingPanel = () => {
         {/* Market order: only amount input for base token */}
         {orderType === "market" && (
           <div className="bg-indigo-800/50 p-2 rounded-md flex items-center mb-2">
-            <div className="flex-shrink-0 w-4 h-4 rounded-full bg-primary mr-2"></div>
+            <div className="relative w-11 h-11 z-10 mr-2">
+              <Image src={base.logo} alt={`${base.symbol} Logo`} fill />
+            </div>
             <input
               type="number"
               placeholder="Enter Amount"
@@ -221,7 +242,9 @@ const TradingPanel = () => {
       </button>
       <div className="flex justify-between">
         <p className="text-xs text-gray-400">Total:</p>
-        <p className="text-xs">0.00 {quote.symbol}</p>
+        <p className="text-xs">
+          {calculateTotal().toFixed(8)} {quote.symbol}
+        </p>
       </div>
     </div>
   );
