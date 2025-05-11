@@ -14,7 +14,7 @@ This repository contains the code for the Coreum.fun website and Smart Contract 
 
 ### 🎲 What is a No Loss Draft?
 
-A No Loss Draft is a system where:
+A No Loss Draft is a system where user does not lose their principal if they don't win:
 
 - Participants buy tickets at a fixed price
 - All participants get their tokens back at the end of the draw
@@ -54,6 +54,18 @@ A No Loss Draft is a system where:
 - Yield generated through validator staking
 - More efficient implementation on Coreum's PoS network
 
+### $TICKET
+
+$TICKET is a smart token that represents ownership of a ticket in the No Loss Draft.
+It can be traded on the Coreum Orderbook DEX and has the following properties:
+
+Ticket is a Smart Tokens that can be traded on the Coreum Dex with the following feature enabled:
+
+- Minting: to mint token as they are bought by the draft participant
+- Burning: to burned to tokens when the principal is returned
+
+Learn more about Smart Tokens in the [Coreum documentation](https://docs.coreum.dev/docs/next/modules/coreum-fungible-token)
+
 ### Coreum Orderbook DEX
 
 A permissionless Orderbook built at the protocol level of Coreum blockchain.
@@ -79,9 +91,305 @@ A permissionless Orderbook built at the protocol level of Coreum blockchain.
 - Sell TICKET → Receive COREUM
 - Price expressed in COREUM per TICKET
 
+
+## Draft lifecycle
+
+This diagram is a detailed view of the lifecycle of a draft on Coreum.fun governed by the smart contract.
+
+```mermaid
+flowchart TD
+    Start([Start]) --> State1
+
+    State1[ticket_sell_in_progress]
+    State1 --> |"All tickets sold or admin ends sale"| State2
+
+    State2[tickets_sold_out_accumulation_in_progress]
+    State2 --> |"Admin selects winner and sends rewards"| State3
+
+    State3[winner_selected_undelegation_in_process]
+    State3 --> |"7-day undelegation period completes"| State4
+
+    State4[undelegation_completed_tokens_can_be_burned]
+    State4 --> |"All tickets burned"| State5
+
+    State5[draw_finished]
+    State5 --> End([End/New Draw])
+
+classDef stateClass fill:#f0f9ff,stroke:#333,stroke-width:2px
+class State1,State2,State3,State4,State5 stateClass
+```
+
+## Architecture
+
+### Context Diagram
+
+This diagram is a high-level overview of the Coreum.fun application. We wanted to show the relationship between the Coreum.fun application, the Coreum Labs validator node, and the Coreum Orderbook DEX.
+
+```mermaid
+graph TD
+    %% Network nodes
+    TopNode((Node))
+    LeftNode((Node))
+    RightNode((Node))
+    BottomRight((Node))
+    BottomSquare[Node]
+    Node63((Node))
+
+    %% Main components
+    Validator{Coreum Labs Validator}
+    CoreumFun[Coreum.fun]
+    SmartContract[Smart Contract]
+    OrderbookDEX[Orderbook DEX]
+
+    %% Network circular structure
+    TopNode --> LeftNode
+    LeftNode --> Validator
+    Validator --> Node63
+    Node63 --> BottomSquare
+    BottomSquare --> BottomRight
+    BottomRight --> RightNode
+    RightNode --> TopNode
+
+    %% Component connections
+    CoreumFun -- "Send signed message" -->  Validator
+    Validator -- "Buy tickets,<br/>Burn tickets" --> SmartContract
+    SmartContract -- "Stake" --> Validator
+    Validator -- "Buy/sell" --> OrderbookDEX
+
+    %% Title
+    subgraph Coreum Network
+    end
+```
+
+### Contract
+
+#### Sequence Diagram (Buy Ticket)
+
+The `buy_ticket` function allows users to purchase one or many tickets. This function handles:
+
+1. Verify the $COREUM amount sent
+2. Verify that some tickets are left
+3. If this was the last ticket set draw_state=tickets_sold_out_accumulation_in_progress
+4. Stake the $COREUM to Coreum Labs validator
+5. Mint and send the $TICKET smart token to the user
+6. Update the contract internal state (map <address, number_of_ticket)
+7. Emit an event that will be picked up by the indexer
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant User
+    participant SmartContract
+    participant CoreumLabsValidator
+    participant SmartTokenModule
+    participant ContractState
+    participant Indexer
+
+    User->>SmartContract: Send $COREUM (buy_ticket)
+
+    Note over SmartContract: Step 1: Verify $COREUM amount
+    SmartContract->>SmartContract: Verify $COREUM amount
+    SmartContract->>SmartContract: Verify tickets left > 0
+
+    alt Amount verification failed
+        SmartContract-->>User: Return error & funds
+    else Amount verification passed
+        Note over SmartContract: Step 2: Stake $COREUM
+        SmartContract->>CoreumLabsValidator: Stake $COREUM
+        CoreumLabsValidator-->>SmartContract: Acknowledge stake
+
+        Note over SmartContract: Step 3: Mint $TICKET tokens
+        SmartContract->>SmartTokenModule: Mint $TICKET smart token
+        SmartTokenModule-->>User: Return minted tokens
+
+        Note over SmartContract: Step 4: Update contract state
+        SmartContract->>ContractState: Update mapping <address, number_of_tickets>
+        ContractState-->>SmartContract: Confirm state update
+
+        Note over SmartContract: Step 5: Emit event
+        SmartContract->>Indexer: Emit "TicketPurchased" event
+        Indexer-->>User: Event acknowledged
+
+        SmartContract-->>User: Return success response
+    end
+```
+
+#### Sequence Diagram (Select Winner and Send Funds)
+
+The `select_winner_and_send_funds` function receives the winner's address and sends them the funds. It also handles starting the undelegation process for all the tokens:
+
+1. Receive the winner address
+2. Set the winner address
+3. Send the rewards to the address
+4. Start the undelegation process for all the tokens the contract has
+5. Set draw_state=winner_selected_undelegation_in_process
+6. Calculate the block at which the undelegation will be completed
+7. Set undelegation_done_future_block
+
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Admin
+    participant SmartContract
+    participant ContractState
+    participant CoreumLabsValidator
+    participant Treasury
+    participant Winner
+    participant Indexer
+    participant BlockchainInfo
+
+    Admin->>SmartContract: select_winner_and_send_funds(winner_address)
+
+    Note over SmartContract: Step 1: Input Validation
+    SmartContract->>SmartContract: Verify caller is authorized admin
+    SmartContract->>ContractState: Check current draw_state
+    ContractState-->>SmartContract: Return current draw_state
+
+    alt Validation Failed
+        SmartContract-->>Admin: Return error (unauthorized or invalid state)
+    else Validation Passed
+        Note over SmartContract: Step 2: Set Winner Address
+        SmartContract->>ContractState: Set winner_address = input_address
+        ContractState-->>SmartContract: Confirm winner address set
+
+        Note over SmartContract: Step 3: Send Rewards to Winner
+        SmartContract->>Treasury: Calculate winner reward amount
+        Treasury-->>SmartContract: Return reward amount
+        SmartContract->>Winner: Transfer reward funds
+        Winner-->>SmartContract: Acknowledge receipt (implicit)
+
+        Note over SmartContract: Step 4: Start Undelegation Process
+        SmartContract->>ContractState: Get total staked amount
+        ContractState-->>SmartContract: Return total_staked_coreum
+        SmartContract->>CoreumLabsValidator: Undelegate all staked $COREUM
+        CoreumLabsValidator-->>SmartContract: Acknowledge undelegation request
+
+        Note over SmartContract: Step 5: Update Draw State
+        SmartContract->>ContractState: Set draw_state = winner_selected_undelegation_in_process
+        ContractState-->>SmartContract: Confirm state update
+
+        Note over SmartContract: Step 6: Calculate Undelegation Completion Block
+        SmartContract->>BlockchainInfo: Get current block height
+        BlockchainInfo-->>SmartContract: Return current_block_height
+        SmartContract->>BlockchainInfo: Get blocks per day
+        BlockchainInfo-->>SmartContract: Return blocks_per_day
+
+        Note over SmartContract: Calculation: current_block + (blocks_per_day * 7)
+
+        Note over SmartContract: Step 7: Set Completion Block
+        SmartContract->>ContractState: Set undelegation_done_future_block = calculated_block
+        ContractState-->>SmartContract: Confirm future block set
+
+        Note over SmartContract: Emit Events
+        SmartContract->>Indexer: Emit "WinnerSelected" event
+        Note right of Indexer: Include:<br/>- Winner address<br/>- Reward amount<br/>- Total undelegated amount<br/>- Timestamp
+
+        SmartContract->>Indexer: Emit "UndelegationStarted" event
+        Note right of Indexer: Include:<br/>- Total amount undelegated<br/>- Current block<br/>- Expected completion block<br/>- Expected completion date
+
+        Indexer-->>SmartContract: Events acknowledged
+        SmartContract-->>Admin: Return success response
+    end
+
+    Note over SmartContract: Error Handling
+    opt Any step fails
+        SmartContract->>SmartContract: Revert all changes
+        SmartContract->>Admin: Return detailed error
+        SmartContract->>Indexer: Emit "WinnerSelectionFailed" event with reason
+    end
+```
+
+#### Sequence Diagram (Burn Ticket)
+
+The `burn_tickets` function allows users to burn their tickets to get their principal back:
+
+1. Receive the $TICKET
+2. Burn the $TICKET
+3. Update internal state (<address, number_of_ticket)
+4. If all the tickets have been burned, set draw_state=draw_finished
+5. Send back the $COREUM to the user
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant User
+    participant SmartContract
+    participant SmartTokenModule
+    participant ContractState
+    participant Vault
+    participant Indexer
+
+    User->>SmartContract: burn_tickets(number_of_tickets)
+
+    Note over SmartContract: Step 1: Input Validation
+    SmartContract->>SmartTokenModule: Check if user has enough tickets
+    SmartTokenModule-->>SmartContract: Return user ticket balance
+    SmartContract->>ContractState: Check contract state allows burning
+    ContractState-->>SmartContract: Return current draw_state
+
+    alt Validation Failed
+        SmartContract-->>User: Return error message
+    else Validation Passed
+        Note over SmartContract: Step 2: Receive $TICKET
+        SmartContract->>SmartTokenModule: Transfer $TICKET from user to contract
+        SmartTokenModule-->>SmartContract: Confirm token transfer
+
+        Note over SmartContract: Step 3: Burn $TICKET
+        SmartContract->>SmartTokenModule: Burn received $TICKET tokens
+        SmartTokenModule-->>SmartContract: Confirm tokens burned
+
+        Note over SmartContract: Step 4: Update Internal State
+        SmartContract->>ContractState: Update user_tickets mapping <address, number_of_tickets>
+        SmartContract->>ContractState: Update total_tickets_burned counter
+        ContractState-->>SmartContract: Confirm state updates
+
+        Note over SmartContract: Step 5: Return $COREUM to User
+        SmartContract->>ContractState: Calculate $COREUM amount based on tickets burned
+        ContractState-->>SmartContract: Return calculated amount
+        SmartContract->>Vault: Request $COREUM transfer to user
+        Vault->>User: Transfer $COREUM tokens (principal)
+        Vault-->>SmartContract: Confirm transfer completed
+
+        Note over SmartContract: Step 6: Check Draw State
+        SmartContract->>ContractState: Check if all tickets are burned
+        ContractState-->>SmartContract: Return total remaining tickets
+
+        alt All Tickets Burned
+            SmartContract->>ContractState: Set draw_state = draw_finished
+            ContractState-->>SmartContract: Confirm draw state update
+            SmartContract->>Indexer: Emit "AllTicketsBurned" event
+        end
+
+        SmartContract->>Indexer: Emit "TicketsBurned" event
+        Note right of Indexer: Include:<br/>- User address<br/>- Number of tickets burned<br/>- $COREUM principal returned<br/>- Vault balance remaining<br/>- Timestamp
+
+        Indexer-->>SmartContract: Event acknowledged
+        SmartContract-->>User: Return success response
+    end
+
+    Note over SmartContract: Error Handling
+    opt Any step fails
+        SmartContract->>SmartContract: Revert all changes
+        SmartContract->>User: Return detailed error
+        SmartContract->>Indexer: Emit "TicketBurnFailed" event with reason
+    end
+```
+
 ## 🚀 Getting Started
 
-### Frontend Development
+### As a user
+
+- Go to the [Coreum.fun website](https://coreum.fun)
+- Buy tickets with $COREUM
+- Cross fingers and hope to win
+- Wait for the draw to finish
+- If you won, the your rewards will be sent to your wallet!
+- If you didn't win, you can burn your tickets to get your principal 7 days after the draw
+
+### As a developer
+
+#### Frontend Development
 
 ```bash
 # Clone the repository
@@ -97,7 +405,7 @@ npm run dev
 # Open http://localhost:3000 in your browser
 ```
 
-### Smart Contract Development
+#### Smart Contract Development
 
 ```bash
 # Clone the repository
