@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TokenPair } from '@/shared/types';
-import coreumLogo from "../../../public/coreum.svg";
-import ticketLogo from "../../../public/ticket.svg";
 import { COREUM_TOKEN_TESTNET, TICKET_TOKEN_TESTNET } from '@/constants';
 
 export interface DexState {
