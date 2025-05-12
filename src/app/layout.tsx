@@ -13,6 +13,7 @@ import { ReduxProvider } from "@/providers/ReduxProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AppProvider } from "@/providers/AppProvider";
 import { CoreumProvider } from "@/providers/CoreumProvider";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,6 +55,7 @@ export default function RootLayout({
             </WalletProvider>
           </QueryClientProvider>
         </ReduxProvider>
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   );
