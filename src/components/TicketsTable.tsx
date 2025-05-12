@@ -3,12 +3,14 @@ import React, { useState } from "react";
 import Holders from "./Holders";
 import OpenOrders from "./OpenOrders";
 import OrderHistory from "./OrderHistory";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const TradingTabs = () => {
   const [activeTab, setActiveTab] = useState<
     "holders" | "openOrders" | "orderHistory"
   >("holders");
-
+  const { openOrders } = useSelector((state: RootState) => state.dex);
   return (
     <div className="w-full">
       <div className="flex gap-4 mb-4">
@@ -30,9 +32,9 @@ const TradingTabs = () => {
           }`}
           onClick={() => setActiveTab("openOrders")}
         >
-          Open Orders (10)
+          Open Orders ({openOrders.length})
         </button>
-        <button
+        {/* <button
           className={`px-4 py-2 rounded-md font-semibold ${
             activeTab === "orderHistory"
               ? "bg-primary text-black"
@@ -41,12 +43,12 @@ const TradingTabs = () => {
           onClick={() => setActiveTab("orderHistory")}
         >
           Order History (10)
-        </button>
+        </button> */}
       </div>
       <div className="bg-indigo-900/50 rounded-lg p-4">
         {activeTab === "holders" && <Holders />}
         {activeTab === "openOrders" && <OpenOrders />}
-        {activeTab === "orderHistory" && <OrderHistory />}
+        {/* {activeTab === "orderHistory" && <OrderHistory />} */}
       </div>
     </div>
   );
