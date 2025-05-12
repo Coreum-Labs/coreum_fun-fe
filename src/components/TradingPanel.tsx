@@ -6,11 +6,16 @@ import { RootState } from "../store/store";
 import Image from "next/image";
 import { selectFormattedBalanceByDenom } from "../features/balances";
 import ReviewDexTxModal from "./ReviewDexTxModal";
+import { useCreateOrder } from "@/hooks/useCreateOrder";
+import { useAppDispatch } from "@/store/hooks";
+import { setIsTxExecuting } from "@/features/general";
 
 const TradingPanel = () => {
   const { base, quote } = useSelector(
     (state: RootState) => state.dex.tokenPair
   );
+  const dispatch = useAppDispatch();
+  const { createOrder } = useCreateOrder();
 
   const baseBalance = useSelector(selectFormattedBalanceByDenom(base.denom));
   const quoteBalance = useSelector(selectFormattedBalanceByDenom(quote.denom));
@@ -68,6 +73,28 @@ const TradingPanel = () => {
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
     setPercent(null); // Clear percentage when manually entering amount
+  };
+
+  const handleConfirmOrder = async () => {
+    try {
+      dispatch(setIsTxExecuting(true));
+      await createOrder(
+        side,
+        amount,
+        price,
+        base.denom,
+        quote.denom,
+        orderType,
+        timeInForce,
+        execution
+      );
+      setIsReviewModalOpen(false);
+    } catch (error) {
+      console.error("Failed to create order:", error);
+      // You might want to show an error message to the user here
+    } finally {
+      dispatch(setIsTxExecuting(false));
+    }
   };
 
   return (
@@ -285,7 +312,7 @@ const TradingPanel = () => {
       <ReviewDexTxModal
         isOpen={isReviewModalOpen}
         onClose={() => setIsReviewModalOpen(false)}
-        onConfirm={() => setIsReviewModalOpen(false)}
+        onConfirm={handleConfirmOrder}
         side={side}
         amount={amount}
         price={price}
