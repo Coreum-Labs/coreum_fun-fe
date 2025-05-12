@@ -11,8 +11,10 @@
   "dependencies": {
     "@chain-registry/types": "^0.50.133",
     "@cosmjs/amino": "^0.33.1",
+    "@cosmjs/proto-signing": "^0.31.3",
     "@radix-ui/react-icons": "^1.3.2",
     "@reduxjs/toolkit": "^2.8.1",
+    "big.js": "^7.0.1",
     "classnames": "^2.5.1",
     "coreum-js": "^2.17.0",
     "coreum-js-nightly": "^2.19.4",
@@ -21,10 +23,12 @@
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-redux": "^9.2.0"
+    "react-redux": "^9.2.0",
+    "sonner": "^2.0.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/big.js": "^6.2.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
