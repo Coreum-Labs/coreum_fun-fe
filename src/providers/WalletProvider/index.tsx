@@ -20,8 +20,8 @@ export const coreumtestnet = defineChainInfo({
       coinGeckoId: "coreum",
     },
   ],
-  rest: "https://full-node.testnet-1.coreum.dev:1317",
-  rpc: "https://full-node.testnet-1.coreum.dev:26657",
+  rest: "https://coreum-testnet-api.ibs.team",
+  rpc: "https://coreum-testnet-rpc.ibs.team",
   bech32Config: {
     bech32PrefixAccAddr: "testcore",
     bech32PrefixAccPub: "testcorepub",
