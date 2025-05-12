@@ -3,6 +3,7 @@ import { Coin } from "@cosmjs/amino";
 import {  Token } from '@/shared/types';
 import axios, { AxiosResponse } from 'axios';
 import { COREUM_TOKEN_TESTNET, TICKET_TOKEN_TESTNET } from '@/constants';
+import { convertSubunitToUnit, convertUnitToSubunit } from '@/utils/convertUnitToSubunit';
 
 interface FetchBalancesByAccountArgs {
   account: string;
@@ -16,7 +17,7 @@ export const fetchBalancesByAccount = createAsyncThunk(
 
     let balancesToSet = [];
     try {
-      const balancesRequestUrl = `https://full-node.testnet-1.coreum.dev:1317/cosmos/bank/v1beta1/balances/${account}`;
+      const balancesRequestUrl = `https://coreum-testnet-api.ibs.team/cosmos/bank/v1beta1/balances/${account}`;
       const {
         data: {
           pagination: { total: balancesTotal },
@@ -119,16 +120,15 @@ export const selectFormattedBalanceByDenom = (denom: string) => (state: { balanc
   
   
   const amount = token.amount;
-  const precision = typeof token.precision === 'number' ? token.precision : 6; // Default to 6 decimals if not specified
-  
+
+  const precision = token.denom === COREUM_TOKEN_TESTNET.denom 
+        ? COREUM_TOKEN_TESTNET.precision 
+        : TICKET_TOKEN_TESTNET.precision;
+ 
   // Convert to decimal
-  const whole = amount.slice(0, -precision) || '0';
-  const fraction = amount.slice(-precision).padStart(precision, '0');
+  const formattedAmount = convertSubunitToUnit({ amount, precision: precision as number });
   
-  // Remove trailing zeros from fraction
-  const trimmedFraction = fraction.replace(/0+$/, '');
-  
-  return trimmedFraction ? `${whole}.${trimmedFraction}` : whole;
+  return formattedAmount;
 };
 
 export const selectPrecisionByDenom = (denom: string) => (state: { balances: BalancesState }) => {
