@@ -11,11 +11,31 @@ export const COREUM_TOKEN_TESTNET: Token = {
 };
 
 export const TICKET_TOKEN_TESTNET: Token = {
-  denom: "uticket-testcore1zgdprlr3hz5hhke9ght8mq723a8wlnzqcepjcd",
+  denom: "ticket-testcore1ghqt9ckdrvklrlcmumzqneetk0k7yplresy98s",
   symbol: "Ticket",
-  subunit: "uticket-testcore1zgdprlr3hz5hhke9ght8mq723a8wlnzqcepjcd",
-  precision: 1,
+  subunit: "ticket",
+  precision: 0,
   logo: ticketLogo,
 };
 
 export const CHAIN_ID = "coreum-testnet-1";
+
+// {
+// 	"uri": "",
+// 	"@type": "/coreum.asset.ft.v1.MsgIssue",
+// 	"issuer": "testcore1ghqt9ckdrvklrlcmumzqneetk0k7yplresy98s",
+// 	"symbol": "TICKET",
+// 	"subunit": "ticket",
+// 	"features": [
+// 		"burning",
+// 		"minting"
+// 	],
+// 	"uri_hash": "",
+// 	"burn_rate": "0.000000000000000000",
+// 	"precision": 0,
+// 	"description": "TICKET from coreum.fun",
+// 	"dex_settings": null,
+// 	"initial_amount": "10",
+// 	"extension_settings": null,
+// 	"send_commission_rate": "0.000000000000000000"
+// }
