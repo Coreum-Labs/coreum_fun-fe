@@ -1,5 +1,7 @@
 import { Client } from 'coreum-js-nightly';
 import { Order, Side } from 'coreum-js-nightly/dist/main/coreum/dex/v1/order';
+import { convertSubunitToUnit } from "@/utils/convertUnitToSubunit";
+import { COREUM_TOKEN_TESTNET, TICKET_TOKEN_TESTNET } from "@/constants";
 
 export async function getOpenOrders(
   client: Client,
@@ -52,12 +54,30 @@ export async function getOrderHistory(
 
 // Helper function to format order data for display
 export function formatOrder(order: Order) {
+  const basePrecision = order.baseDenom === COREUM_TOKEN_TESTNET.denom 
+    ? COREUM_TOKEN_TESTNET.precision 
+    : TICKET_TOKEN_TESTNET.precision;
+  
+  const quotePrecision = order.quoteDenom === COREUM_TOKEN_TESTNET.denom 
+    ? COREUM_TOKEN_TESTNET.precision 
+    : TICKET_TOKEN_TESTNET.precision;
+
+  const volume = convertSubunitToUnit({ amount: order.quantity, precision: basePrecision as number });
+  const total = convertSubunitToUnit({ 
+    amount: (Number(order.price) * Number(order.quantity)).toString(), 
+    precision: quotePrecision as number 
+  });
+  const remainingQuantity = convertSubunitToUnit({ 
+    amount: order.remainingQuantity, 
+    precision: basePrecision as number 
+  });
+
   return {
     side: order.side === Side.SIDE_BUY ? 'Buy' : 'Sell',
     price: order.price,
-    volume: order.quantity,
-    total: (Number(order.price) * Number(order.quantity)).toString(),
-    remainingQuantity: order.remainingQuantity,
+    volume,
+    total,
+    remainingQuantity,
     status: order.remainingQuantity === '0' ? 'Completed' : 'Open'
   };
 } 

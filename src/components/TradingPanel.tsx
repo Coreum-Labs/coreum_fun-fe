@@ -91,7 +91,6 @@ const TradingPanel = () => {
       setIsReviewModalOpen(false);
     } catch (error) {
       console.error("Failed to create order:", error);
-      // You might want to show an error message to the user here
     } finally {
       dispatch(setIsTxExecuting(false));
     }
