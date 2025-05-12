@@ -122,6 +122,7 @@ export const useCreateOrder = () => {
       return response;
     } catch (error) {
       refetchBalances();
+      fetchOrders();
       console.error('Error creating order:', error);
       
       // Only show success toast for the specific "Invalid string" error

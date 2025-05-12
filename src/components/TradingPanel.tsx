@@ -89,7 +89,15 @@ const TradingPanel = () => {
         execution
       );
       setIsReviewModalOpen(false);
+      // Reset form after successful order
+      setAmount("");
+      setPrice("");
+      setPercent(null);
     } catch (error) {
+      setIsReviewModalOpen(false);
+      setAmount("");
+      setPrice("");
+      setPercent(null);
       console.error("Failed to create order:", error);
     } finally {
       dispatch(setIsTxExecuting(false));
