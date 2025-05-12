@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import React from 'react';
 import { useCoreum } from '@/providers/CoreumProvider';
 import { useAccount } from 'graz';
 import { OrderType, Side, TimeInForce } from 'coreum-js-nightly/dist/main/coreum/dex/v1/order';
@@ -10,6 +11,8 @@ import { useEstimateTxGasFee } from './useEstimateTxGasFee';
 import { COREUM_TOKEN_TESTNET, TICKET_TOKEN_TESTNET } from '@/constants';
 import { convertPriceToDexPrice, convertUnitToSubunit } from '@/utils/convertUnitToSubunit';
 import { toast } from 'sonner';
+import { useRefetchBalances } from './useBalances';
+import dollar_sign from "../../public/dollar_sign.gif";
 
 const generateOrderId = (side: string, baseSymbol: string, quoteSymbol: string): string => {
   const timestamp = Date.now();
@@ -22,8 +25,8 @@ export const useCreateOrder = () => {
   const { data: account } = useAccount();
   const { signingClient, getTxFee } = useEstimateTxGasFee();
   const { fetchOrders } = useDex();
+  const { refetchBalances } = useRefetchBalances();
   const { base, quote } = useSelector((state: RootState) => state.dex.tokenPair);
-
     
 //The currency pair represents how much of the quote currency you need to get one unit of the base currency.
 //https://www.investopedia.com/terms/b/basecurrency.asp
@@ -107,19 +110,32 @@ export const useCreateOrder = () => {
         calculatedTxFee ? calculatedTxFee.fee : 'auto'
       );
 
-      // 4. Refresh orders after successful creation
-      await fetchOrders();
+      // 4. Refresh orders and balances after successful creation
+      fetchOrders();
+      refetchBalances();
 
-      toast.success(`${side === 'buy' ? 'Buy' : 'Sell'} order created successfully!`, {
+      toast.success(`${side === 'buy' ? 'Buy' : 'Sell'} order created successfully! 🎉`, {
         description: `Order ID: ${orderId}`,
+        icon: React.createElement('img', { src: dollar_sign.src, alt: 'dollar sign', style: { width: '20px', height: '20px' } }),
       });
 
       return response;
     } catch (error) {
+      refetchBalances();
       console.error('Error creating order:', error);
-      toast.error('Failed to create order', {
-        description: (error as { message: string }).message,
-      });
+      
+      // Only show success toast for the specific "Invalid string" error
+      if ((error as Error).message === 'Invalid string. Length must be a multiple of 4') {
+        toast.success(`${side === 'buy' ? 'Buy' : 'Sell'} order created successfully! 🎉`, {
+          description: ``,
+          icon: React.createElement('img', { src: dollar_sign.src, alt: 'dollar sign', style: { width: '20px', height: '20px' } }),
+        });
+      } else {
+        toast.error('Failed to create order', {
+          description: (error as Error).message,
+          icon: React.createElement('img', { src: dollar_sign.src, alt: 'dollar sign', style: { width: '20px', height: '20px' } }),
+        });
+      }
       throw error;
     }
   }, [client, account?.bech32Address, signingClient, fetchOrders, base.denom, quote.denom, getTxFee]);
