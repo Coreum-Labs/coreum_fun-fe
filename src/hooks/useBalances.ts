@@ -3,6 +3,20 @@ import { setAccount } from "@/features/general";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useEffect } from "react";
 
+export const useRefetchBalances = () => {
+  const dispatch = useAppDispatch();
+  const account = useAppSelector(state => state.general.account);
+  const isLoading = useAppSelector(state => state.balances.isLoading);
+
+  const refetchBalances = () => {
+    if (account.length && !isLoading) {
+      dispatch(fetchBalancesByAccount({ account }));
+    }
+  };
+
+  return { refetchBalances };
+};
+
 export const useAccountBalances = () => {
   const account = useAppSelector(state => state.general.account);
   const isConnected = useAppSelector(state => state.general.isConnected);
