@@ -9,7 +9,7 @@ const TradingSection = () => {
     <div className="w-full flex flex-col gap-4 mb-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <TokenSelector />
-        <TokenBalance ticketBalance={2} coreumBalance={1000} />
+        <TokenBalance />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Chart />
