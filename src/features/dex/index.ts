@@ -1,9 +1,18 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { TokenPair } from '@/shared/types';
 import { COREUM_TOKEN_TESTNET, TICKET_TOKEN_TESTNET } from '@/constants';
+import { Order } from "coreum-js-nightly/dist/main/coreum/dex/v1/order";
+import { getOpenOrders, getOrderHistory } from './queries';
+import type { Client } from 'coreum-js-nightly';
 
 export interface DexState {
   tokenPair: TokenPair;
+  openOrders: Order[];
+  orderHistory: Order[];
+  baseAmount: string;
+  quoteAmount: string;
+  isLoading: boolean;
+  error: string | null;
 }
 
 export const initialDexState: DexState = {
@@ -19,7 +28,32 @@ export const initialDexState: DexState = {
       logo: COREUM_TOKEN_TESTNET.logo
     }
   },
+  openOrders: [],
+  orderHistory: [],
+  baseAmount: '0',
+  quoteAmount: '0',
+  isLoading: false,
+  error: null
 };
+
+// Async thunks for fetching orders
+export const fetchOpenOrders = createAsyncThunk(
+  'dex/fetchOpenOrders',
+  async ({ queryClient, address }: { queryClient: Client; address?: string }, { getState }) => {
+    const state = getState() as { dex: DexState };
+    const { base, quote } = state.dex.tokenPair;
+    return await getOpenOrders(queryClient, base.denom, quote.denom, address);
+  }
+);
+
+export const fetchOrderHistory = createAsyncThunk(
+  'dex/fetchOrderHistory',
+  async ({ queryClient, address }: { queryClient: Client; address?: string }, { getState }) => {
+    const state = getState() as { dex: DexState };
+    const { base, quote } = state.dex.tokenPair;
+    return await getOrderHistory(queryClient, base.denom, quote.denom, address);
+  }
+);
 
 const dexSlice = createSlice({
   name: 'dex',
@@ -35,6 +69,35 @@ const dexSlice = createSlice({
         quote: base
       };
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      // Handle open orders
+      .addCase(fetchOpenOrders.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchOpenOrders.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.openOrders = action.payload;
+      })
+      .addCase(fetchOpenOrders.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to fetch open orders';
+      })
+      // Handle order history
+      .addCase(fetchOrderHistory.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchOrderHistory.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.orderHistory = action.payload;
+      })
+      .addCase(fetchOrderHistory.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to fetch order history';
+      });
   },
 });
 
