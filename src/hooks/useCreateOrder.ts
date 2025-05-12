@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useEstimateTxGasFee } from './useEstimateTxGasFee';
 import { COREUM_TOKEN_TESTNET, TICKET_TOKEN_TESTNET } from '@/constants';
-import { convertUnitToSubunit } from '@/utils/convertUnitToSubunit';
+import { convertPriceToDexPrice, convertUnitToSubunit } from '@/utils/convertUnitToSubunit';
 import { toast } from 'sonner';
 
 const generateOrderId = (side: string, baseSymbol: string, quoteSymbol: string): string => {
@@ -23,6 +23,18 @@ export const useCreateOrder = () => {
   const { signingClient, getTxFee } = useEstimateTxGasFee();
   const { fetchOrders } = useDex();
   const { base, quote } = useSelector((state: RootState) => state.dex.tokenPair);
+
+    
+//The currency pair represents how much of the quote currency you need to get one unit of the base currency.
+//https://www.investopedia.com/terms/b/basecurrency.asp
+
+    //Base: COREUM (what you are buying)
+    //Quote: TICKET (what you are paying with)
+
+    //base_denom - when you buy, you are buying the base_denom, when you sell, you are selling the base_denom.
+    //quote_denom - when you buy, you are selling the quote_denom, when you sell, you are buying the quote_denom.
+
+
 
   const createOrder = useCallback(async (
     side: 'buy' | 'sell',
@@ -50,10 +62,20 @@ export const useCreateOrder = () => {
       
       console.log('basePrecision', basePrecision);
       console.log('quotePrecision', quotePrecision);
-      console.log("price", price);
+        console.log("price", price);
+        console.log("side", side);
+        console.log("amount", amount);
+        console.log("baseDenom", baseDenom);
+        console.log("quoteDenom", quoteDenom);
+        console.log("orderType", orderType);
+        console.log("timeInForce", timeInForce);
+        console.log("execution", execution);
       
+      //TODO: check if this is correct: 1e-6 -> 0.000001 TICKET per ucore, meaning 1 TICKET per COREUM
       const quantityInSubunit = convertUnitToSubunit({ amount, precision: basePrecision as number });
       const priceInSubunit = convertUnitToSubunit({ amount: price, precision: quotePrecision as number });
+      const priceInDexPrice = convertPriceToDexPrice( price );
+      console.log("priceInDexPrice", priceInDexPrice);
       
       console.log("quantityInSubunit", quantityInSubunit);
       console.log("priceInSubunit", priceInSubunit);
@@ -65,7 +87,7 @@ export const useCreateOrder = () => {
         sender: account.bech32Address,
         side: side === 'buy' ? Side.SIDE_BUY : Side.SIDE_SELL,
         quantity: quantityInSubunit,
-        price: priceInSubunit,
+        price: priceInDexPrice,
         baseDenom: baseDenom,
         quoteDenom,
         // TODO use the right time param coming from the UI
