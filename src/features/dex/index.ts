@@ -13,6 +13,7 @@ export interface DexState {
   quoteAmount: string;
   isLoading: boolean;
   error: string | null;
+  selectedOrder: Order | null;
 }
 
 export const initialDexState: DexState = {
@@ -33,7 +34,8 @@ export const initialDexState: DexState = {
   baseAmount: '0',
   quoteAmount: '0',
   isLoading: false,
-  error: null
+  error: null,
+  selectedOrder: null
 };
 
 // Async thunks for fetching orders
@@ -69,6 +71,9 @@ const dexSlice = createSlice({
         quote: base
       };
     },
+    setSelectedOrder(state, action: PayloadAction<Order | null>) {
+      state.selectedOrder = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -104,6 +109,7 @@ const dexSlice = createSlice({
 export const {
   setTokenPair,
   swapTokenPair,
+  setSelectedOrder,
 } = dexSlice.actions;
 export const dexReducer = dexSlice.reducer;
 export default dexSlice.reducer;

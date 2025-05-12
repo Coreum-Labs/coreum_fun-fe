@@ -9,11 +9,14 @@ import ReviewDexTxModal from "./ReviewDexTxModal";
 import { useCreateOrder } from "@/hooks/useCreateOrder";
 import { useAppDispatch } from "@/store/hooks";
 import { setIsTxExecuting } from "@/features/general";
+import { setSelectedOrder } from "@/features/dex";
+import { formatOrder } from "@/features/dex/queries";
 
 const TradingPanel = () => {
-  const { base, quote } = useSelector(
-    (state: RootState) => state.dex.tokenPair
+  const { tokenPair, selectedOrder } = useSelector(
+    (state: RootState) => state.dex
   );
+  const { base, quote } = tokenPair;
   const dispatch = useAppDispatch();
   const { createOrder } = useCreateOrder();
 
@@ -32,6 +35,37 @@ const TradingPanel = () => {
   const [amount, setAmount] = useState<string>("");
   const [price, setPrice] = useState<string>("");
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [isManualSideChange, setIsManualSideChange] = useState(false);
+
+  // Handle selected order changes
+  useEffect(() => {
+    if (selectedOrder) {
+      const formatted = formatOrder(selectedOrder);
+      setOrderType("limit");
+      // Reset manual side change flag when new order is selected
+      setIsManualSideChange(false);
+      // Set the opposite side of the selected order
+      setSide(formatted.side.toLowerCase() === "buy" ? "sell" : "buy");
+      setAmount(formatted.volume);
+      setPrice(formatted.price);
+      setPercent(null);
+    }
+  }, [selectedOrder]);
+
+  // Handle manual side change
+  const handleSideChange = (newSide: "buy" | "sell") => {
+    setIsManualSideChange(true);
+    setSide(newSide);
+  };
+
+  // Reset manual side change flag when form is reset
+  const resetForm = () => {
+    setAmount("");
+    setPrice("");
+    setPercent(null);
+    setIsManualSideChange(false);
+    dispatch(setSelectedOrder(null));
+  };
 
   // Update amount when percent changes
   useEffect(() => {
@@ -89,15 +123,10 @@ const TradingPanel = () => {
         execution
       );
       setIsReviewModalOpen(false);
-      // Reset form after successful order
-      setAmount("");
-      setPrice("");
-      setPercent(null);
+      resetForm();
     } catch (error) {
       setIsReviewModalOpen(false);
-      setAmount("");
-      setPrice("");
-      setPercent(null);
+      resetForm();
       console.error("Failed to create order:", error);
     } finally {
       dispatch(setIsTxExecuting(false));
@@ -129,7 +158,7 @@ const TradingPanel = () => {
               ? "bg-primary text-black"
               : "bg-primary/40 text-white"
           }`}
-          onClick={() => setSide("buy")}
+          onClick={() => handleSideChange("buy")}
         >
           Buy
         </button>
@@ -139,7 +168,7 @@ const TradingPanel = () => {
               ? "bg-secondary text-black"
               : "bg-secondary/40 text-white"
           }`}
-          onClick={() => setSide("sell")}
+          onClick={() => handleSideChange("sell")}
         >
           Sell
         </button>

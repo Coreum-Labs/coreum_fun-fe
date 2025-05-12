@@ -9,6 +9,7 @@ import { useAccount } from "graz";
 import { useAppDispatch } from "@/store/hooks";
 import { setIsTxExecuting } from "@/features/general";
 import { Modal } from "./Modal";
+import { setSelectedOrder } from "@/features/dex";
 
 export const OpenOrders = () => {
   const { openOrders, isLoading } = useSelector(
@@ -47,6 +48,11 @@ export const OpenOrders = () => {
     }
   };
 
+  const handleOrderClick = (order: any) => {
+    const newOrder = { ...order };
+    dispatch(setSelectedOrder(newOrder));
+  };
+
   if (isLoading) {
     return <div>Loading open orders...</div>;
   }
@@ -82,7 +88,10 @@ export const OpenOrders = () => {
                   className={`cursor-pointer ${
                     selected === idx ? "bg-white/10" : ""
                   } rounded-lg`}
-                  onClick={() => setSelected(idx)}
+                  onClick={() => {
+                    setSelected(idx);
+                    handleOrderClick(order);
+                  }}
                 >
                   <td className="py-2 px-4 rounded-l-lg flex items-center gap-2">
                     {formatted.side === "Buy" ? (
