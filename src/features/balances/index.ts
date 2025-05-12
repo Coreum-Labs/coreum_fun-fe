@@ -36,14 +36,14 @@ export const fetchBalancesByAccount = createAsyncThunk(
         balancesToSet = allBalances;
       }
 
-      const userIssuedBalances: any[] = [];
+      const userPairBalances: any[] = [];
       const userOtherBalances: Coin[] = [];
 
       balances.forEach((token: Coin) => {
         const isPair = currencies.find((currency: Token) => currency.denom === token.denom);
 
         if (isPair) {
-          userIssuedBalances.push({
+          userPairBalances.push({
             ...isPair,
             amount: token.amount,
           });
@@ -52,7 +52,7 @@ export const fetchBalancesByAccount = createAsyncThunk(
         }
       });
 
-      thunkAPI.dispatch(setBalances(userIssuedBalances));
+      thunkAPI.dispatch(setBalances(userPairBalances));
 
       return balancesToSet;
     } catch (error) {
@@ -117,6 +117,7 @@ export const selectFormattedBalanceByDenom = (denom: string) => (state: { balanc
   const token = state.balances.list.find(b => b.denom === denom);
   if (!token?.amount) return '0';
   
+  
   const amount = token.amount;
   const precision = typeof token.precision === 'number' ? token.precision : 6; // Default to 6 decimals if not specified
   
@@ -128,6 +129,11 @@ export const selectFormattedBalanceByDenom = (denom: string) => (state: { balanc
   const trimmedFraction = fraction.replace(/0+$/, '');
   
   return trimmedFraction ? `${whole}.${trimmedFraction}` : whole;
+};
+
+export const selectPrecisionByDenom = (denom: string) => (state: { balances: BalancesState }) => {
+  const token = state.balances.list.find(b => b.denom === denom);
+  return token?.precision;
 };
 export const selectIsLoading = (state: { balances: BalancesState }) => state.balances.isLoading;
 export const selectIsFetched = (state: { balances: BalancesState }) => state.balances.isFetched;
