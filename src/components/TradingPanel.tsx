@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import Image from "next/image";
 import { selectFormattedBalanceByDenom } from "../features/balances";
+import ReviewDexTxModal from "./ReviewDexTxModal";
 
 const TradingPanel = () => {
   const { base, quote } = useSelector(
@@ -25,6 +26,7 @@ const TradingPanel = () => {
   );
   const [amount, setAmount] = useState<string>("");
   const [price, setPrice] = useState<string>("");
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
   // Update amount when percent changes
   useEffect(() => {
@@ -269,9 +271,27 @@ const TradingPanel = () => {
           )}
         </div>
       )}
-      <button className="w-full bg-primary text-black py-2 rounded-md mb-4 font-semibold">
+      <button
+        className="w-full bg-primary text-black py-2 rounded-md mb-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+        onClick={() => setIsReviewModalOpen(true)}
+        disabled={
+          !amount ||
+          Number(amount) <= 0 ||
+          (orderType === "limit" && (!price || Number(price) <= 0))
+        }
+      >
         Review {side === "buy" ? "Buy" : "Sell"} Order
       </button>
+      <ReviewDexTxModal
+        isOpen={isReviewModalOpen}
+        onClose={() => setIsReviewModalOpen(false)}
+        onConfirm={() => setIsReviewModalOpen(false)}
+        side={side}
+        amount={amount}
+        price={price}
+        baseSymbol={base.symbol}
+        quoteSymbol={quote.symbol}
+      />
       <div className="flex justify-between">
         <p className="text-xs text-gray-400">Total:</p>
         <p className="text-xs">
