@@ -59,6 +59,11 @@ export const convertPriceToDexPrice = (price: string): string => {
     throw new Error('Number part cannot exceed 19 digits');
   }
 
+  // Special case: if exponent is 0, return the normalized number without scientific notation
+  if (exponent === 0) {
+    return normalizedNumber.replace(/0+$/, '');
+  }
+
   // Construct the final price string
   const finalPrice = `${normalizedNumber}e${exponent}`;
   
@@ -101,6 +106,11 @@ export const convertToDexPriceFormat = (price: string): string => {
   // Ensure number part doesn't exceed 19 digits
   if (normalizedNumber.length > 19) {
     throw new Error('Number part cannot exceed 19 digits');
+  }
+
+  // Special case: if exponent is 0, return the normalized number without scientific notation
+  if (exponent === 0) {
+    return normalizedNumber.replace(/0+$/, '');
   }
 
   // Construct the final price string
