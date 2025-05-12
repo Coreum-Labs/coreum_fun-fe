@@ -43,7 +43,7 @@ const TradingTabs = () => {
           Order History (10)
         </button>
       </div>
-      <div className="bg-indigo-900/50 rounded-b-lg p-4">
+      <div className="bg-indigo-900/50 rounded-lg p-4">
         {activeTab === "holders" && <Holders />}
         {activeTab === "openOrders" && <OpenOrders />}
         {activeTab === "orderHistory" && <OrderHistory />}
