@@ -10,9 +10,10 @@ import { useAppDispatch } from "@/store/hooks";
 import { setIsTxExecuting } from "@/features/general";
 import { Modal } from "./Modal";
 import { setSelectedOrder } from "@/features/dex";
+import { convertDexPriceToNumber } from "@/utils/convertUnitToSubunit";
 
 export const OpenOrders = () => {
-  const { openOrders, isLoading } = useSelector(
+  const { openOrders, isLoading, tokenPair } = useSelector(
     (state: RootState) => state.dex
   );
   const { data: account } = useAccount();
@@ -86,7 +87,7 @@ export const OpenOrders = () => {
                 <tr
                   key={order.id + idx}
                   className={`cursor-pointer ${
-                    selected === idx ? "bg-white/10" : ""
+                    selected === idx ? "bg-white/10 " : ""
                   } rounded-lg`}
                   onClick={() => {
                     setSelected(idx);
@@ -101,11 +102,26 @@ export const OpenOrders = () => {
                     )}
                     <span>{formatted.side}</span>
                   </td>
-                  <td className="py-2 px-4 text-right">{formatted.price}</td>
-                  <td className="py-2 px-4 text-right">{formatted.volume}</td>
-                  <td className="py-2 px-4 text-right">{formatted.total}</td>
                   <td className="py-2 px-4 text-right">
-                    {formatted.remainingQuantity}
+                    {convertDexPriceToNumber(formatted.price)}
+                  </td>
+                  <td className="py-2 px-4 text-right">
+                    {formatted.volume}{" "}
+                    <span className="text-white/60">
+                      {tokenPair.base.symbol}
+                    </span>
+                  </td>
+                  <td className="py-2 px-4 text-right">
+                    {formatted.total}{" "}
+                    <span className="text-white/60">
+                      {tokenPair.quote.symbol}
+                    </span>
+                  </td>
+                  <td className="py-2 px-4 text-right">
+                    {formatted.remainingQuantity}{" "}
+                    <span className="text-white/60">
+                      {tokenPair.base.symbol}
+                    </span>
                   </td>
                   <td className="py-2 px-4 text-right">{formatted.status}</td>
                   <td className="py-2 px-4 rounded-r-lg text-right">

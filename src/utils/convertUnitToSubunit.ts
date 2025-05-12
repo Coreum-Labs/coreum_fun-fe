@@ -145,7 +145,7 @@ export const convertDexPriceToNumber = (dexPrice: string): string => {
     const result = new Big(numberPart).times(new Big(10).pow(exponent));
     
     // Convert to string and remove trailing zeros
-    return result.toString().replace(/\.?0+$/, '');
+    return result.toString();
   } catch (error) {
     console.error('Error converting DEX price to number:', error);
     return "0";
