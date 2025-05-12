@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { formatOrder } from "../features/dex/queries";
 import { useDex } from "@/hooks/useDex";
-
+import { ArrowBottomRightIcon, ArrowTopLeftIcon } from "@radix-ui/react-icons";
 export const OpenOrders = () => {
   const { openOrders, isLoading } = useSelector(
     (state: RootState) => state.dex
@@ -50,7 +50,14 @@ export const OpenOrders = () => {
                   } rounded-lg`}
                   onClick={() => setSelected(idx)}
                 >
-                  <td className="py-2 px-4 rounded-l-lg">{formatted.side}</td>
+                  <td className="py-2 px-4 rounded-l-lg flex items-center gap-2">
+                    {formatted.side === "Buy" ? (
+                      <ArrowBottomRightIcon className="text-green-400" />
+                    ) : (
+                      <ArrowTopLeftIcon className="text-red-400" />
+                    )}
+                    <span>{formatted.side}</span>
+                  </td>
                   <td className="py-2 px-4 text-right">{formatted.price}</td>
                   <td className="py-2 px-4 text-right">{formatted.volume}</td>
                   <td className="py-2 px-4 text-right">{formatted.total}</td>
