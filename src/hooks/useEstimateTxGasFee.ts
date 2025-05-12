@@ -28,6 +28,7 @@ export const useEstimateTxGasFee = () => {
 
   const { data: tendermintClient } = useTendermintClient({
     chainId: CHAIN_ID,
+    rpcUrl: "https://coreum-testnet-rpc.ibs.team",
     type: "tm34",
   }) as { data: Comet38Client | undefined };
   
