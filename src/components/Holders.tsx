@@ -1,37 +1,5 @@
 import React, { useState } from "react";
-
-const holdersData = [
-  {
-    address: "core...a9SzO75xyz",
-    tickets: 5,
-    winRate: 102.35,
-    deposit: 0,
-  },
-  {
-    address: "core...w40g9pxxyz",
-    tickets: 1,
-    winRate: 0.68,
-    deposit: 0.68,
-  },
-  {
-    address: "core...w40g9pxxyz",
-    tickets: 2,
-    winRate: 1.19,
-    deposit: 1.19,
-  },
-  {
-    address: "core...zqcepjcdyz",
-    tickets: 4,
-    winRate: 3290.49,
-    deposit: 1.19,
-  },
-  {
-    address: "core...zqcepjcdyz",
-    tickets: 3,
-    winRate: 547.25,
-    deposit: 1.19,
-  },
-];
+import { useTicketHolders } from "@/hooks/useTicketHolders";
 
 function getEmoji(tickets: number) {
   if (tickets >= 5) return "🦈";
@@ -43,6 +11,21 @@ function getEmoji(tickets: number) {
 
 const Holders = () => {
   const [selected, setSelected] = useState(0);
+  const { holders, isLoading } = useTicketHolders(
+    "tickets-testcore1ghqt9ckdrvklrlcmumzqneetk0k7yplresy98s"
+  );
+
+  // Transform holders data to match the existing UI format
+  const holdersData = holders.map((holder) => ({
+    address: holder.address.slice(0, 4) + "..." + holder.address.slice(-4),
+    tickets: parseInt(holder.balance.amount) / 1000000, // Convert from subunit to unit
+    winRate: 0, // These values would need to be calculated or fetched from another source
+    deposit: 0, // These values would need to be calculated or fetched from another source
+  }));
+
+  if (isLoading) {
+    return <div className="text-white/70">Loading holders...</div>;
+  }
 
   return (
     <div className="w-full">
