@@ -38,7 +38,7 @@ A No Loss Draft is a system where user does not lose their principal if they don
 
    - Tickets can be traded on Coreum Orderbook DEX
    - Secondary market allows price discovery
-   - Tickets can be burned to reclaim COREUM
+   - Tickets can be burned to reclaim COREUM at the end of the draw
 
 4. **Draw Process**
    - Countdown starts when all tickets are sold
@@ -59,8 +59,6 @@ A No Loss Draft is a system where user does not lose their principal if they don
 $TICKET is a smart token that represents ownership of a ticket in the No Loss Draft.
 It can be traded on the Coreum Orderbook DEX and has the following properties:
 
-Ticket is a Smart Tokens that can be traded on the Coreum Dex with the following feature enabled:
-
 - Minting: to mint token as they are bought by the draft participant
 - Burning: to burned to tokens when the principal is returned
 
@@ -70,6 +68,51 @@ Learn more about Smart Tokens in the [Coreum documentation](https://docs.coreum.
 
 A permissionless Orderbook built at the protocol level of Coreum blockchain.
 [Learn more about Coreum Orderbook DEX](https://github.com/CoreumFoundation/coreum/tree/master/x/dex/spec)
+
+#### Order Attributes
+
+Users can place orders with the following attributes:
+
+- `order_id` - unique order identifier of the order.
+- `base_denom` - when you buy, you are buying the `base_denom`, when you sell, you are selling the `base_denom`.
+- `quote_denom` - when you buy, you are selling the `quote_denom`, when you sell, you are buying the `quote_denom`.
+- `price` - value of one unit of the `base_denom` expressed in terms of the `quote_denom`. It indicates how much of the
+  `quote_denom` is needed to buy one unit of the `base_denom`.
+- `quantity` - is amount of the `base_denom` being traded.
+- `side`
+  - `sell` - means that the order is to sell `base_denom` `quantity` with the `price`.
+  - `buy` - means that the order is to buy `base_denom` `quantity` with the `price`.
+- `time_in_force` - how long an order will remain active before it is executed or expires, based on matching state.
+  - `GTC` - Good Til Canceled
+  - `IOC` - Immediate Or Cancel
+  - `FOK` - Fill or Kill
+- `good_til` - how long an order will remain active before it is executed or expires, based height or time.
+  - `good_til_block_height` - max block height to execute the order, or it will be canceled.
+  - `good_til_block_time` - max block time to execute the order, or it will be canceled.
+
+
+#### DEX Parameters
+
+In this section we will explain the parameters of the DEX that are relevant to the No Loss Draft. More information about the DEX can be found in the [Coreum Orderbook DEX documentation](https://github.com/CoreumFoundation/coreum/tree/master/x/dex/spec)
+
+- price_tick_size ensures that prices have a fixed minimum increment, preventing arbitrary fractional values.
+- quantity_step enforces a minimum step size for base asset quantities, ensuring consistent calculations.
+- quote_quantity_step provides a consistent step size for quote amounts, derived from the other two parameters.
+
+See more here: https://docs.coreum.dev/docs/next/modules/coreum-dex/prices-and-limits
+
+- default_unified_ref_amount: 0.000000000000000001
+- price_tick_exponent: 18
+- quantity_step_exponent: 1
+- max_orders_per_denom: 6
+- order_reserve: denom: utestcore, amount: 10000000
+
+##### Implication for the $TICKET token
+
+To simplify the maths $TICKET will have the same precision as COREUM (6) to avoid precision loss and to make it easier to trade with. This will be enforced by the smart contract. 
+On the UI we will make sure that the user can only buy or sell full tickets.
+
+On the other a ticket is only redeemable for $COREUMs it's a full $TICKET (meaning 1 *10^6 uticket`)
 
 ### Trading Pairs Explained
 
