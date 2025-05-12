@@ -11,10 +11,10 @@ export const COREUM_TOKEN_TESTNET: Token = {
 };
 
 export const TICKET_TOKEN_TESTNET: Token = {
-  denom: "ticket-testcore1ghqt9ckdrvklrlcmumzqneetk0k7yplresy98s",
+  denom: "tickets-testcore1ghqt9ckdrvklrlcmumzqneetk0k7yplresy98s",
   symbol: "Ticket",
   subunit: "ticket",
-  precision: 0,
+  precision: 6,
   logo: ticketLogo,
 };
 
