@@ -76,7 +76,7 @@ export const convertPriceToDexPrice = (price: string): string => {
   return finalPrice;
 };
 
-export const convertToDexPriceFormat = (price: string): string => {
+export const convertPriceToDexPriceFormat = (price: string): string => {
   // Convert to Big for precise calculations
   const priceBig = new Big(price);
   
@@ -123,4 +123,31 @@ export const convertToDexPriceFormat = (price: string): string => {
   }
 
   return finalPrice;
+};
+
+export const convertDexPriceToNumber = (dexPrice: string): string => {
+  // Handle empty or invalid input
+  if (!dexPrice) {
+    return "0";
+  }
+
+  try {
+    // If the price is already a regular number, return it
+    if (!dexPrice.includes('e')) {
+      return dexPrice;
+    }
+
+    // Split the scientific notation
+    const [numberPart, exponentPart] = dexPrice.split('e');
+    const exponent = parseInt(exponentPart);
+
+    // Convert to regular number
+    const result = new Big(numberPart).times(new Big(10).pow(exponent));
+    
+    // Convert to string and remove trailing zeros
+    return result.toString().replace(/\.?0+$/, '');
+  } catch (error) {
+    console.error('Error converting DEX price to number:', error);
+    return "0";
+  }
 };

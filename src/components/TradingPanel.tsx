@@ -11,6 +11,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { setIsTxExecuting } from "@/features/general";
 import { setSelectedOrder } from "@/features/dex";
 import { formatOrder } from "@/features/dex/queries";
+import { convertDexPriceToNumber } from "@/utils/convertUnitToSubunit";
 
 const TradingPanel = () => {
   const { tokenPair, selectedOrder } = useSelector(
@@ -47,7 +48,8 @@ const TradingPanel = () => {
       // Set the opposite side of the selected order
       setSide(formatted.side.toLowerCase() === "buy" ? "sell" : "buy");
       setAmount(formatted.volume);
-      setPrice(formatted.price);
+      // Convert DEX price to regular number
+      setPrice(convertDexPriceToNumber(formatted.price));
       setPercent(null);
     }
   }, [selectedOrder]);
