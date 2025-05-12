@@ -6,7 +6,7 @@ export const contractAddress ='TBD';
 
 export const blockTime = 1;
 
-export const rpcUrl = 'https://full-node.testnet-1.coreum.dev:1317/';
+export const rpcUrl = 'https://coreum-testnet-rpc.ibs.team';
 
 export interface WalletOption {
   type: WalletType,

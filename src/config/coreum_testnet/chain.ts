@@ -97,7 +97,7 @@ const chain: Chain = {
   "apis": {
     "rpc": [
       {
-        "address": "https://full-node.testnet-1.coreum.dev:26657",
+        "address": "https://coreum-testnet-rpc.ibs.team/",
         "provider": "Coreum Foundation"
       },
     
@@ -118,7 +118,7 @@ const chain: Chain = {
     ],
     "rest": [
       {
-        "address": "https://full-node.testnet-1.coreum.dev:1317",
+        "address": "https://coreum-api.ibs.team/",
         "provider": "Coreum"
       },
       {
