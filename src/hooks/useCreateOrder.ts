@@ -96,7 +96,7 @@ export const useCreateOrder = () => {
     } catch (error) {
       console.error('Error creating order:', error);
       toast.error('Failed to create order', {
-        description: error instanceof Error ? error.message : 'Unknown error occurred',
+        description: (error as { message: string }).message,
       });
       throw error;
     }
