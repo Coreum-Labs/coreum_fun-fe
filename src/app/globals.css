@@ -10,6 +10,22 @@
   --color-septenary: #000000;
 }
 
+@theme {
+  --animate-background: background-move ease infinite;
+
+  @keyframes background-move {
+
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+}
+
 body {
   background-color: #1f1b4d;
   color: white;
