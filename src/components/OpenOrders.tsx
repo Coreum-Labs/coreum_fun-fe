@@ -60,86 +60,164 @@ export const OpenOrders = () => {
 
   return (
     <div className="w-full">
-      <table className="w-full text-white">
-        <thead>
-          <tr className="text-left text-white/70 text-sm">
-            <th className="py-2 px-4">Side</th>
-            <th className="py-2 px-4 text-right">Price</th>
-            <th className="py-2 px-4 text-right">Volume</th>
-            <th className="py-2 px-4 text-right">Total</th>
-            <th className="py-2 px-4 text-right">Remaining</th>
-            <th className="py-2 px-4 text-right">Status</th>
-            <th className="py-2 px-4 text-right">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {openOrders.length === 0 ? (
-            <tr>
-              <td colSpan={7} className="py-4 text-center text-white/60">
-                No open orders found.
-              </td>
+      {/* Desktop Table View */}
+      <div className="hidden md:block overflow-x-auto">
+        <table className="w-full text-white min-w-[800px]">
+          <thead>
+            <tr className="text-left text-white/70 text-sm">
+              <th className="py-2 px-4">Side</th>
+              <th className="py-2 px-4 text-right">Price</th>
+              <th className="py-2 px-4 text-right">Volume</th>
+              <th className="py-2 px-4 text-right">Total</th>
+              <th className="py-2 px-4 text-right">Remaining</th>
+              <th className="py-2 px-4 text-right">Status</th>
+              <th className="py-2 px-4 text-right">Actions</th>
             </tr>
-          ) : (
-            openOrders.map((order, idx) => {
-              const formatted = formatOrder(order);
-              const isCreator = order.creator === account?.bech32Address;
-              return (
-                <tr
-                  key={order.id + idx}
-                  className={`cursor-pointer ${
-                    selected === idx ? "bg-white/10 " : ""
-                  } rounded-lg`}
-                  onClick={() => {
-                    setSelected(idx);
-                    handleOrderClick(order);
-                  }}
-                >
-                  <td className="py-2 px-4 rounded-l-lg flex items-center gap-2">
+          </thead>
+          <tbody>
+            {openOrders.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="py-4 text-center text-white/60">
+                  No open orders found.
+                </td>
+              </tr>
+            ) : (
+              openOrders.map((order, idx) => {
+                const formatted = formatOrder(order);
+                const isCreator = order.creator === account?.bech32Address;
+                return (
+                  <tr
+                    key={order.id + idx}
+                    className={`cursor-pointer ${
+                      selected === idx ? "bg-white/10" : ""
+                    } rounded-lg`}
+                    onClick={() => {
+                      setSelected(idx);
+                      handleOrderClick(order);
+                    }}
+                  >
+                    <td className="py-2 px-4 rounded-l-lg flex items-center gap-2">
+                      {formatted.side === "Buy" ? (
+                        <ArrowBottomRightIcon className="text-green-400" />
+                      ) : (
+                        <ArrowTopLeftIcon className="text-red-400" />
+                      )}
+                      <span>{formatted.side}</span>
+                    </td>
+                    <td className="py-2 px-4 text-right">
+                      {convertDexPriceToNumber(formatted.price)}
+                    </td>
+                    <td className="py-2 px-4 text-right">
+                      {formatted.volume}{" "}
+                      <span className="text-white/60">
+                        {tokenPair.base.symbol}
+                      </span>
+                    </td>
+                    <td className="py-2 px-4 text-right">
+                      {formatted.total}{" "}
+                      <span className="text-white/60">
+                        {tokenPair.quote.symbol}
+                      </span>
+                    </td>
+                    <td className="py-2 px-4 text-right">
+                      {formatted.remainingQuantity}{" "}
+                      <span className="text-white/60">
+                        {tokenPair.base.symbol}
+                      </span>
+                    </td>
+                    <td className="py-2 px-4 text-right">{formatted.status}</td>
+                    <td className="py-2 px-4 rounded-r-lg text-right">
+                      {isCreator && (
+                        <button
+                          className="bg-red-500/20 text-red-400 px-3 py-1 rounded-md hover:bg-red-500/30 transition-colors"
+                          onClick={(e) => handleCancelOrder(order.id, e)}
+                        >
+                          Cancel
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4">
+        {openOrders.length === 0 ? (
+          <div className="py-4 text-center text-white/60">
+            No open orders found.
+          </div>
+        ) : (
+          openOrders.map((order, idx) => {
+            const formatted = formatOrder(order);
+            const isCreator = order.creator === account?.bech32Address;
+            return (
+              <div
+                key={order.id + idx}
+                className={`bg-white/5 rounded-lg p-4 cursor-pointer ${
+                  selected === idx ? "bg-white/10" : ""
+                }`}
+                onClick={() => {
+                  setSelected(idx);
+                  handleOrderClick(order);
+                }}
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <div className="flex items-center gap-2">
                     {formatted.side === "Buy" ? (
                       <ArrowBottomRightIcon className="text-green-400" />
                     ) : (
                       <ArrowTopLeftIcon className="text-red-400" />
                     )}
-                    <span>{formatted.side}</span>
-                  </td>
-                  <td className="py-2 px-4 text-right">
-                    {convertDexPriceToNumber(formatted.price)}
-                  </td>
-                  <td className="py-2 px-4 text-right">
-                    {formatted.volume}{" "}
-                    <span className="text-white/60">
-                      {tokenPair.base.symbol}
+                    <span className="text-sm">{formatted.side}</span>
+                  </div>
+                  <span className="text-sm text-white/70">
+                    {formatted.status}
+                  </span>
+                </div>
+                <div className="space-y-1">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-white/70">Price</span>
+                    <span>{convertDexPriceToNumber(formatted.price)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-white/70">Volume</span>
+                    <span>
+                      {formatted.volume} {tokenPair.base.symbol}
                     </span>
-                  </td>
-                  <td className="py-2 px-4 text-right">
-                    {formatted.total}{" "}
-                    <span className="text-white/60">
-                      {tokenPair.quote.symbol}
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-white/70">Total</span>
+                    <span>
+                      {formatted.total} {tokenPair.quote.symbol}
                     </span>
-                  </td>
-                  <td className="py-2 px-4 text-right">
-                    {formatted.remainingQuantity}{" "}
-                    <span className="text-white/60">
-                      {tokenPair.base.symbol}
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-white/70">Remaining</span>
+                    <span>
+                      {formatted.remainingQuantity} {tokenPair.base.symbol}
                     </span>
-                  </td>
-                  <td className="py-2 px-4 text-right">{formatted.status}</td>
-                  <td className="py-2 px-4 rounded-r-lg text-right">
-                    {isCreator && (
-                      <button
-                        className="bg-red-500/20 text-red-400 px-3 py-1 rounded-md hover:bg-red-500/30 transition-colors"
-                        onClick={(e) => handleCancelOrder(order.id, e)}
-                      >
-                        Cancel
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              );
-            })
-          )}
-        </tbody>
-      </table>
+                  </div>
+                </div>
+                {isCreator && (
+                  <div className="mt-2 flex justify-end">
+                    <button
+                      className="bg-red-500/20 text-red-400 px-3 py-1 rounded-md hover:bg-red-500/30 transition-colors text-sm"
+                      onClick={(e) => handleCancelOrder(order.id, e)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          })
+        )}
+      </div>
+
       <div className="flex justify-center mt-4">
         <button
           className="bg-white/10 text-white/50 px-6 py-2 rounded-md cursor-not-allowed"
