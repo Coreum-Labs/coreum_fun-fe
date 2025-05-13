@@ -54,7 +54,7 @@ export default function ClientLayout({
                   <span className="text-lg sm:text-xl font-bold text-white">
                     Coreum.fun
                   </span>
-                  <span className="text-xs sm:text-sm text-primary font-bol mt-1">
+                  <span className="text-xs sm:text-sm text-primary font-semibold mt-1">
                     The No Loss Crypto Draft
                   </span>
                 </div>

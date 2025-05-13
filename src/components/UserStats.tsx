@@ -7,7 +7,7 @@ import { selectFormattedBalanceByDenom } from "../features/balances";
 
 const UserStats = () => {
   return (
-    <div className="w-full flex flex-col gap-4 mb-6 bg-indigo-900/50 p-4 rounded-lg">
+    <div className="w-full flex flex-col gap-4 mb-3 bg-indigo-900/50 p-4 rounded-lg">
       {/* Desktop View */}
       <div className="hidden md:flex justify-between items-center">
         <span className="text-gray-300 font-semibold">Your Balance...</span>

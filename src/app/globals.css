@@ -27,10 +27,10 @@
 }
 
 body {
-  background-color: #1f1b4d;
+  background-color: #1e1a78;
   color: white;
 }
-
+/* bg-gradient-to-bl from-[#0f172a] via-[#1e1a78] to-[#0f172a] */
 :root {
   --color-primary: #35F0D0;
   --color-secondary: #F79D84;
