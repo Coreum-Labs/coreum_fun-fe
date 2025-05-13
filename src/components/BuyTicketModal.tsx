@@ -95,7 +95,7 @@ export const BuyTicketModal: React.FC = () => {
                 className={`py-2 rounded-lg ${
                   ticketCount === num
                     ? "bg-primary text-white"
-                    : "bg-gray-600/80 text-gray-300 hover:bg-gray-500/80"
+                    : "bg-indigo-700/50 text-gray-300 hover:bg-indigo-600/80 ease-in-out duration-300"
                 }`}
               >
                 {num}
@@ -108,7 +108,7 @@ export const BuyTicketModal: React.FC = () => {
           <label className="block text-white mb-2">
             Amount (200 COREUM per ticket)
           </label>
-          <div className="flex items-center bg-gray-600/80 rounded-lg">
+          <div className="flex items-center bg-indigo-700/50 rounded-lg">
             <div className="ml-4 flex items-center">
               <svg
                 width="20"
