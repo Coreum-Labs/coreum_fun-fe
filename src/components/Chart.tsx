@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import { createChart, ColorType, AreaSeries } from "lightweight-charts";
 import { usePriceData } from "@/hooks/usePriceData";
-
+import DollarPlaceholder from "@/assets/coreum_fun_logo.png";
 const Chart = () => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const { priceHistory, isLoading, error } = usePriceData();
@@ -123,6 +123,21 @@ const Chart = () => {
     return (
       <div className="bg-indigo-900/50 rounded-lg h-full w-full flex items-center justify-center">
         <p className="text-gray-300">Loading...</p>
+      </div>
+    );
+  }
+
+  if (priceHistory.length === 0) {
+    return (
+      <div className="bg-indigo-900/50 rounded-lg h-full w-full flex flex-col items-center justify-center">
+        <img
+          src={DollarPlaceholder.src}
+          alt="Waiting for trades"
+          style={{ width: 200, height: 200, marginBottom: 16 }}
+        />
+        <p className="text-gray-300 text-lg mt-2">
+          waiting for 1st trades to happen
+        </p>
       </div>
     );
   }
