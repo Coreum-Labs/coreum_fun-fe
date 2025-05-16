@@ -9,10 +9,40 @@ import dollorSign from "../../public/dollar_sign.gif";
 import ticketIcon from "../assets/ticket.webp";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { COREUM_TOKEN_TESTNET } from "@/constants";
+import {
+  COREUM_TOKEN_TESTNET,
+  CHAIN_ID,
+  COREUM_DOT_FUN_CONTRACT_ADDRESS,
+  COREUM_DOT_FUN_TICKET_PRICE,
+} from "@/constants";
 import { selectFormattedBalanceByDenom } from "../features/balances";
+import { CoreumDotFunClient } from "@/ts/CoreumDotFun.client";
+import { TICKET_TOKEN_TESTNET } from "@/constants";
+import { useEstimateTxGasFee } from "@/hooks/useEstimateTxGasFee";
+import { useAccount } from "graz";
+import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { Coin, Registry } from "@cosmjs/proto-signing";
+import { defaultRegistryTypes } from "@cosmjs/stargate";
+import { coreumRegistry, cosmwasmRegistry } from "coreum-js-nightly";
+import { useDraft } from "@/hooks/useDraft";
+import { useRefetchBalances } from "@/hooks/useBalances";
+import { toast } from "sonner";
+import { usePriceData } from "@/hooks/usePriceData";
+
+const registryTypes = [
+  ...defaultRegistryTypes,
+  ...coreumRegistry,
+  ...cosmwasmRegistry,
+];
+const registry = new Registry(registryTypes);
 
 export const BuyTicketModal: React.FC = () => {
+  const { data: account } = useAccount();
+  const { signingClient, getTxFee } = useEstimateTxGasFee();
+  const { numberOfTicketsSold, refetchAll } = useDraft();
+  const { refetchBalances } = useRefetchBalances();
+  const { coreumPrice } = usePriceData();
+
   const [ticketCount, setTicketCount] = useState<number>(1);
   const [amount, setAmount] = useState<number>(200);
   const dispatch = useAppDispatch();
@@ -23,6 +53,14 @@ export const BuyTicketModal: React.FC = () => {
   const coreumBalance = useSelector(
     selectFormattedBalanceByDenom(COREUM_TOKEN_TESTNET.denom)
   );
+
+  // Calculate win rate based on selected tickets
+  const calculateWinRate = () => {
+    if (!numberOfTicketsSold?.total_tickets) return "0";
+    const totalTickets = parseFloat(numberOfTicketsSold.total_tickets);
+    if (totalTickets === 0) return "0";
+    return ((ticketCount / totalTickets) * 100).toFixed(2);
+  };
 
   // Update amount whenever ticket count changes
   useEffect(() => {
@@ -41,18 +79,96 @@ export const BuyTicketModal: React.FC = () => {
 
     try {
       dispatch(setIsTxExecuting(true));
-      // Implement your buy ticket logic here
-      // Call your contract or API
+      toast.loading("Processing your ticket purchase...", {
+        id: "buy-tickets",
+        icon: React.createElement("img", {
+          src: dollorSign.src,
+          alt: "dollar sign",
+          style: { width: "20px", height: "20px" },
+        }),
+      });
+
+      if (!signingClient || !account?.bech32Address) {
+        throw new Error("Client or account not initialized");
+      }
+
+      const funds: Coin = {
+        denom: COREUM_TOKEN_TESTNET.denom,
+        amount: (Number(COREUM_DOT_FUN_TICKET_PRICE) * ticketCount).toString(),
+      };
+
+      const fee = {
+        amount: [
+          {
+            denom: "ucore",
+            amount: "0.044647239000471281",
+          },
+        ],
+        gas: "1208774",
+      };
+
+      const coreumDotFunClient = new CoreumDotFunClient(
+        signingClient as unknown as SigningCosmWasmClient,
+        account.bech32Address,
+        COREUM_DOT_FUN_CONTRACT_ADDRESS
+      );
+
+      const result = await coreumDotFunClient.buyTicket(
+        { numberOfTickets: ticketCount.toString() },
+        fee,
+        account.bech32Address,
+        [funds]
+      );
+
+      console.log(result.transactionHash);
+      console.log(result.events);
+
+      // Refetch all data after successful purchase
+      await Promise.all([refetchAll(), refetchBalances()]);
+
+      // Show success toast
+      toast.success("Tickets purchased successfully! 🎉", {
+        id: "buy-tickets",
+        description: `You bought ${ticketCount} ticket${
+          ticketCount > 1 ? "s" : ""
+        }`,
+        icon: React.createElement("img", {
+          src: dollorSign.src,
+          alt: "dollar sign",
+          style: { width: "20px", height: "20px" },
+        }),
+      });
 
       // Close modal on success
       handleCloseModal();
     } catch (error) {
       console.error("Failed to buy tickets:", error);
-      // Handle error
+      await Promise.all([refetchAll(), refetchBalances()]);
+
+      // Show error toast
+      toast.error("Failed to buy tickets", {
+        id: "buy-tickets",
+        description: (error as Error).message,
+        icon: React.createElement("img", {
+          src: dollorSign.src,
+          alt: "dollar sign",
+          style: { width: "20px", height: "20px" },
+        }),
+      });
     } finally {
       dispatch(setIsTxExecuting(false));
     }
-  }, [ticketCount, amount, isConnected, dispatch]);
+  }, [
+    ticketCount,
+    amount,
+    isConnected,
+    dispatch,
+    signingClient,
+    account,
+    getTxFee,
+    refetchAll,
+    refetchBalances,
+  ]);
 
   const handleCloseModal = () => {
     dispatch(setIsBuyTicketModalOpen(false));
@@ -102,6 +218,13 @@ export const BuyTicketModal: React.FC = () => {
               </button>
             ))}
           </div>
+          <div className="mt-2 text-sm text-gray-400">
+            <p>Win Rate: {calculateWinRate()}%</p>
+            <p>
+              Tickets Remaining: {numberOfTicketsSold?.tickets_remaining || "0"}
+            </p>
+            <p className="text-gray-400">Info: Maximum 5 tickets per wallet</p>
+          </div>
         </div>
 
         <div className="w-full mb-6">
@@ -135,7 +258,7 @@ export const BuyTicketModal: React.FC = () => {
             />
           </div>
           <p className="text-gray-400 mt-1">
-            ≈ ${(amount * 0.85).toFixed(2)} USD
+            ≈ ${(amount * (coreumPrice || 0)).toFixed(2)} USD
           </p>
         </div>
 
