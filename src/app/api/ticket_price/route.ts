@@ -8,13 +8,18 @@ import { NextResponse } from 'next/server';
 // Initialize Redis
 const redis = Redis.fromEnv();
 
+interface PriceEntry {
+  time: number;
+  value: number;
+}
+
 // GET request handler: get ticket price history
 export const GET = async () => {
   try {
-    let priceHistory = await redis.get('ticket_price_history') || [];
+    let priceHistory = (await redis.get('ticket_price_history') || []) as PriceEntry[];
     if (Array.isArray(priceHistory)) {
       // Remove duplicates: keep only the last occurrence for each timestamp
-      const map = new Map<number, { time: number; value: number }>();
+      const map = new Map<number, PriceEntry>();
       for (const entry of priceHistory) {
         map.set(entry.time, entry);
       }
