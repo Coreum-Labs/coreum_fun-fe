@@ -7,13 +7,14 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useTicketHolders } from "@/hooks/useTicketHolders";
 import { TICKET_TOKEN_TESTNET } from "@/constants";
+import { useDraft } from "@/hooks/useDraft";
 
 const TradingTabs = () => {
   const [activeTab, setActiveTab] = useState<
     "holders" | "openOrders" | "orderHistory"
   >("holders");
   const { openOrders } = useSelector((state: RootState) => state.dex);
-  const { holders } = useTicketHolders();
+  const { ticketHolders } = useDraft();
   return (
     <div className="w-full">
       <div className="flex gap-4 mb-4">
@@ -25,7 +26,7 @@ const TradingTabs = () => {
           }`}
           onClick={() => setActiveTab("holders")}
         >
-          Holders ({holders.length})
+          Holders ({ticketHolders?.total_holders})
         </button>
         <button
           className={`px-4 py-2 rounded-md font-semibold ${

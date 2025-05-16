@@ -9,10 +9,11 @@ import {
   TicketsSoldResponse,
   DrawState,
   Coin,
+  TicketHoldersResponse,
 } from "@/ts/CoreumDotFun.types";
 
 interface DraftState {
-  participants: ParticipantsResponse;
+  ticketHolders: TicketHoldersResponse;
   draftState: CurrentStateResponse;
   bonusRewards: BonusRewardsResponse;
   accumulatedRewards: AccumulatedRewardsResponse;
@@ -22,7 +23,7 @@ interface DraftState {
 }
 
 const initialState: DraftState = {
-  participants: { participants: [], total_participants: 0 },
+  ticketHolders: { holders: [], total_holders: 0 },
   draftState: { state: "TicketSalesOpen" as DrawState },
   bonusRewards: { bonus_rewards: "0" },
   accumulatedRewards: { accumulated_rewards: "0" },
@@ -35,8 +36,8 @@ const draftSlice = createSlice({
   name: "draft",
   initialState,
   reducers: {
-    setParticipants: (state, action: PayloadAction<ParticipantsResponse>) => {
-      state.participants = action.payload;
+    setTicketHolders: (state, action: PayloadAction<TicketHoldersResponse>) => {
+      state.ticketHolders = action.payload;
     },
     setDraftState: (state, action: PayloadAction<CurrentStateResponse>) => {
       state.draftState = action.payload;
@@ -60,7 +61,7 @@ const draftSlice = createSlice({
 });
 
 export const {
-  setParticipants,
+  setTicketHolders,
   setDraftState,
   setBonusRewards,
   setAccumulatedRewards,

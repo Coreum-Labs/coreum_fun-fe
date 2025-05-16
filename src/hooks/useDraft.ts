@@ -6,7 +6,7 @@ import { CoreumDotFunQueryClient } from "@/ts/CoreumDotFun.client";
 import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { COREUM_DOT_FUN_CONTRACT_ADDRESS } from "@/constants";
 import {
-  setParticipants,
+  setTicketHolders,
   setDraftState,
   setBonusRewards,
   setAccumulatedRewards,
@@ -15,7 +15,7 @@ import {
   setNumberOfTicketsSold,
 } from "@/features/draft";
 import {
-  ParticipantsResponse,
+
   CurrentStateResponse,
   BonusRewardsResponse,
   AccumulatedRewardsResponse,
@@ -24,6 +24,7 @@ import {
   TicketsSoldResponse,
   UserTicketsResponse,
   UserWinChanceResponse,
+  TicketHoldersResponse,
 } from "@/ts/CoreumDotFun.types";
 
 export const useDraft = () => {
@@ -47,15 +48,15 @@ export const useDraft = () => {
   }, [coswasmClient]);
 
   // Get participants
-  const { data: participants, refetch: refetchParticipants } = useQuery<ParticipantsResponse>({
-    queryKey: ["participants"],
+  const { data: ticketHolders, refetch: refetchTicketHolders } = useQuery<TicketHoldersResponse>({
+    queryKey: ["ticketHolders"],
     queryFn: async () => {
       if (coreumDotFunClient) {
-        const result = await coreumDotFunClient.getParticipants();
-        dispatch(setParticipants(result));
+        const result = await coreumDotFunClient.getTicketHolders();
+        dispatch(setTicketHolders(result));
         return result;
       }
-      return { participants: [], total_participants: 0 };
+      return { holders: [], total_holders: 0 };
     },
     refetchOnMount: true,
     refetchOnWindowFocus: true,
@@ -193,7 +194,7 @@ export const useDraft = () => {
   // Function to refetch all data
   const refetchAll = async () => {
     await Promise.all([
-      refetchParticipants(),
+      refetchTicketHolders(),
       refetchDraftState(),
       refetchBonusRewards(),
       refetchAccumulatedRewards(),
@@ -206,7 +207,7 @@ export const useDraft = () => {
   };
 
   return {
-    participants,
+    ticketHolders,
     draftState,
     bonusRewards,
     accumulatedRewards,
@@ -216,7 +217,7 @@ export const useDraft = () => {
     userTickets,
     userWinChance,
     // Individual refetch functions
-    refetchParticipants,
+    refetchTicketHolders,
     refetchDraftState,
     refetchBonusRewards,
     refetchAccumulatedRewards,

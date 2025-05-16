@@ -13,19 +13,18 @@ function getEmoji(tickets: string) {
 
 const Holders = () => {
   const [selected, setSelected] = useState(0);
-  const { participants } = useDraft();
+  const { ticketHolders } = useDraft();
 
   // Transform participants data to match the existing UI format
   const holdersData =
-    participants?.participants.map((participant) => ({
-      address:
-        participant.address.slice(0, 4) + "..." + participant.address.slice(-4),
-      tickets: parseInt(participant.tickets),
-      winRate: parseFloat(participant.win_chance), // Convert to percentage
-      deposit: parseInt(participant.tickets) * 100, // TODO: Get price from the contract
+    ticketHolders?.holders.map((holder) => ({
+      address: holder.address.slice(0, 4) + "..." + holder.address.slice(-4),
+      tickets: parseInt(holder.tickets),
+      winRate: parseFloat(holder.win_chance), // Convert to percentage
+      deposit: parseInt(holder.tickets) * 100, // TODO: Get price from the contract
     })) || [];
 
-  if (!participants) {
+  if (!ticketHolders) {
     return <div className="text-white/70">Loading holders...</div>;
   }
 
