@@ -2,12 +2,14 @@
 
 import React, { useEffect, useRef } from "react";
 import { createChart, ColorType, AreaSeries } from "lightweight-charts";
+import { usePriceData } from "@/hooks/usePriceData";
 
 const Chart = () => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
+  const { priceHistory, isLoading, error } = usePriceData();
 
   useEffect(() => {
-    if (!chartContainerRef.current) return;
+    if (!chartContainerRef.current || priceHistory.length === 0) return;
 
     // Create chart instance
     const chart = createChart(chartContainerRef.current, {
@@ -24,14 +26,23 @@ const Chart = () => {
       rightPriceScale: {
         borderColor: "rgba(197, 203, 206, 0.3)",
         visible: true,
+        scaleMargins: {
+          top: 0.1,
+          bottom: 0.1,
+        },
+        mode: 0,
+        autoScale: true,
+        alignLabels: true,
+        borderVisible: true,
+        textColor: "#d1d5db",
       },
       timeScale: {
         borderColor: "rgba(197, 203, 206, 0.3)",
-        timeVisible: false,
+        timeVisible: true,
       },
     });
 
-    // Create the area series using the proper constructor approach
+    // Create the area series
     const areaSeries = chart.addSeries(AreaSeries);
 
     // Set series options
@@ -41,61 +52,45 @@ const Chart = () => {
       bottomColor: "rgba(53, 240, 208, 0.1)",
       lineWidth: 2,
       priceLineVisible: false,
+      priceFormat: {
+        type: "price",
+        precision: 2,
+        minMove: 0.000001,
+      },
+      title: "Ticket/Coreum",
     });
 
-    // Sample data for the chart
-    const data = [
-      { time: "2023-01-01", value: 20 },
-      { time: "2023-01-02", value: 25 },
-      { time: "2023-01-03", value: 23 },
-      { time: "2023-01-04", value: 30 },
-      { time: "2023-01-05", value: 25 },
-      { time: "2023-01-06", value: 32 },
-      { time: "2023-01-07", value: 35 },
-      { time: "2023-01-08", value: 33 },
-      { time: "2023-01-09", value: 37 },
-      { time: "2023-01-10", value: 32 },
-      { time: "2023-01-11", value: 38 },
-      { time: "2023-01-12", value: 43 },
-      { time: "2023-01-13", value: 36 },
-      { time: "2023-01-14", value: 25 },
-      { time: "2023-01-15", value: 30 },
-      { time: "2023-01-16", value: 37 },
-      { time: "2023-01-17", value: 40 },
-      { time: "2023-01-18", value: 50 },
-      { time: "2023-01-19", value: 47 },
-      { time: "2023-01-20", value: 55 },
-      { time: "2023-01-21", value: 60 },
-      { time: "2023-01-22", value: 62 },
-      { time: "2023-01-23", value: 58 },
-      { time: "2023-01-24", value: 55 },
-      { time: "2023-01-25", value: 52 },
-      { time: "2023-01-26", value: 57 },
-      { time: "2023-01-27", value: 62 },
-      { time: "2023-01-28", value: 55 },
-      { time: "2023-01-29", value: 23.16 },
-    ];
+    // Set the data
+    areaSeries.setData(priceHistory);
 
-    areaSeries.setData(data);
+    // Add custom price markers if we have data
+    if (priceHistory.length > 0) {
+      const latestPrice = priceHistory[priceHistory.length - 1].value;
+      const minPrice = Math.min(
+        ...priceHistory.map((d: { value: number }) => d.value)
+      );
+      const maxPrice = Math.max(
+        ...priceHistory.map((d: { value: number }) => d.value)
+      );
 
-    // Add custom price markers
-    areaSeries.createPriceLine({
-      price: 23.16,
-      color: "#ef4444",
-      lineWidth: 2,
-      lineStyle: 2,
-      axisLabelVisible: true,
-      title: "23.16",
-    });
+      areaSeries.createPriceLine({
+        price: minPrice,
+        color: "#35F0D0",
+        lineWidth: 2,
+        lineStyle: 2,
+        axisLabelVisible: true,
+        title: minPrice.toFixed(2),
+      });
 
-    areaSeries.createPriceLine({
-      price: 76.84,
-      color: "#4ade80",
-      lineWidth: 2,
-      lineStyle: 2,
-      axisLabelVisible: true,
-      title: "76.84",
-    });
+      areaSeries.createPriceLine({
+        price: maxPrice,
+        color: "#4ade80",
+        lineWidth: 2,
+        lineStyle: 2,
+        axisLabelVisible: true,
+        title: maxPrice.toFixed(2),
+      });
+    }
 
     chart.timeScale().fitContent();
 
@@ -114,7 +109,23 @@ const Chart = () => {
       chart.remove();
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [priceHistory]);
+
+  if (error) {
+    return (
+      <div className="bg-indigo-900/50 rounded-lg h-full w-full flex items-center justify-center">
+        <p className="text-red-500">Error: {error}</p>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="bg-indigo-900/50 rounded-lg h-full w-full flex items-center justify-center">
+        <p className="text-gray-300">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-indigo-900/50 rounded-lg h-full w-full">
