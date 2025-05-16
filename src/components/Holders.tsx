@@ -1,27 +1,31 @@
 import React, { useState } from "react";
-import { useTicketHolders } from "@/hooks/useTicketHolders";
+import { useDraft } from "@/hooks/useDraft";
+import { TICKET_TOKEN_TESTNET } from "@/constants";
 
-function getEmoji(tickets: number) {
-  if (tickets >= 5) return "🦈";
-  if (tickets === 4) return "🐋";
-  if (tickets === 3) return "🐡";
-  if (tickets === 2) return "🐠";
+function getEmoji(tickets: string) {
+  const ticketNum = parseInt(tickets);
+  if (ticketNum >= 5) return "🦈";
+  if (ticketNum === 4) return "🐋";
+  if (ticketNum === 3) return "🐡";
+  if (ticketNum === 2) return "🐠";
   return "🦐";
 }
 
 const Holders = () => {
   const [selected, setSelected] = useState(0);
-  const { holders, isLoading } = useTicketHolders();
+  const { participants } = useDraft();
 
-  // Transform holders data to match the existing UI format
-  const holdersData = holders.map((holder) => ({
-    address: holder.address.slice(0, 4) + "..." + holder.address.slice(-4),
-    tickets: parseInt(holder.balance.amount) / 1000000, // Convert from subunit to unit
-    winRate: 0, // These values would need to be calculated or fetched from another source
-    deposit: 0, // These values would need to be calculated or fetched from another source
-  }));
+  // Transform participants data to match the existing UI format
+  const holdersData =
+    participants?.participants.map((participant) => ({
+      address:
+        participant.address.slice(0, 4) + "..." + participant.address.slice(-4),
+      tickets: parseInt(participant.tickets),
+      winRate: parseFloat(participant.win_chance), // Convert to percentage
+      deposit: parseInt(participant.tickets) * 100, // TODO: Get price from the contract
+    })) || [];
 
-  if (isLoading) {
+  if (!participants) {
     return <div className="text-white/70">Loading holders...</div>;
   }
 
@@ -50,10 +54,12 @@ const Holders = () => {
               >
                 <td className="py-2 px-4 rounded-l-lg">{row.address}</td>
                 <td className="py-2 px-4 text-right">{row.tickets}</td>
-                <td className="py-2 px-4 text-right">{row.winRate}</td>
+                <td className="py-2 px-4 text-right">
+                  {row.winRate.toFixed(2)}%
+                </td>
                 <td className="py-2 px-4 text-right">{row.deposit}</td>
                 <td className="py-2 px-4 rounded-r-lg text-right">
-                  {getEmoji(row.tickets)}
+                  {getEmoji(row.tickets.toString())}
                 </td>
               </tr>
             ))}
@@ -73,7 +79,9 @@ const Holders = () => {
           >
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-white/70">{row.address}</span>
-              <span className="text-xl">{getEmoji(row.tickets)}</span>
+              <span className="text-xl">
+                {getEmoji(row.tickets.toString())}
+              </span>
             </div>
             <div className="space-y-1">
               <div className="flex justify-between text-sm">
@@ -82,7 +90,7 @@ const Holders = () => {
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-white/70">Win Rate</span>
-                <span>{row.winRate}</span>
+                <span>{row.winRate.toFixed(2)}%</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-white/70">Deposit</span>

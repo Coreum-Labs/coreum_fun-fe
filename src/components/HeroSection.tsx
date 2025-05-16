@@ -7,10 +7,12 @@ import {
 import { useAppDispatch } from "@/store/hooks";
 import React from "react";
 import { useAccount } from "graz";
+import { useDraft } from "@/hooks/useDraft";
 
 const HeroSection = () => {
   const dispatch = useAppDispatch();
   const { isConnected } = useAccount();
+  const { numberOfTicketsSold } = useDraft();
 
   const handleOpenModal = () => {
     if (isConnected) {
@@ -26,7 +28,14 @@ const HeroSection = () => {
         Win up to <span className="text-shadow-xs text-primary">$600</span>
       </h1>
       <p className="text-md mb-4 font-semibold">
-        <span className="text-primary">100</span> Ticket left
+        <span className="text-primary">
+          {numberOfTicketsSold?.tickets_remaining || 0}
+        </span>{" "}
+        Tickets left <span className="mx-2">|</span>{" "}
+        <span className="text-secondary">
+          {numberOfTicketsSold?.tickets_sold || 0}
+        </span>{" "}
+        Tickets Sold
       </p>
       <button
         onClick={handleOpenModal}
