@@ -65,7 +65,12 @@ const UserStats = () => {
           </span>
           <div className="flex flex-col gap-2">
             <div className="border-2 border-primary/40 text-primary font-semibold py-1 px-4 rounded-full text-center">
-              ${(Number(coreumBalance) * getLastTicketPrice()).toFixed(2)}
+              $
+              {(
+                Number(coreumPrice || "0") *
+                getLastTicketPrice() *
+                Number(userTickets?.tickets || "0")
+              ).toFixed(2)}{" "}
             </div>
             <div className="border-2 border-secondary/40 text-secondary font-semibold py-1 px-4 rounded-full text-center">
               {userTickets?.tickets || "0"} $TICKET
