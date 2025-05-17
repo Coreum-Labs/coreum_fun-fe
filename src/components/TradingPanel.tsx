@@ -6,6 +6,7 @@ import { RootState } from "../store/store";
 import Image from "next/image";
 import { selectFormattedBalanceByDenom } from "../features/balances";
 import ReviewDexTxModal from "./ReviewDexTxModal";
+import TradeSuccessModal from "./TradeSuccessModal";
 import { useCreateOrder } from "../hooks/useCreateOrder";
 import { useAppDispatch } from "../store/hooks";
 import { setIsTxExecuting } from "../features/general";
@@ -36,6 +37,10 @@ const TradingPanel = () => {
   const [price, setPrice] = useState<string>("");
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [isManualSideChange, setIsManualSideChange] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [lastTxHash, setLastTxHash] = useState<string>();
+  const [lastAmount, setLastAmount] = useState<string>("");
+  const [lastPrice, setLastPrice] = useState<string>("");
 
   // Handle selected order changes
   useEffect(() => {
@@ -192,7 +197,7 @@ const TradingPanel = () => {
 
     try {
       dispatch(setIsTxExecuting(true));
-      await createOrder(
+      const response = await createOrder(
         side,
         amount,
         price,
@@ -202,6 +207,15 @@ const TradingPanel = () => {
         "Good till Cancel",
         "standard"
       );
+
+      // Store transaction hash
+      if (response?.transactionHash) {
+        setLastTxHash(response.transactionHash);
+      }
+
+      // Store the last amount and price before resetting
+      setLastAmount(amount);
+      setLastPrice(price);
 
       try {
         // Calculate price per ticket
@@ -222,13 +236,13 @@ const TradingPanel = () => {
         console.log("Ticket price stored:", data);
       } catch (error) {
         console.error("Failed to store ticket price:", error);
-        // Don't throw error here as the order was already created
       }
 
       // Refetch price data after successful trade
       refetchPrice();
 
       setIsReviewModalOpen(false);
+      setIsSuccessModalOpen(true);
       resetForm();
     } catch (error) {
       setIsReviewModalOpen(false);
@@ -384,6 +398,16 @@ const TradingPanel = () => {
         price={price}
         baseSymbol={base.symbol}
         quoteSymbol={quote.symbol}
+      />
+      <TradeSuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        side={side}
+        amount={lastAmount}
+        baseSymbol={base.symbol}
+        quoteSymbol={quote.symbol}
+        txHash={lastTxHash}
+        price={lastPrice}
       />
       <div className="flex justify-between">
         <p className="text-xs text-gray-400">Total:</p>
