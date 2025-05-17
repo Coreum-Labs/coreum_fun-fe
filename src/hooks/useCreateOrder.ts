@@ -23,7 +23,7 @@ const generateOrderId = (side: string, baseSymbol: string, quoteSymbol: string):
 export const useCreateOrder = () => {
   const { client } = useCoreum();
   const { data: account } = useAccount();
-  const { signingClient, getTxFee } = useEstimateTxGasFee();
+  const { signingClient } = useEstimateTxGasFee();
   const { fetchOrders } = useDex();
   const { refetchBalances } = useRefetchBalances();
   const { base, quote } = useSelector((state: RootState) => state.dex.tokenPair);
@@ -101,13 +101,21 @@ export const useCreateOrder = () => {
       });
         
       // 2. Calculate transaction fee
-      const calculatedTxFee = await getTxFee([orderMsg]);
 
+      const fee = {
+        amount: [
+          {
+            denom: "ucore",
+            amount: "0.044647239000471281",
+          },
+        ],
+        gas: "1208774",
+      };
       // 3. Send the transaction using the signing client
       const response = await signingClient.signAndBroadcast(
         account.bech32Address,
         [orderMsg],
-        calculatedTxFee ? calculatedTxFee.fee : 'auto'
+        fee
       );
 
       // 4. Refresh orders and balances after successful creation
@@ -124,22 +132,14 @@ export const useCreateOrder = () => {
       refetchBalances();
       fetchOrders();
       console.error('Error creating order:', error);
-      
-      // Only show success toast for the specific "Invalid string" error
-      if ((error as Error).message === 'Invalid string. Length must be a multiple of 4') {
-        toast.success(`${side === 'buy' ? 'Buy' : 'Sell'} order created successfully! 🎉`, {
-          description: ``,
-          icon: React.createElement('img', { src: dollar_sign.src, alt: 'dollar sign', style: { width: '20px', height: '20px' } }),
-        });
-      } else {
         toast.error('Failed to create order', {
           description: (error as Error).message,
           icon: React.createElement('img', { src: dollar_sign.src, alt: 'dollar sign', style: { width: '20px', height: '20px' } }),
         });
-      }
+      
       throw error;
     }
-  }, [client, account?.bech32Address, signingClient, fetchOrders, base.denom, quote.denom, getTxFee]);
+  }, [client, account?.bech32Address, signingClient, fetchOrders, base.denom, quote.denom]);
 
   return { createOrder };
 }; 

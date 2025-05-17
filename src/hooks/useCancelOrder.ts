@@ -11,7 +11,7 @@ import dollar_sign from "../../public/dollar_sign.gif";
 export const useCancelOrder = () => {
   const { client } = useCoreum();
   const { data: account } = useAccount();
-  const { signingClient, getTxFee } = useEstimateTxGasFee();
+  const { signingClient } = useEstimateTxGasFee();
   const { fetchOrders } = useDex();
   const { refetchBalances } = useRefetchBalances();
 
@@ -28,13 +28,22 @@ export const useCancelOrder = () => {
       });
 
       // Calculate transaction fee
-      const calculatedTxFee = await getTxFee([cancelOrderMsg]);
+
+         const fee = {
+        amount: [
+          {
+            denom: "ucore",
+            amount: "0.044647239000471281",
+          },
+        ],
+        gas: "1208774",
+      };
 
       // Send the transaction using the signing client
       const response = await signingClient.signAndBroadcast(
         account.bech32Address,
         [cancelOrderMsg],
-        calculatedTxFee ? calculatedTxFee.fee : 'auto'
+        fee
       );
 
       // Refresh orders and balances after successful cancellation
@@ -68,7 +77,7 @@ export const useCancelOrder = () => {
       }
       throw error;
     }
-  }, [client, account?.bech32Address, signingClient, fetchOrders, getTxFee]);
+  }, [client, account?.bech32Address, signingClient, fetchOrders]);
 
   return { cancelOrder };
 };

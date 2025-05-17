@@ -191,31 +191,6 @@ const TradingPanel = () => {
     }
 
     try {
-      // Calculate price per ticket
-      const pricePerTicket =
-        side === "buy"
-          ? parseFloat(price) / parseFloat(amount)
-          : parseFloat(price) * parseFloat(amount);
-
-      // Store the price
-      const response = await fetch("/api/ticket_price", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ price: pricePerTicket }),
-      });
-      const data = await response.json();
-      console.log("Ticket price stored:", data);
-    } catch (error) {
-      console.error("Failed to store ticket price:", error);
-      // Don't throw error here as the order was already created
-    }
-
-    // Refetch price data after successful trade
-    refetchPrice();
-
-    try {
       dispatch(setIsTxExecuting(true));
       await createOrder(
         side,
@@ -227,6 +202,31 @@ const TradingPanel = () => {
         "Good till Cancel",
         "standard"
       );
+
+      try {
+        // Calculate price per ticket
+        const pricePerTicket =
+          side === "buy"
+            ? parseFloat(price) / parseFloat(amount)
+            : parseFloat(price) * parseFloat(amount);
+
+        // Store the price
+        const response = await fetch("/api/ticket_price", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ price: pricePerTicket }),
+        });
+        const data = await response.json();
+        console.log("Ticket price stored:", data);
+      } catch (error) {
+        console.error("Failed to store ticket price:", error);
+        // Don't throw error here as the order was already created
+      }
+
+      // Refetch price data after successful trade
+      refetchPrice();
 
       setIsReviewModalOpen(false);
       resetForm();

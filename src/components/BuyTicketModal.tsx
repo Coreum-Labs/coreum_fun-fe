@@ -38,7 +38,7 @@ const registry = new Registry(registryTypes);
 
 export const BuyTicketModal: React.FC = () => {
   const { data: account } = useAccount();
-  const { signingClient, getTxFee } = useEstimateTxGasFee();
+  const { signingClient } = useEstimateTxGasFee();
   const { numberOfTicketsSold, refetchAll } = useDraft();
   const { refetchBalances } = useRefetchBalances();
   const { coreumPrice } = usePriceData();
@@ -165,7 +165,6 @@ export const BuyTicketModal: React.FC = () => {
     dispatch,
     signingClient,
     account,
-    getTxFee,
     refetchAll,
     refetchBalances,
   ]);
