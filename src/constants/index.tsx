@@ -12,7 +12,7 @@ export const COREUM_TOKEN_TESTNET: Token = {
 
 export const TICKET_TOKEN_TESTNET: Token = {
   denom:
-    "uticket_test-testcore1gdpe6y930ads46taj7e54ukccqj5ckqss7u7h0xvlzxl56lg7uuq6f2jsj",
+    "uticket_test-testcore1x66zxsh75r0ydpz7kqcwxe989ms4fvfprpwdxzd8c509z4m6d0wqsawm5w",
   symbol: "Ticket",
   subunit: "ticket",
   precision: 6,
@@ -22,7 +22,7 @@ export const TICKET_TOKEN_TESTNET: Token = {
 export const CHAIN_ID = "coreum-testnet-1";
 
 export const COREUM_DOT_FUN_CONTRACT_ADDRESS =
-  "testcore1gdpe6y930ads46taj7e54ukccqj5ckqss7u7h0xvlzxl56lg7uuq6f2jsj";
+  "testcore1x66zxsh75r0ydpz7kqcwxe989ms4fvfprpwdxzd8c509z4m6d0wqsawm5w";
 
 export const COREUM_DOT_FUN_TICKET_PRICE = "200000000";
 
