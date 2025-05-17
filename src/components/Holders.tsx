@@ -15,7 +15,7 @@ const Holders = () => {
   const [selected, setSelected] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const { ticketHolders } = useDraft();
-  const ITEMS_PER_PAGE = 5;
+  const ITEMS_PER_PAGE = 4;
 
   // Transform participants data to match the existing UI format
   const holdersData =
