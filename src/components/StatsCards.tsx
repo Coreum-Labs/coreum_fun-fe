@@ -53,7 +53,7 @@ const StatsCards = () => {
             ${totalDepositedUSD}
           </p>
           <p className="text-xs text-gray-400">
-            {draftTVL?.tvl || "0"} $COREUM
+            {Number(draftTVL?.tvl) * 10 ** -6 || "0"} $COREUM
           </p>
         </div>
         <div className="bg-indigo-900/50 p-3 rounded-lg flex flex-col items-center">
