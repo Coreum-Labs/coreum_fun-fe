@@ -9,14 +9,27 @@ const StatsCards = () => {
 
   // Calculate total deposited in USD
   const totalDepositedUSD = draftTVL?.tvl
-    ? (Number(draftTVL?.tvl) * 10 ** -6 * (coreumPrice || 0)).toFixed(2)
-    : "0.00";
+    ? new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(Number(draftTVL?.tvl) * 10 ** -6 * (coreumPrice || 0))
+    : "$0.00";
+
+  // Format COREUM amount
+  const formatCoreumAmount = (amount: number) => {
+    return new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  };
 
   // Calculate win chance per ticket
   const calculateWinChance = () => {
-    if (!numberOfTicketsSold?.total_tickets) return "0";
+    if (!numberOfTicketsSold?.total_tickets) return "0.00";
     const totalTickets = parseFloat(numberOfTicketsSold.total_tickets);
-    if (totalTickets === 0) return "0";
+    if (totalTickets === 0) return "0.00";
     return (100 / totalTickets).toFixed(2);
   };
 
@@ -28,9 +41,9 @@ const StatsCards = () => {
       <div className="hidden md:grid grid-cols-3 gap-3">
         <div className="bg-indigo-900/50 p-6 rounded-lg flex flex-col items-center">
           <h3 className="text-gray-300 mb-2 text-lg">Total deposited</h3>
-          <p className="text-primary text-3xl mb-2">${totalDepositedUSD}</p>
+          <p className="text-primary text-3xl mb-2">{totalDepositedUSD}</p>
           <p className="text-md text-gray-400">
-            {Number(draftTVL?.tvl) * 10 ** -6 || "0"} $COREUM
+            {formatCoreumAmount(Number(draftTVL?.tvl) * 10 ** -6 || 0)} $COREUM
           </p>
         </div>
         <div className="bg-indigo-900/50 p-6 rounded-lg flex flex-col items-center">
@@ -50,10 +63,10 @@ const StatsCards = () => {
         <div className="bg-indigo-900/50 p-3 rounded-lg flex flex-col items-center">
           <h3 className="text-gray-300 mb-1 text-sm">Total deposited</h3>
           <p className="text-primary text-lg font-medium mb-1">
-            ${totalDepositedUSD}
+            {totalDepositedUSD}
           </p>
           <p className="text-xs text-gray-400">
-            {Number(draftTVL?.tvl) * 10 ** -6 || "0"} $COREUM
+            {formatCoreumAmount(Number(draftTVL?.tvl) * 10 ** -6 || 0)} $COREUM
           </p>
         </div>
         <div className="bg-indigo-900/50 p-3 rounded-lg flex flex-col items-center">

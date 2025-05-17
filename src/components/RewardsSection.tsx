@@ -10,30 +10,50 @@ const RewardsSection = () => {
 
   // Calculate total deposited in USD
   const rewardAmount = bonusRewards?.bonus_rewards
-    ? (
-        Number(bonusRewards?.bonus_rewards) *
-        10 ** -6 *
-        (coreumPrice || 0)
-      ).toFixed(2)
-    : "0.00";
+    ? new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(
+        Number(bonusRewards?.bonus_rewards) * 10 ** -6 * (coreumPrice || 0)
+      )
+    : "$0.00";
 
   // Calculate prize yield in USD
   const prizeYieldUSD = accumulatedRewards?.accumulated_rewards
-    ? (
+    ? new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(
         Number(accumulatedRewards?.accumulated_rewards) *
-        10 ** -6 *
-        (coreumPrice || 0)
-      ).toFixed(2)
-    : "0.00";
+          10 ** -6 *
+          (coreumPrice || 0)
+      )
+    : "$0.00";
 
   const handleRefresh = () => {
     refetchAll();
   };
 
-  // Format number to 6 decimal places
-  const formatToSixDecimals = (value: string | undefined) => {
-    if (!value) return "0";
-    return (Number(value) * 10 ** -6).toFixed(6);
+  // Format COREUM amount with 2 decimal places for bonus rewards
+  const formatBonusAmount = (value: string | undefined) => {
+    if (!value) return "0.00";
+    return new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(Number(value) * 10 ** -6);
+  };
+
+  // Format COREUM amount with 6 decimal places for prize yield
+  const formatPrizeAmount = (value: string | undefined) => {
+    if (!value) return "0.000000";
+    return new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 6,
+      maximumFractionDigits: 6,
+    }).format(Number(value) * 10 ** -6);
   };
 
   return (
@@ -42,9 +62,9 @@ const RewardsSection = () => {
       <div className="hidden md:grid grid-cols-2 gap-3">
         <div className="bg-indigo-900/50 p-6 rounded-lg flex flex-col items-center">
           <h3 className="text-gray-300 mb-2 text-lg">Bonus Rewards</h3>
-          <p className="text-primary text-3xl mb-2">${rewardAmount}</p>
+          <p className="text-primary text-3xl mb-2">{rewardAmount}</p>
           <p className="text-md text-gray-400">
-            {formatToSixDecimals(bonusRewards?.bonus_rewards)} $COREUM
+            {formatBonusAmount(bonusRewards?.bonus_rewards)} $COREUM
           </p>
         </div>
         <div className="bg-indigo-900/50 p-6 rounded-lg flex flex-col items-center relative">
@@ -56,10 +76,9 @@ const RewardsSection = () => {
             <UpdateIcon className="w-4 h-4 text-gray-400 hover:text-gray-200" />
           </button>
           <h3 className="text-gray-300 mb-2 text-lg">Prize Yield</h3>
-          <p className="text-primary text-3xl mb-2">${prizeYieldUSD}</p>
+          <p className="text-primary text-3xl mb-2">{prizeYieldUSD}</p>
           <p className="text-md text-gray-400">
-            {formatToSixDecimals(accumulatedRewards?.accumulated_rewards)}{" "}
-            $COREUM
+            {formatPrizeAmount(accumulatedRewards?.accumulated_rewards)} $COREUM
           </p>
         </div>
       </div>
@@ -69,10 +88,10 @@ const RewardsSection = () => {
         <div className="bg-indigo-900/50 p-4 rounded-lg flex flex-col items-center">
           <h3 className="text-gray-300 mb-1 text-sm">Bonus Rewards</h3>
           <p className="text-primary text-xl font-medium mb-1">
-            ${rewardAmount}
+            {rewardAmount}
           </p>
           <p className="text-xs text-gray-400">
-            {formatToSixDecimals(bonusRewards?.bonus_rewards)} $COREUM
+            {formatBonusAmount(bonusRewards?.bonus_rewards)} $COREUM
           </p>
         </div>
         <div className="bg-indigo-900/50 p-4 rounded-lg flex flex-col items-center relative">
@@ -85,11 +104,10 @@ const RewardsSection = () => {
           </button>
           <h3 className="text-gray-300 mb-1 text-sm">Prize Yield</h3>
           <p className="text-primary text-xl font-medium mb-1">
-            ${prizeYieldUSD}
+            {prizeYieldUSD}
           </p>
           <p className="text-xs text-gray-400">
-            {formatToSixDecimals(accumulatedRewards?.accumulated_rewards)}{" "}
-            $COREUM
+            {formatPrizeAmount(accumulatedRewards?.accumulated_rewards)} $COREUM
           </p>
         </div>
       </div>
