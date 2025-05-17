@@ -69,7 +69,7 @@ export default function ClientLayout({
               />
               <div className="text-white  rounded-lg p-2 h-fit border-white/10 border">
                 <a
-                  href="https://x.com/coreum_labs"
+                  href="https://x.com/Coreum_dot_fun"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:opacity-80 transition-opacity"
