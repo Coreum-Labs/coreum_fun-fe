@@ -92,7 +92,7 @@ const InfoModal = ({
             {/* Add Medium Article Link */}
             <div className="mt-4">
               <a
-                href="https://medium.com/@coreumlabs/coreum-fun-c7c54482b675"
+                href="https://medium.com/@coreumlabs/introducing-coreum-fun-ac28118771a9"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"

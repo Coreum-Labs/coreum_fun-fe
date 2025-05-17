@@ -30,7 +30,7 @@ const Countdown = () => {
         <span className="text-secondary">{getStateMessage()}</span>
         <div className="flex items-center gap-2">
           <a
-            href="https://medium.com/@coreumlabs/coreum-fun-c7c54482b675"
+            href="https://medium.com/@coreumlabs/introducing-coreum-fun-ac28118771a9"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:text-primary/80 transition-colors"
