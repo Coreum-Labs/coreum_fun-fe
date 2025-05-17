@@ -13,8 +13,10 @@ const HeroSection = () => {
   const dispatch = useAppDispatch();
   const { isConnected } = useAccount();
   const { numberOfTicketsSold } = useDraft();
+  const isSoldOut = numberOfTicketsSold?.tickets_remaining === "0"; // Assuming 1M is max tickets
 
   const handleOpenModal = () => {
+    if (isSoldOut) return;
     if (isConnected) {
       dispatch(setIsBuyTicketModalOpen(true));
     } else {
@@ -39,13 +41,18 @@ const HeroSection = () => {
       </p>
       <button
         onClick={handleOpenModal}
-        className="block animate-background bg-gradient-to-r from-secondary via-primary to-[#f6d447] bg-[length:_400%_400%] p-[1px] [animation-duration:_6s] font-medium  rounded-md flex items-center gap-2 mb-8"
+        disabled={isSoldOut}
+        className={`block animate-background bg-gradient-to-r from-secondary via-primary to-[#f6d447] bg-[length:_400%_400%] p-[1px] [animation-duration:_6s] font-medium rounded-md flex items-center gap-2 mb-8 ${
+          isSoldOut ? "opacity-50 cursor-not-allowed" : ""
+        }`}
       >
         <a
           href="#"
-          className="block rounded-md bg-[#171b5e]/80 px-10 py-4 text-lg font-medium text-white hover:bg-[#171b5e]/70"
+          className={`block rounded-md bg-[#171b5e]/80 px-10 py-4 text-lg font-medium text-white ${
+            isSoldOut ? "hover:bg-[#171b5e]/80" : "hover:bg-[#171b5e]/70"
+          }`}
         >
-          BUY Ticket to WIN 🎉
+          {isSoldOut ? "Tickets Sold Out 🎫" : "BUY Ticket to WIN 🎉"}
         </a>
       </button>
     </div>
