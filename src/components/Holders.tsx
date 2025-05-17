@@ -13,7 +13,9 @@ function getEmoji(tickets: string) {
 
 const Holders = () => {
   const [selected, setSelected] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const { ticketHolders } = useDraft();
+  const ITEMS_PER_PAGE = 5;
 
   // Transform participants data to match the existing UI format
   const holdersData =
@@ -23,6 +25,9 @@ const Holders = () => {
       winRate: parseFloat(holder.win_chance), // Convert to percentage
       deposit: parseInt(holder.tickets) * 100, // TODO: Get price from the contract
     })) || [];
+
+  const paginatedHolders = holdersData.slice(0, currentPage * ITEMS_PER_PAGE);
+  const hasMore = holdersData.length > currentPage * ITEMS_PER_PAGE;
 
   if (!ticketHolders) {
     return <div className="text-white/70">Loading holders...</div>;
@@ -43,7 +48,7 @@ const Holders = () => {
             </tr>
           </thead>
           <tbody>
-            {holdersData.map((row, idx) => (
+            {paginatedHolders.map((row, idx) => (
               <tr
                 key={row.address + idx}
                 className={`cursor-pointer ${
@@ -68,7 +73,7 @@ const Holders = () => {
 
       {/* Mobile Card View */}
       <div className="md:hidden grid grid-cols-2 gap-4">
-        {holdersData.map((row, idx) => (
+        {paginatedHolders.map((row, idx) => (
           <div
             key={row.address + idx}
             className={`bg-white/5 rounded-lg p-4 cursor-pointer ${
@@ -102,8 +107,13 @@ const Holders = () => {
 
       <div className="flex justify-center mt-4">
         <button
-          className="bg-white/10 text-white/50 px-6 py-2 rounded-md cursor-not-allowed"
-          disabled
+          className={`px-6 py-2 rounded-md ${
+            hasMore
+              ? "bg-white/10 text-white hover:bg-white/20"
+              : "bg-white/10 text-white/50 cursor-not-allowed"
+          }`}
+          onClick={() => hasMore && setCurrentPage((prev) => prev + 1)}
+          disabled={!hasMore}
         >
           Show More
         </button>
