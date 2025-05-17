@@ -1,41 +1,26 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { Modal } from "./Modal";
 import x_logo from "../assets/x-logo-white.png";
 
-interface TradeSuccessModalProps {
+interface BuyTicketSuccessModalProps {
   isOpen: boolean;
   onClose: () => void;
-  side: "buy" | "sell";
-  amount: string;
-  baseSymbol: string;
-  quoteSymbol: string;
-  price: string;
+  ticketCount: number;
+  amount: number;
   txHash?: string;
 }
 
-export const TradeSuccessModal: React.FC<TradeSuccessModalProps> = ({
+export const BuyTicketSuccessModal: React.FC<BuyTicketSuccessModalProps> = ({
   isOpen,
   onClose,
-  side,
+  ticketCount,
   amount,
-  baseSymbol,
-  quoteSymbol,
-  price,
   txHash,
 }) => {
-  const formatSymbol = (symbol: string) => {
-    const lowerSymbol = symbol.toLowerCase();
-    if (lowerSymbol === "ticket") return "$TICKET";
-    if (lowerSymbol === "coreum") return "$COREUM";
-    return symbol.toUpperCase();
-  };
-
-  const shareText = `Just placed a ${
-    side === "buy" ? "buy" : "sell"
-  } order for ${amount} ${formatSymbol(baseSymbol)} at ${price} ${formatSymbol(
-    quoteSymbol
-  )} on the @CoreumOfficial DEX! 🚀\n\nCheck it out: https://coreum.fun`;
+  const shareText = `Just bought ${ticketCount} $TICKET${
+    ticketCount > 1 ? "s" : ""
+  } for ${amount} $COREUM on @Coreum_dot_fun! 🎫\n\nCheck it out: https://coreum.fun`;
 
   const handleShare = () => {
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
@@ -50,7 +35,9 @@ export const TradeSuccessModal: React.FC<TradeSuccessModalProps> = ({
       onClose={onClose}
       title={
         <div className="flex items-center gap-2">
-          <span className="text-green-400">Order Placed Successfully!</span>
+          <span className="text-green-400">
+            Tickets Purchased Successfully!
+          </span>
         </div>
       }
     >
@@ -58,25 +45,18 @@ export const TradeSuccessModal: React.FC<TradeSuccessModalProps> = ({
         <div className="flex flex-col items-center">
           <div className="w-32 h-32 mb-4">
             <img
-              src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMnFqbjc4ZWt5aHQ2MXR1OGZ5ejg4YWkxdWVoMGkwZHk0cm9sOXNxaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2m00OCBAsMaHfSrRho/giphy.gif"
+              src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3Y4bTJpbXB1NjRoNXdud3h4bm1qZjNmd2RjMzhtNHB1MGVmbzI0eiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rsANkiygv0Jpyn7mFC/giphy.gif"
               alt="Success"
               className="w-full h-full object-contain"
             />
           </div>
 
           <p className="text-center text-white/80 text-sm mb-4">
-            You have successfully placed a{" "}
-            <span className="text-secondary font-bold">
-              {side === "buy" ? "buy" : "sell"}
-            </span>{" "}
-            order for{" "}
+            You have successfully purchased{" "}
             <span className="text-primary font-bold">
-              {amount} {formatSymbol(baseSymbol)}
+              {ticketCount} $TICKET{ticketCount > 1 ? "s" : ""}
             </span>{" "}
-            at{" "}
-            <span className="text-primary font-bold">
-              {price} {formatSymbol(quoteSymbol)}
-            </span>
+            for <span className="text-primary font-bold">{amount} $COREUM</span>
           </p>
 
           {txHash && (
@@ -99,4 +79,4 @@ export const TradeSuccessModal: React.FC<TradeSuccessModalProps> = ({
   );
 };
 
-export default TradeSuccessModal;
+export default BuyTicketSuccessModal;
