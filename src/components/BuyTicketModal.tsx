@@ -2,8 +2,8 @@
 
 import React, { useState, useCallback, useEffect } from "react";
 import { Modal } from "./Modal";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setIsTxExecuting, setIsBuyTicketModalOpen } from "@/features/general";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { setIsTxExecuting, setIsBuyTicketModalOpen } from "../features/general";
 import Image from "next/image";
 import dollorSign from "../../public/dollar_sign.gif";
 import ticketIcon from "../assets/ticket.webp";
@@ -14,20 +14,20 @@ import {
   CHAIN_ID,
   COREUM_DOT_FUN_CONTRACT_ADDRESS,
   COREUM_DOT_FUN_TICKET_PRICE,
-} from "@/constants";
+} from "../constants";
 import { selectFormattedBalanceByDenom } from "../features/balances";
-import { CoreumDotFunClient } from "@/ts/CoreumDotFun.client";
-import { TICKET_TOKEN_TESTNET } from "@/constants";
-import { useEstimateTxGasFee } from "@/hooks/useEstimateTxGasFee";
+import { CoreumDotFunClient } from "../ts/CoreumDotFun.client";
+import { TICKET_TOKEN_TESTNET } from "../constants";
+import { useEstimateTxGasFee } from "../hooks/useEstimateTxGasFee";
 import { useAccount } from "graz";
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { Coin, Registry } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes } from "@cosmjs/stargate";
 import { coreumRegistry, cosmwasmRegistry } from "coreum-js-nightly";
-import { useDraft } from "@/hooks/useDraft";
-import { useRefetchBalances } from "@/hooks/useBalances";
+import { useDraft } from "../hooks/useDraft";
+import { useRefetchBalances } from "../hooks/useBalances";
 import { toast } from "sonner";
-import { usePriceData } from "@/hooks/usePriceData";
+import { usePriceData } from "../hooks/usePriceData";
 
 const registryTypes = [
   ...defaultRegistryTypes,

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { TokenPair } from '@/shared/types';
-import { COREUM_TOKEN_TESTNET, TICKET_TOKEN_TESTNET } from '@/constants';
+import { TokenPair } from '../../shared/types';
+import { COREUM_TOKEN_TESTNET, TICKET_TOKEN_TESTNET } from '../../constants';
 import { Order } from "coreum-js-nightly/dist/main/coreum/dex/v1/order";
 import { getOpenOrders, getOrderHistory } from './queries';
 import type { Client } from 'coreum-js-nightly';

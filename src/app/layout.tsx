@@ -7,13 +7,13 @@ import xIcon from "../../public/x.svg";
 import telegramIcon from "../../public/telegram.svg";
 import questionIcon from "../../public/question-mark.svg";
 import ClientModalWrapper from "../components/ClientModalWrapper";
-import { WalletProvider } from "@/providers/WalletProvider";
-import ClientLayout from "@/components/ClientLayout";
-import { ReduxProvider } from "@/providers/ReduxProvider";
+import { WalletProvider } from "../providers/WalletProvider";
+import ClientLayout from "../components/ClientLayout";
+import { ReduxProvider } from "../providers/ReduxProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AppProvider } from "@/providers/AppProvider";
+import { AppProvider } from "../providers/AppProvider";
 import { Toaster } from "sonner";
-import { CoreumProvider } from "@/providers/CoreumProvider";
+import { CoreumProvider } from "../providers/CoreumProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

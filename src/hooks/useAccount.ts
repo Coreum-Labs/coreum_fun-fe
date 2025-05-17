@@ -1,8 +1,8 @@
-import { setAccount, setIsConnected } from "@/features/general/index";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setAccount, setIsConnected } from "../features/general/index";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { useAccount } from "graz";
 import { useEffect } from "react";
-import { CHAIN_ID } from "@/constants";
+import { CHAIN_ID } from "../constants";
 export const useConnectedAccount = () => {
   const { data, isConnected } = useAccount({
     chainId: CHAIN_ID,

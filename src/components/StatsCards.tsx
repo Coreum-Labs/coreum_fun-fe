@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { useDraft } from "@/hooks/useDraft";
-import { usePriceData } from "@/hooks/usePriceData";
+import { useDraft } from "../hooks/useDraft";
+import { usePriceData } from "../hooks/usePriceData";
 
 const StatsCards = () => {
   const { draftTVL, numberOfTicketsSold } = useDraft();

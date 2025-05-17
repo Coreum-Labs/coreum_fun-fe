@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { chainName } from '@/config/default';
+import { chainName } from '../../config/default';
 
 //Base token is the token the user is buying or selling.
 // Quote token is the token used to price the base token. It's the currency used to buy or sell the base token.

@@ -1,7 +1,7 @@
 import { Client } from 'coreum-js-nightly';
 import { Order, Side } from 'coreum-js-nightly/dist/main/coreum/dex/v1/order';
-import { convertSubunitToUnit } from "@/utils/convertUnitToSubunit";
-import { COREUM_TOKEN_TESTNET, TICKET_TOKEN_TESTNET } from "@/constants";
+import { convertSubunitToUnit } from "../../utils/convertUnitToSubunit";
+import { COREUM_TOKEN_TESTNET, TICKET_TOKEN_TESTNET } from "../../constants";
 
 export async function getOpenOrders(
   client: Client,

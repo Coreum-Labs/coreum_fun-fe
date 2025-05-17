@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { fetchTicketHolders } from '@/features/tickets/ticketsSlice';
-import { TICKET_TOKEN_TESTNET } from "@/constants";
+import { useAppDispatch, useAppSelector } from '../store/hooks'; 
+import { fetchTicketHolders } from '../features/tickets/ticketsSlice';
+import { TICKET_TOKEN_TESTNET } from "../constants";
 
 
 export const useTicketHolders = () => {

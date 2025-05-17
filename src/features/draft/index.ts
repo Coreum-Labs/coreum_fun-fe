@@ -10,7 +10,7 @@ import {
   DrawState,
   Coin,
   TicketHoldersResponse,
-} from "@/ts/CoreumDotFun.types";
+} from "../../ts/CoreumDotFun.types";
 
 interface DraftState {
   ticketHolders: TicketHoldersResponse;

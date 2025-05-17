@@ -4,10 +4,10 @@ import Holders from "./Holders";
 import OpenOrders from "./OpenOrders";
 import OrderHistory from "./OrderHistory";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { useTicketHolders } from "@/hooks/useTicketHolders";
-import { TICKET_TOKEN_TESTNET } from "@/constants";
-import { useDraft } from "@/hooks/useDraft";
+import { RootState } from "../store/store";
+import { useTicketHolders } from "../hooks/useTicketHolders";
+import { TICKET_TOKEN_TESTNET } from "../constants";
+import { useDraft } from "../hooks/useDraft";
 
 const TradingTabs = () => {
   const [activeTab, setActiveTab] = useState<

@@ -3,8 +3,8 @@
 import React from "react";
 import ClientModalWrapper from "./ClientModalWrapper";
 import { ConnectWalletModal } from "./ConnectWalletModal";
-import { useAppDispatch } from "@/store/hooks";
-import { setIsConnectModalOpen } from "@/features/general";
+import { useAppDispatch } from "../store/hooks";
+import { setIsConnectModalOpen } from "../features/general";
 import { useAccount, useDisconnect } from "graz";
 import BuyTicketModal from "./BuyTicketModal";
 import Link from "next/link";

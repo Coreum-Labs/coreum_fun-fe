@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useDraft } from "@/hooks/useDraft";
+import { useDraft } from "../hooks/useDraft";
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 
 const Countdown = () => {

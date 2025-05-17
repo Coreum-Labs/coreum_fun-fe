@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import { useDraft } from "@/hooks/useDraft";
+import { useDraft } from "../hooks/useDraft";
 import { UpdateIcon } from "@radix-ui/react-icons";
-import { usePriceData } from "@/hooks/usePriceData";
+import { usePriceData } from "../hooks/usePriceData";
 
 const RewardsSection = () => {
   const { bonusRewards, accumulatedRewards, refetchAll } = useDraft();

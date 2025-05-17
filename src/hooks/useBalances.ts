@@ -1,6 +1,6 @@
-import { fetchBalancesByAccount, setBalances, shouldRefetchBalances } from "@/features/balances/";
-import { setAccount } from "@/features/general";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchBalancesByAccount, setBalances, shouldRefetchBalances } from "../features/balances/";
+import { setAccount } from "../features/general";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { useEffect } from "react";
 
 export const useRefetchBalances = () => {

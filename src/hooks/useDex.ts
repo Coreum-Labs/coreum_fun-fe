@@ -1,10 +1,10 @@
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useCoreum } from '@/providers/CoreumProvider';
+import { useCoreum } from '../providers/CoreumProvider';
 import { useAccount } from 'graz';
-import { fetchOpenOrders, fetchOrderHistory } from '@/features/dex';
+import { fetchOpenOrders, fetchOrderHistory } from '../features/dex';
 import type { Client } from 'coreum-js-nightly';
-import { RootState } from '@/store/store';
+import { RootState } from '../store/store';
 
 export const useDex = () => {
   const dispatch = useDispatch();

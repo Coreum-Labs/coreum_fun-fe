@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useDraft } from "@/hooks/useDraft";
-import { TICKET_TOKEN_TESTNET } from "@/constants";
+import { useDraft } from "../hooks/useDraft";
+import { TICKET_TOKEN_TESTNET } from "../constants";
 
 function getEmoji(tickets: string) {
   const ticketNum = parseInt(tickets);

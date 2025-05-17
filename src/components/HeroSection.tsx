@@ -3,11 +3,11 @@
 import {
   setIsBuyTicketModalOpen,
   setIsConnectModalOpen,
-} from "@/features/general";
-import { useAppDispatch } from "@/store/hooks";
+} from "../features/general";
+import { useAppDispatch } from "../store/hooks";
 import React from "react";
 import { useAccount } from "graz";
-import { useDraft } from "@/hooks/useDraft";
+import { useDraft } from "../hooks/useDraft";
 
 const HeroSection = () => {
   const dispatch = useAppDispatch();

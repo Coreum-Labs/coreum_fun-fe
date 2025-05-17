@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useCoreum } from '@/providers/CoreumProvider';
+import { useCoreum } from '../providers/CoreumProvider';
 import { useAccount } from 'graz';
 import { useDex } from './useDex';
 import { DEX } from 'coreum-js-nightly';

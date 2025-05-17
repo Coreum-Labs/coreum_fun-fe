@@ -2,8 +2,8 @@
 
 import React, { useEffect, useRef } from "react";
 import { createChart, ColorType, AreaSeries } from "lightweight-charts";
-import { usePriceData } from "@/hooks/usePriceData";
-import DollarPlaceholder from "@/assets/coreum_fun_logo.png";
+import { usePriceData } from "../hooks/usePriceData";
+import DollarPlaceholder from "../assets/coreum_fun_logo.png";
 const Chart = () => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const { priceHistory, isLoading, error } = usePriceData();

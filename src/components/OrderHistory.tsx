@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { formatOrder } from "../features/dex/queries";
-import { useDex } from "@/hooks/useDex";
+import { useDex } from "../hooks/useDex";
 
 export const OrderHistory = () => {
   const { orderHistory, isLoading } = useSelector(

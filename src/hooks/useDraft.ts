@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch } from "../store/hooks";
 import { useCosmWasmClient, useAccount } from "graz";
 import { useEffect, useState } from "react";
-import { CoreumDotFunQueryClient } from "@/ts/CoreumDotFun.client";
+import { CoreumDotFunQueryClient } from "../ts/CoreumDotFun.client";
 import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { COREUM_DOT_FUN_CONTRACT_ADDRESS } from "@/constants";
+import { COREUM_DOT_FUN_CONTRACT_ADDRESS } from "../constants";
 import {
   setTicketHolders,
   setDraftState,
@@ -13,7 +13,7 @@ import {
   setDraftTVL,
   setDelegatedAmount,
   setNumberOfTicketsSold,
-} from "@/features/draft";
+} from "../features/draft";
 import {
 
   CurrentStateResponse,
@@ -25,7 +25,7 @@ import {
   UserTicketsResponse,
   UserWinChanceResponse,
   TicketHoldersResponse,
-} from "@/ts/CoreumDotFun.types";
+} from "../ts/CoreumDotFun.types";
 
 export const useDraft = () => {
   const dispatch = useAppDispatch();

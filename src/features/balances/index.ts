@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Coin } from "@cosmjs/amino";
-import {  Token } from '@/shared/types';
+import {  Token } from '../../shared/types';
 import axios, { AxiosResponse } from 'axios';
-import { COREUM_TOKEN_TESTNET, TICKET_TOKEN_TESTNET } from '@/constants';
-import { convertSubunitToUnit, convertUnitToSubunit } from '@/utils/convertUnitToSubunit';
+import { COREUM_TOKEN_TESTNET, TICKET_TOKEN_TESTNET } from '../../constants';
+import { convertSubunitToUnit, convertUnitToSubunit } from '../../utils/convertUnitToSubunit';
 
 interface FetchBalancesByAccountArgs {
   account: string;

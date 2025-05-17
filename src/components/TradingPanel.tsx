@@ -6,15 +6,15 @@ import { RootState } from "../store/store";
 import Image from "next/image";
 import { selectFormattedBalanceByDenom } from "../features/balances";
 import ReviewDexTxModal from "./ReviewDexTxModal";
-import { useCreateOrder } from "@/hooks/useCreateOrder";
-import { useAppDispatch } from "@/store/hooks";
-import { setIsTxExecuting } from "@/features/general";
-import { setSelectedOrder } from "@/features/dex";
-import { formatOrder } from "@/features/dex/queries";
-import { convertDexPriceToNumber } from "@/utils/convertUnitToSubunit";
+import { useCreateOrder } from "../hooks/useCreateOrder";
+import { useAppDispatch } from "../store/hooks";
+import { setIsTxExecuting } from "../features/general";
+import { setSelectedOrder } from "../features/dex";
+import { formatOrder } from "../features/dex/queries";
+import { convertDexPriceToNumber } from "../utils/convertUnitToSubunit";
 import { toast } from "sonner";
-import { TICKET_TOKEN_TESTNET, COREUM_TOKEN_TESTNET } from "@/constants";
-import { usePriceData } from "@/hooks/usePriceData";
+import { TICKET_TOKEN_TESTNET, COREUM_TOKEN_TESTNET } from "../constants";
+import { usePriceData } from "../hooks/usePriceData";
 
 const TradingPanel = () => {
   const { tokenPair, selectedOrder } = useSelector(

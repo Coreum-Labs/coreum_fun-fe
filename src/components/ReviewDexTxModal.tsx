@@ -2,7 +2,7 @@ import React from "react";
 import { Modal } from "./Modal";
 import { ArrowBottomRightIcon, ArrowTopLeftIcon } from "@radix-ui/react-icons";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { RootState } from "../store/store";
 
 interface ReviewDexTxModalProps {
   isOpen: boolean;

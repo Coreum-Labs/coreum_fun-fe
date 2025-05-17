@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { formatOrder } from "../features/dex/queries";
-import { useDex } from "@/hooks/useDex";
-import { useCancelOrder } from "@/hooks/useCancelOrder";
+import { useDex } from "../hooks/useDex";
+import { useCancelOrder } from "../hooks/useCancelOrder";
 import { ArrowBottomRightIcon, ArrowTopLeftIcon } from "@radix-ui/react-icons";
 import { useAccount } from "graz";
-import { useAppDispatch } from "@/store/hooks";
-import { setIsTxExecuting } from "@/features/general";
+import { useAppDispatch } from "../store/hooks";
+import { setIsTxExecuting } from "../features/general";
 import { Modal } from "./Modal";
-import { setSelectedOrder } from "@/features/dex";
-import { convertDexPriceToNumber } from "@/utils/convertUnitToSubunit";
+import { setSelectedOrder } from "../features/dex";
+import { convertDexPriceToNumber } from "../utils/convertUnitToSubunit";
 
 export const OpenOrders = () => {
   const { openOrders, isLoading, tokenPair } = useSelector(

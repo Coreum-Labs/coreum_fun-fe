@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/store/hooks";
+import { useAppSelector } from "../store/hooks";
 import { EncodeObject, Registry } from "@cosmjs/proto-signing";
 import { useCosmWasmSigningClient, useTendermintClient, useOfflineSigners } from "graz";
 import { useMemo } from "react";
@@ -10,10 +10,10 @@ import {
   decodeCosmosSdkDecFromProto,
   defaultRegistryTypes,
 } from "@cosmjs/stargate";
-import { QueryClientImpl as FeeModelClient } from "@/lib/query";
+import { QueryClientImpl as FeeModelClient } from "../lib/query";
 import Big from "big.js";
 import { coreumRegistry, cosmwasmRegistry } from "coreum-js-nightly";
-import { CHAIN_ID } from "@/constants";
+import { CHAIN_ID } from "../constants";
 import { Comet38Client } from "@cosmjs/tendermint-rpc";
 
 const registryTypes = [

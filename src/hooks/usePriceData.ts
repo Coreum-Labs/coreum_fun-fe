@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPriceHistory, setLoading, setError, setCoreumPrice } from '@/store/slices/priceSlice';
-import { RootState } from '@/store/store';
+import { setPriceHistory, setLoading, setError, setCoreumPrice } from '../store/slices/priceSlice';
+import { RootState } from '../store/store';
 
 export const usePriceData = () => {
   const dispatch = useDispatch();

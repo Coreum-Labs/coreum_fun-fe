@@ -2,19 +2,19 @@
 
 import { useCallback } from "react";
 import { Modal } from "./Modal";
-import { WalletType } from "@/types/Wallet";
-import { WalletOption } from "@/config/default";
+import { WalletType } from "../types/Wallet";
+import { WalletOption } from "../config/default";
 import { WalletItem } from "./WalletItem";
-import { CONNECT_WALLET_OPTIONS } from "@/config/default";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setIsConnectModalOpen } from "@/features/general/index";
+import { CONNECT_WALLET_OPTIONS } from "../config/default";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { setIsConnectModalOpen } from "../features/general/index";
 import {
   WalletType as GrazWalletType,
   useDisconnect,
   useSuggestChainAndConnect,
   useConnect,
 } from "graz";
-import { coreumtestnet } from "@/providers/WalletProvider";
+import { coreumtestnet } from "../providers/WalletProvider";
 import Link from "next/link";
 
 export const ConnectWalletModal = () => {

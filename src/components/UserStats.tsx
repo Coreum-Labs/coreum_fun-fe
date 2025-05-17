@@ -2,10 +2,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { COREUM_TOKEN_TESTNET, TICKET_TOKEN_TESTNET } from "@/constants";
+import { COREUM_TOKEN_TESTNET, TICKET_TOKEN_TESTNET } from "../constants";
 import { selectFormattedBalanceByDenom } from "../features/balances";
-import { useDraft } from "@/hooks/useDraft";
-import { usePriceData } from "@/hooks/usePriceData";
+import { useDraft } from "../hooks/useDraft";
+import { usePriceData } from "../hooks/usePriceData";
 
 const UserStats = () => {
   const { userTickets, userWinChance, numberOfTicketsSold } = useDraft();
