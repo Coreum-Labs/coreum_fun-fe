@@ -143,10 +143,10 @@ const Chart = () => {
   }
 
   return (
-    <div className="bg-indigo-900/50 rounded-lg h-full w-full">
+    <div className="bg-indigo-900/50 rounded-lg h-full w-full min-h-[300px] border border-indigo-500/30">
       <div
         ref={chartContainerRef}
-        className="h-full w-full bg-indigo-900/30 rounded"
+        className="h-full w-full bg-indigo-900/30 rounded-lg min-h-[300px] overflow-hidden"
       />
     </div>
   );
