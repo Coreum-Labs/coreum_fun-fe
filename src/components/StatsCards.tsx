@@ -109,9 +109,7 @@ const StatsCards = () => {
         >
           <h3 className="text-gray-300 mb-2 text-lg">Grand Prize</h3>
           <p className="text-primary text-3xl mb-2">{grandPrize} $COREUM</p>
-          <button className="text-md text-blue-400">
-            {grandPrizeUSD} $USD
-          </button>
+          <button className="text-md text-blue-400">${grandPrizeUSD}</button>
         </div>
         <div
           className={getCardClassName("yield")}
@@ -156,9 +154,7 @@ const StatsCards = () => {
           <p className="text-primary text-lg font-medium mb-1">
             {grandPrize} $COREUM
           </p>
-          <button className="text-xs text-blue-400">
-            {grandPrizeUSD} $USD
-          </button>
+          <button className="text-xs text-blue-400">${grandPrizeUSD}</button>
         </div>
         <div
           className={`${getCardClassName("yield", true)} col-span-2`}
