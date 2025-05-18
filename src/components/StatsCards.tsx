@@ -54,7 +54,17 @@ const StatsCards = () => {
         <div className="bg-indigo-900/50 p-6 rounded-lg flex flex-col items-center">
           <h3 className="text-gray-300 mb-2 text-lg">Yield Source</h3>
           <p className="text-primary text-3xl  mb-2">Coreum Labs</p>
-          <button className="text-md text-blue-400">38% Network Yield</button>
+          <button
+            onClick={() =>
+              window.open(
+                "https://validator.info/coreum/corevaloper14e0slqpzhgsakm6fwnh5sk6mu2dmdc9ghxhuw5",
+                "_blank"
+              )
+            }
+            className="text-md text-blue-400"
+          >
+            38% Network Yield
+          </button>
         </div>
       </div>
 
@@ -79,7 +89,17 @@ const StatsCards = () => {
         <div className="bg-indigo-900/50 p-3 rounded-lg flex flex-col items-center col-span-2">
           <h3 className="text-gray-300 mb-1 text-sm">Yield Source</h3>
           <p className="text-primary text-lg font-medium mb-1">Coreum Labs</p>
-          <button className="text-xs text-blue-400">38% Network Yield</button>
+          <button
+            onClick={() =>
+              window.open(
+                "https://validator.info/coreum/corevaloper14e0slqpzhgsakm6fwnh5sk6mu2dmdc9ghxhuw5",
+                "_blank"
+              )
+            }
+            className="text-xs text-blue-400"
+          >
+            38% Network Yield
+          </button>
         </div>
       </div>
     </div>
