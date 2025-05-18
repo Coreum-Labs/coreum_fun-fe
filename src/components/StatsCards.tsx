@@ -1,11 +1,22 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useDraft } from "../hooks/useDraft";
 import { usePriceData } from "../hooks/usePriceData";
 
 const StatsCards = () => {
-  const { draftTVL, numberOfTicketsSold } = useDraft();
+  const {
+    draftTVL,
+    numberOfTicketsSold,
+    accumulatedRewards,
+    bonusRewards,
+    refetchAll,
+  } = useDraft();
   const { coreumPrice } = usePriceData();
+  const [tileStates, setTileStates] = useState({
+    deposited: { isRefreshing: false },
+    prize: { isRefreshing: false },
+    yield: { isRefreshing: false },
+  });
 
   // Calculate total deposited in USD
   const totalDepositedUSD = draftTVL?.tvl
@@ -35,32 +46,87 @@ const StatsCards = () => {
 
   const winChance = calculateWinChance();
 
+  const grandPrize = (
+    ((Number(accumulatedRewards?.accumulated_rewards) || 0) +
+      (Number(bonusRewards?.bonus_rewards) || 0)) *
+    10 ** -6
+  ).toFixed(2);
+
+  const grandPrizeUSD = (Number(grandPrize) * (coreumPrice || 0)).toFixed(2);
+
+  const handleRefresh = async (tileId: "deposited" | "prize" | "yield") => {
+    if (Object.values(tileStates).some((state) => state.isRefreshing)) return;
+
+    try {
+      setTileStates({
+        deposited: { isRefreshing: true },
+        prize: { isRefreshing: true },
+        yield: { isRefreshing: true },
+      });
+
+      await refetchAll();
+    } finally {
+      setTileStates({
+        deposited: { isRefreshing: false },
+        prize: { isRefreshing: false },
+        yield: { isRefreshing: false },
+      });
+    }
+  };
+
+  const getCardClassName = (
+    tileId: "deposited" | "prize" | "yield",
+    isMobile = false
+  ) => {
+    const baseClasses = isMobile
+      ? "bg-indigo-900/50 p-3 rounded-lg flex flex-col items-center cursor-pointer transition-all duration-200"
+      : "bg-indigo-900/50 p-6 rounded-lg flex flex-col items-center cursor-pointer transition-all duration-200";
+
+    const stateClasses = tileStates[tileId].isRefreshing
+      ? "opacity-50 scale-95"
+      : "hover:bg-indigo-900/70 hover:scale-[1.02]";
+
+    return `${baseClasses} ${stateClasses}`;
+  };
+
   return (
     <div className="w-full mb-3">
       {/* Desktop View */}
       <div className="hidden md:grid grid-cols-3 gap-3">
-        <div className="bg-indigo-900/50 p-6 rounded-lg flex flex-col items-center">
+        <div
+          className={getCardClassName("deposited")}
+          onClick={() => handleRefresh("deposited")}
+        >
           <h3 className="text-gray-300 mb-2 text-lg">Total deposited</h3>
           <p className="text-primary text-3xl mb-2">{totalDepositedUSD}</p>
           <p className="text-md text-gray-400">
             {formatCoreumAmount(Number(draftTVL?.tvl) * 10 ** -6 || 0)} $COREUM
           </p>
         </div>
-        <div className="bg-indigo-900/50 p-6 rounded-lg flex flex-col items-center">
-          <h3 className="text-gray-300 mb-2 text-lg">Win Chance</h3>
-          <p className="text-primary text-3xl mb-2">{winChance}% per ticket</p>
-          <button className="text-md text-blue-400">Learn More</button>
+        <div
+          className={getCardClassName("prize")}
+          onClick={() => handleRefresh("prize")}
+        >
+          <h3 className="text-gray-300 mb-2 text-lg">Grand Prize</h3>
+          <p className="text-primary text-3xl mb-2">{grandPrize} $COREUM</p>
+          <button className="text-md text-blue-400">
+            {grandPrizeUSD} $USD
+          </button>
         </div>
-        <div className="bg-indigo-900/50 p-6 rounded-lg flex flex-col items-center">
+        <div
+          className={getCardClassName("yield")}
+          onClick={() => handleRefresh("yield")}
+        >
           <h3 className="text-gray-300 mb-2 text-lg">Yield Source</h3>
-          <p className="text-primary text-3xl  mb-2">Coreum Labs</p>
+          <p className="text-primary text-3xl mb-2">Coreum Labs</p>
           <button
-            onClick={() =>
+            onClick={(e) => {
+              e.stopPropagation();
               window.open(
                 "https://validator.info/coreum/corevaloper14e0slqpzhgsakm6fwnh5sk6mu2dmdc9ghxhuw5",
                 "_blank"
-              )
-            }
+              );
+            }}
             className="text-md text-blue-400"
           >
             38% Network Yield
@@ -70,7 +136,10 @@ const StatsCards = () => {
 
       {/* Mobile View */}
       <div className="md:hidden grid grid-cols-2 gap-2">
-        <div className="bg-indigo-900/50 p-3 rounded-lg flex flex-col items-center">
+        <div
+          className={getCardClassName("deposited", true)}
+          onClick={() => handleRefresh("deposited")}
+        >
           <h3 className="text-gray-300 mb-1 text-sm">Total deposited</h3>
           <p className="text-primary text-lg font-medium mb-1">
             {totalDepositedUSD}
@@ -79,23 +148,32 @@ const StatsCards = () => {
             {formatCoreumAmount(Number(draftTVL?.tvl) * 10 ** -6 || 0)} $COREUM
           </p>
         </div>
-        <div className="bg-indigo-900/50 p-3 rounded-lg flex flex-col items-center">
-          <h3 className="text-gray-300 mb-1 text-sm">Win Chance</h3>
+        <div
+          className={getCardClassName("prize", true)}
+          onClick={() => handleRefresh("prize")}
+        >
+          <h3 className="text-gray-300 mb-1 text-sm">Grand Prize</h3>
           <p className="text-primary text-lg font-medium mb-1">
-            {winChance}% per ticket
+            {grandPrize} $COREUM
           </p>
-          <button className="text-xs text-blue-400">Learn More</button>
+          <button className="text-xs text-blue-400">
+            {grandPrizeUSD} $USD
+          </button>
         </div>
-        <div className="bg-indigo-900/50 p-3 rounded-lg flex flex-col items-center col-span-2">
+        <div
+          className={`${getCardClassName("yield", true)} col-span-2`}
+          onClick={() => handleRefresh("yield")}
+        >
           <h3 className="text-gray-300 mb-1 text-sm">Yield Source</h3>
           <p className="text-primary text-lg font-medium mb-1">Coreum Labs</p>
           <button
-            onClick={() =>
+            onClick={(e) => {
+              e.stopPropagation();
               window.open(
                 "https://validator.info/coreum/corevaloper14e0slqpzhgsakm6fwnh5sk6mu2dmdc9ghxhuw5",
                 "_blank"
-              )
-            }
+              );
+            }}
             className="text-xs text-blue-400"
           >
             38% Network Yield
