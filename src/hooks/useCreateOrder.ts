@@ -122,10 +122,17 @@ export const useCreateOrder = () => {
       fetchOrders();
       refetchBalances();
 
-      toast.success(`${side === 'buy' ? 'Buy' : 'Sell'} order created successfully! 🎉`, {
-        description: `Order ID: ${orderId}`,
-        icon: React.createElement('img', { src: dollar_sign.src, alt: 'dollar sign', style: { width: '20px', height: '20px' } }),
-      });
+      console.log("response", response);
+
+      if(response.code ==  0) {
+        toast.success('Order created successfully! 🎉', {
+        });
+      } else {
+        toast.error('Failed to create order', {
+          description: "Insufficient balance",
+          icon: React.createElement('img', { src: dollar_sign.src, alt: 'dollar sign', style: { width: '20px', height: '20px' } }),
+        });
+      }
 
       return response;
     } catch (error) {
