@@ -11,7 +11,7 @@ interface WalletProviderProps {
 }
 
 export const coreummainnet = defineChainInfo({
-  chainId: "coreum",
+  chainId: "coreum-mainnet-1",
   currencies: [
     {
       coinDenom: "core",
@@ -24,7 +24,7 @@ export const coreummainnet = defineChainInfo({
   rpc: "https://coreum-rpc.ibs.team",
   bech32Config: {
     bech32PrefixAccAddr: "core",
-    bech32PrefixAccPub: "testcorepub",
+    bech32PrefixAccPub: "corepub",
     bech32PrefixValAddr: "corevaloper",
     bech32PrefixValPub: "corevaloperpub",
     bech32PrefixConsAddr: "corevalcons",

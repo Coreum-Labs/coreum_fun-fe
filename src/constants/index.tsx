@@ -19,7 +19,7 @@ export const TICKET_TOKEN_TESTNET: Token = {
   logo: ticketLogo,
 };
 
-export const CHAIN_ID = "coreum";
+export const CHAIN_ID = "coreum-mainnet-1";
 
 export const COREUM_DOT_FUN_CONTRACT_ADDRESS =
   "core1pkdpdj05g5xjvq98qxlyt6faz2p7d7vhughrnrqelu6ue3eakeaseux75g";

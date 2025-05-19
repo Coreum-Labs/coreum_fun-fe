@@ -1,6 +1,6 @@
 import { WalletType } from "graz";
 
-export const chainId = 'coreum-mainnet-1';
+export const chainId = 'coreum';
 export const chainName = 'coreum';
 export const contractAddress ='TBD';
 
