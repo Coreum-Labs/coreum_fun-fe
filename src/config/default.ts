@@ -1,12 +1,12 @@
 import { WalletType } from "graz";
 
-export const chainId = 'coreum-testnet-1';
-export const chainName = 'coreumtestnet';
+export const chainId = 'coreum';
+export const chainName = 'coreum';
 export const contractAddress ='TBD';
 
 export const blockTime = 1;
 
-export const rpcUrl = 'https://coreum-testnet-rpc.ibs.team';
+export const rpcUrl = 'https://coreum-rpc.ibs.team';
 
 export interface WalletOption {
   type: WalletType,

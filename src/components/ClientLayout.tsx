@@ -8,6 +8,7 @@ import { setIsConnectModalOpen } from "../features/general";
 import { useAccount, useDisconnect } from "graz";
 import BuyTicketModal from "./BuyTicketModal";
 import Link from "next/link";
+import { CHAIN_ID } from "@/constants";
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -30,7 +31,7 @@ export default function ClientLayout({
     dispatch(setIsConnectModalOpen(true));
   };
 
-  const { data: account, isConnected } = useAccount();
+  const { data: account, isConnected } = useAccount({ chainId: CHAIN_ID });
   const address = account?.bech32Address;
   const { disconnect } = useDisconnect();
 

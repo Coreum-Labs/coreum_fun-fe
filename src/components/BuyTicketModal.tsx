@@ -38,7 +38,7 @@ const registryTypes = [
 const registry = new Registry(registryTypes);
 
 export const BuyTicketModal: React.FC = () => {
-  const { data: account } = useAccount();
+  const { data: account } = useAccount({ chainId: CHAIN_ID });
   const { signingClient } = useEstimateTxGasFee();
   const { numberOfTicketsSold, refetchAll } = useDraft();
   const { refetchBalances } = useRefetchBalances();
@@ -130,6 +130,16 @@ export const BuyTicketModal: React.FC = () => {
       }
       setLastTicketCount(ticketCount);
       setLastAmount(amount);
+
+      // Show success toast
+      toast.success("Tickets purchased successfully!", {
+        id: "buy-tickets",
+        icon: React.createElement("img", {
+          src: dollorSign.src,
+          alt: "dollar sign",
+          style: { width: "20px", height: "20px" },
+        }),
+      });
 
       // Refetch all data after successful purchase
       await Promise.all([refetchAll(), refetchBalances()]);

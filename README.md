@@ -450,19 +450,7 @@ npm run dev
 
 #### Smart Contract Development
 
-```bash
-# Clone the repository
-git clone [repository-url]
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Access the application
-# Open http://localhost:3000 in your browser
-```
+TBD
 
 ## 📄 License
 

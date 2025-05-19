@@ -12,8 +12,12 @@ const TradingSection = () => {
         <TokenBalance />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Chart />
-        <TradingPanel />
+        <div className="min-h-[300px]">
+          <Chart />
+        </div>
+        <div className="min-h-[300px]">
+          <TradingPanel />
+        </div>
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ import {
   useSuggestChainAndConnect,
   useConnect,
 } from "graz";
-import { coreumtestnet } from "../providers/WalletProvider";
+import { coreummainnet } from "../providers/WalletProvider";
 import Link from "next/link";
 
 export const ConnectWalletModal = () => {
@@ -35,7 +35,7 @@ export const ConnectWalletModal = () => {
     async (type: WalletType) => {
       try {
         await suggestAndConnectAsync({
-          chainInfo: coreumtestnet,
+          chainInfo: coreummainnet,
           walletType: type as unknown as GrazWalletType,
         });
         dispatch(setIsConnectModalOpen(false));

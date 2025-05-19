@@ -26,7 +26,7 @@ export const fetchTicketHolders = createAsyncThunk(
   async (ticketDenom: string) => {
     try {
       const response = await axios.get(
-        `https://coreum-testnet-api.ibs.team/cosmos/bank/v1beta1/denom_owners/${ticketDenom}`
+        `https://coreum-api.ibs.team/cosmos/bank/v1beta1/denom_owners/${ticketDenom}`
       );
       return response.data.denom_owners;
     } catch (error) {
