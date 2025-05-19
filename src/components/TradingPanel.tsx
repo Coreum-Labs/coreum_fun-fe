@@ -242,7 +242,9 @@ const TradingPanel = () => {
       refetchPrice();
 
       setIsReviewModalOpen(false);
-      setIsSuccessModalOpen(true);
+      if (response.code == 0) {
+        setIsSuccessModalOpen(true);
+      }
       resetForm();
     } catch (error) {
       setIsReviewModalOpen(false);
