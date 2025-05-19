@@ -3,26 +3,26 @@ import coreumLogo from "../../public/coreum.svg";
 import ticketLogo from "../../public/ticket.svg";
 
 export const COREUM_TOKEN_TESTNET: Token = {
-  denom: "utestcore",
+  denom: "ucore",
   symbol: "Coreum",
-  subunit: "utestcore",
+  subunit: "ucore",
   precision: 6,
   logo: coreumLogo,
 };
 
 export const TICKET_TOKEN_TESTNET: Token = {
   denom:
-    "uticket_test-testcore1x66zxsh75r0ydpz7kqcwxe989ms4fvfprpwdxzd8c509z4m6d0wqsawm5w",
+    "uticket-core1pkdpdj05g5xjvq98qxlyt6faz2p7d7vhughrnrqelu6ue3eakeaseux75g",
   symbol: "Ticket",
   subunit: "ticket",
   precision: 6,
   logo: ticketLogo,
 };
 
-export const CHAIN_ID = "coreum-testnet-1";
+export const CHAIN_ID = "coreum";
 
 export const COREUM_DOT_FUN_CONTRACT_ADDRESS =
-  "testcore1x66zxsh75r0ydpz7kqcwxe989ms4fvfprpwdxzd8c509z4m6d0wqsawm5w";
+  "core1pkdpdj05g5xjvq98qxlyt6faz2p7d7vhughrnrqelu6ue3eakeaseux75g";
 
 export const COREUM_DOT_FUN_TICKET_PRICE = "200000000";
 

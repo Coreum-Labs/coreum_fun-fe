@@ -18,8 +18,8 @@ export const CoreumProvider: React.FC<{ children: React.ReactNode }> = ({
     const initClient = async () => {
       try {
         const coreum = new Client({
-          network: "testnet",
-          custom_node_endpoint: "https://coreum-testnet-rpc.ibs.team",
+          network: "mainnet",
+          custom_node_endpoint: "https://coreum-rpc.ibs.team",
         });
         await coreum.connect({ withWS: true });
         setClient(coreum);

@@ -8,7 +8,7 @@ import { DEX } from 'coreum-js-nightly';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { useEstimateTxGasFee } from './useEstimateTxGasFee';
-import { COREUM_TOKEN_TESTNET, TICKET_TOKEN_TESTNET } from '../constants';
+import { CHAIN_ID, COREUM_TOKEN_TESTNET, TICKET_TOKEN_TESTNET } from '../constants';
 import { convertPriceToDexPrice, convertUnitToSubunit } from '../utils/convertUnitToSubunit';
 import { toast } from 'sonner';
 import { useRefetchBalances } from './useBalances';
@@ -22,7 +22,7 @@ const generateOrderId = (side: string, baseSymbol: string, quoteSymbol: string):
 
 export const useCreateOrder = () => {
   const { client } = useCoreum();
-  const { data: account } = useAccount();
+  const { data: account } = useAccount({chainId: CHAIN_ID});
   const { signingClient } = useEstimateTxGasFee();
   const { fetchOrders } = useDex();
   const { refetchBalances } = useRefetchBalances();

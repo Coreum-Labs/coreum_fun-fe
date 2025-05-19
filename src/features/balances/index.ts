@@ -17,7 +17,7 @@ export const fetchBalancesByAccount = createAsyncThunk(
 
     let balancesToSet = [];
     try {
-      const balancesRequestUrl = `https://coreum-testnet-api.ibs.team/cosmos/bank/v1beta1/balances/${account}`;
+      const balancesRequestUrl = `https://coreum-api.ibs.team/cosmos/bank/v1beta1/balances/${account}`;
       const {
         data: {
           pagination: { total: balancesTotal },

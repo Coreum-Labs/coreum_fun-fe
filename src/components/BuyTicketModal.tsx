@@ -38,7 +38,7 @@ const registryTypes = [
 const registry = new Registry(registryTypes);
 
 export const BuyTicketModal: React.FC = () => {
-  const { data: account } = useAccount();
+  const { data: account } = useAccount({ chainId: CHAIN_ID });
   const { signingClient } = useEstimateTxGasFee();
   const { numberOfTicketsSold, refetchAll } = useDraft();
   const { refetchBalances } = useRefetchBalances();

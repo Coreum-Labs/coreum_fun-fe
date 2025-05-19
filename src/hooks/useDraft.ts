@@ -4,7 +4,7 @@ import { useCosmWasmClient, useAccount } from "graz";
 import { useEffect, useState } from "react";
 import { CoreumDotFunQueryClient } from "../ts/CoreumDotFun.client";
 import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { COREUM_DOT_FUN_CONTRACT_ADDRESS } from "../constants";
+import { CHAIN_ID, COREUM_DOT_FUN_CONTRACT_ADDRESS } from "../constants";
 import {
   setTicketHolders,
   setDraftState,
@@ -30,7 +30,7 @@ import {
 export const useDraft = () => {
   const dispatch = useAppDispatch();
   const { data: coswasmClient } = useCosmWasmClient();
-  const { data: account } = useAccount();
+  const { data: account } = useAccount({chainId: CHAIN_ID});
   const [coreumDotFunClient, setCoreumDotFunClient] =
     useState<CoreumDotFunQueryClient | null>(null);
 

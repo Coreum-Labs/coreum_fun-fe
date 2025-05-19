@@ -5,11 +5,12 @@ import { useAccount } from 'graz';
 import { fetchOpenOrders, fetchOrderHistory } from '../features/dex';
 import type { Client } from 'coreum-js-nightly';
 import { RootState } from '../store/store';
+import { CHAIN_ID } from '@/constants';
 
 export const useDex = () => {
   const dispatch = useDispatch();
   const { client } = useCoreum();
-  const { data: account } = useAccount();
+  const { data: account } = useAccount({chainId: CHAIN_ID});
   const { base, quote } = useSelector((state: RootState) => state.dex.tokenPair);
 
   const fetchOrders = useCallback(() => {

@@ -10,31 +10,31 @@ interface WalletProviderProps {
   children: React.ReactNode;
 }
 
-export const coreumtestnet = defineChainInfo({
-  chainId: "coreum-testnet-1",
+export const coreummainnet = defineChainInfo({
+  chainId: "coreum",
   currencies: [
     {
-      coinDenom: "testcore",
-      coinMinimalDenom: "utestcore",
+      coinDenom: "core",
+      coinMinimalDenom: "ucore",
       coinDecimals: 6,
       coinGeckoId: "coreum",
     },
   ],
-  rest: "https://coreum-testnet-api.ibs.team",
-  rpc: "https://coreum-testnet-rpc.ibs.team",
+  rest: "https://coreum-api.ibs.team",
+  rpc: "https://coreum-rpc.ibs.team",
   bech32Config: {
-    bech32PrefixAccAddr: "testcore",
+    bech32PrefixAccAddr: "core",
     bech32PrefixAccPub: "testcorepub",
-    bech32PrefixValAddr: "testcorevaloper",
-    bech32PrefixValPub: "testcorevaloperpub",
-    bech32PrefixConsAddr: "testcorevalcons",
-    bech32PrefixConsPub: "testcorevalconspub",
+    bech32PrefixValAddr: "corevaloper",
+    bech32PrefixValPub: "corevaloperpub",
+    bech32PrefixConsAddr: "corevalcons",
+    bech32PrefixConsPub: "corevalconspub",
   },
-  chainName: "coreumtestnet",
+  chainName: "coreum",
   feeCurrencies: [
     {
-      coinDenom: "testcore",
-      coinMinimalDenom: "utestcore",
+      coinDenom: "core",
+      coinMinimalDenom: "ucore",
       coinDecimals: 6,
       coinGeckoId: "coreum",
       gasPriceStep: {
@@ -45,8 +45,8 @@ export const coreumtestnet = defineChainInfo({
     },
   ],
   stakeCurrency: {
-    coinDenom: "testcore",
-    coinMinimalDenom: "utestcore",
+    coinDenom: "core",
+    coinMinimalDenom: "ucore",
     coinDecimals: 6,
     coinGeckoId: "coreum",
   },
@@ -57,7 +57,7 @@ export const coreumtestnet = defineChainInfo({
 
 export const WalletProvider: FC<WalletProviderProps> = ({ children }) => {
   const grazOptions: ConfigureGrazArgs = {
-    chains: [coreumtestnet],
+    chains: [coreummainnet],
     autoReconnect: true,
     defaultWallet: WalletType.KEPLR,
   };

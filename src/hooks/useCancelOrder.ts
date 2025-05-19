@@ -7,10 +7,11 @@ import { useEstimateTxGasFee } from './useEstimateTxGasFee';
 import { toast } from 'sonner';
 import { useRefetchBalances } from './useBalances';
 import dollar_sign from "../../public/dollar_sign.gif";
+import { CHAIN_ID } from '@/constants';
 
 export const useCancelOrder = () => {
   const { client } = useCoreum();
-  const { data: account } = useAccount();
+  const { data: account } = useAccount({chainId: CHAIN_ID});
   const { signingClient } = useEstimateTxGasFee();
   const { fetchOrders } = useDex();
   const { refetchBalances } = useRefetchBalances();

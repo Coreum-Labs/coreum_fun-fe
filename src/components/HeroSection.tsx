@@ -11,10 +11,11 @@ import React, { useEffect, useState } from "react";
 import { useAccount } from "graz";
 import { useDraft } from "../hooks/useDraft";
 import { usePriceData } from "../hooks/usePriceData";
+import { CHAIN_ID } from "@/constants";
 
 const HeroSection = () => {
   const dispatch = useAppDispatch();
-  const { isConnected } = useAccount();
+  const { isConnected } = useAccount({ chainId: CHAIN_ID });
   const { numberOfTicketsSold, accumulatedRewards, bonusRewards } = useDraft();
   const { coreumPrice } = usePriceData();
   const isSoldOut = numberOfTicketsSold?.tickets_remaining === "0";
