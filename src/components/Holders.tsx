@@ -19,12 +19,14 @@ const Holders = () => {
 
   // Transform participants data to match the existing UI format
   const holdersData =
-    ticketHolders?.holders.map((holder) => ({
-      address: holder.address.slice(0, 4) + "..." + holder.address.slice(-4),
-      tickets: parseInt(holder.tickets),
-      winRate: parseFloat(holder.win_chance), // Convert to percentage
-      deposit: parseInt(holder.tickets) * 100, // TODO: Get price from the contract
-    })) || [];
+    ticketHolders?.holders
+      .map((holder) => ({
+        address: holder.address.slice(0, 4) + "..." + holder.address.slice(-4),
+        tickets: parseInt(holder.tickets),
+        winRate: parseFloat(holder.win_chance), // Convert to percentage
+        deposit: parseInt(holder.tickets) * 100, // TODO: Get price from the contract
+      }))
+      .sort((a, b) => b.tickets - a.tickets) || [];
 
   const paginatedHolders = holdersData.slice(0, currentPage * ITEMS_PER_PAGE);
   const hasMore = holdersData.length > currentPage * ITEMS_PER_PAGE;
