@@ -23,6 +23,9 @@ export const OpenOrders = () => {
   const [selected, setSelected] = useState(0);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filter, setFilter] = useState<"all" | "buy" | "sell">("all");
+  const ITEMS_PER_PAGE = 4;
 
   useEffect(() => {
     fetchOrders();
@@ -54,12 +57,63 @@ export const OpenOrders = () => {
     dispatch(setSelectedOrder(newOrder));
   };
 
+  const filteredOrders = openOrders.filter((order) => {
+    const formatted = formatOrder(order);
+    if (filter === "all") return true;
+    return formatted.side === filter.charAt(0).toUpperCase() + filter.slice(1);
+  });
+
+  const paginatedOrders = filteredOrders.slice(0, currentPage * ITEMS_PER_PAGE);
+  const hasMore = filteredOrders.length > currentPage * ITEMS_PER_PAGE;
+
   if (isLoading) {
     return <div>Loading open orders...</div>;
   }
 
   return (
     <div className="w-full">
+      <div className="flex justify-end mb-4 gap-2">
+        <button
+          className={`px-4 py-2 rounded-md transition-colors ${
+            filter === "all"
+              ? "bg-white/20 text-white"
+              : "bg-white/10 text-white/70 hover:bg-white/20"
+          }`}
+          onClick={() => {
+            setFilter("all");
+            setCurrentPage(1);
+          }}
+        >
+          All
+        </button>
+        <button
+          className={`px-4 py-2 rounded-md transition-colors ${
+            filter === "buy"
+              ? "bg-green-500/20 text-green-400"
+              : "bg-white/10 text-white/70 hover:bg-white/20"
+          }`}
+          onClick={() => {
+            setFilter("buy");
+            setCurrentPage(1);
+          }}
+        >
+          Buy
+        </button>
+        <button
+          className={`px-4 py-2 rounded-md transition-colors ${
+            filter === "sell"
+              ? "bg-red-500/20 text-red-400"
+              : "bg-white/10 text-white/70 hover:bg-white/20"
+          }`}
+          onClick={() => {
+            setFilter("sell");
+            setCurrentPage(1);
+          }}
+        >
+          Sell
+        </button>
+      </div>
+
       {/* Desktop Table View */}
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-white min-w-[800px]">
@@ -75,14 +129,14 @@ export const OpenOrders = () => {
             </tr>
           </thead>
           <tbody>
-            {openOrders.length === 0 ? (
+            {paginatedOrders.length === 0 ? (
               <tr>
                 <td colSpan={7} className="py-4 text-center text-white/60">
                   No open orders found.
                 </td>
               </tr>
             ) : (
-              openOrders.map((order, idx) => {
+              paginatedOrders.map((order, idx) => {
                 const formatted = formatOrder(order);
                 const isCreator = order.creator === account?.bech32Address;
                 return (
@@ -146,12 +200,12 @@ export const OpenOrders = () => {
 
       {/* Mobile Card View */}
       <div className="md:hidden space-y-4">
-        {openOrders.length === 0 ? (
+        {paginatedOrders.length === 0 ? (
           <div className="py-4 text-center text-white/60">
             No open orders found.
           </div>
         ) : (
-          openOrders.map((order, idx) => {
+          paginatedOrders.map((order, idx) => {
             const formatted = formatOrder(order);
             const isCreator = order.creator === account?.bech32Address;
             return (
@@ -220,8 +274,13 @@ export const OpenOrders = () => {
 
       <div className="flex justify-center mt-4">
         <button
-          className="bg-white/10 text-white/50 px-6 py-2 rounded-md cursor-not-allowed"
-          disabled
+          className={`px-6 py-2 rounded-md ${
+            hasMore
+              ? "bg-white/10 text-white hover:bg-white/20"
+              : "bg-white/10 text-white/50 cursor-not-allowed"
+          }`}
+          onClick={() => hasMore && setCurrentPage((prev) => prev + 1)}
+          disabled={!hasMore}
         >
           Show More
         </button>
