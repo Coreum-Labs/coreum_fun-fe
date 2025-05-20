@@ -14,6 +14,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AppProvider } from "../providers/AppProvider";
 import { Toaster } from "sonner";
 import { CoreumProvider } from "../providers/CoreumProvider";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +39,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-gradient-to-bl from-[#0f172a] via-[#1e1a78] to-[#0f172a]`}
       >
         <ReduxProvider>
+          <Analytics />
           <QueryClientProvider client={contractQueryClient}>
             <WalletProvider>
               <AppProvider>
