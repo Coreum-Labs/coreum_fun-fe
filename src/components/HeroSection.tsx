@@ -12,6 +12,7 @@ import { useAccount } from "graz";
 import { useDraft } from "../hooks/useDraft";
 import { usePriceData } from "../hooks/usePriceData";
 import { CHAIN_ID } from "@/constants";
+import superledger_podcast_logo from "../assets/superledger_podcast.webp";
 
 const HeroSection = () => {
   const dispatch = useAppDispatch();
@@ -103,6 +104,56 @@ const HeroSection = () => {
                 {numberOfTicketsSold?.tickets_sold || 0}
               </span>
               <span className="text-gray-300 text-sm sm:text-base">sold</span>
+            </div>
+          </div>
+
+          {/* Podcast & Winner Selection Info */}
+          <div className="flex flex-col items-center bg-indigo-900/50 rounded-xl px-3 sm:px-4 py-2 w-full max-w-xl mx-auto ">
+            <div className="flex flex-col sm:flex-row sm:justify-between items-center w-full gap-1.5 sm:gap-0 mb-1">
+              <div className="flex flex-col  items-center  gap-1.5 sm:gap-2 flex-1 sm:justify-start ">
+                <span className="sm:hidden text-gray-200 text-base whitespace-nowrap text-center sm:text-left">
+                  Winner Selection on
+                </span>
+                <span className="hidden sm:block text-gray-200 text-base font-semibold  text-center">
+                  Winner Selection on The Superledger Podcast
+                </span>
+
+                {/* <div className="hidden sm:block w-px h-6 bg-gray-700 mx-2" /> */}
+              </div>
+
+              <img
+                src={superledger_podcast_logo.src}
+                alt="The Superledger Podcast Logo"
+                className="w-12 h-12 sm:w-15 sm:h-15 rounded-lg shadow bg-black mx-auto sm:ml-4"
+              />
+              <span className="sm:hidden text-gray-200 text-center text-base font-semibold whitespace-nowrap text-center sm:text-left">
+                The Superledger Podcast
+              </span>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center gap-1.5 sm:gap-2 text-sm mt-0.5 justify-center">
+              <span className="font-bold text-primary">25 of Mai 2025</span>
+              <span className="text-gray-400">on X</span>
+              <a
+                href="https://x.com/i/spaces/1zqKVjRaompKB"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-primary hover:text-primary/80 transition-colors font-medium group text-sm"
+              >
+                Register Here
+                <svg
+                  className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                  />
+                </svg>
+              </a>
             </div>
           </div>
 
