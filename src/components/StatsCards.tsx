@@ -147,7 +147,7 @@ const StatsCards = () => {
           </p>
         </div>
         <div
-          className={getCardClassName("prize", true)}
+          className={`${getCardClassName("prize", true)} text-center`}
           onClick={() => handleRefresh("prize")}
         >
           <h3 className="text-gray-300 mb-1 text-sm">Grand Prize</h3>
