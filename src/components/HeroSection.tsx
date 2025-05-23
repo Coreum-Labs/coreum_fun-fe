@@ -13,11 +13,19 @@ import { useDraft } from "../hooks/useDraft";
 import { usePriceData } from "../hooks/usePriceData";
 import { CHAIN_ID } from "@/constants";
 import superledger_podcast_logo from "../assets/superledger_podcast.webp";
+import winner_shark from "../assets/shark_winner.webp";
 
 const HeroSection = () => {
   const dispatch = useAppDispatch();
   const { isConnected } = useAccount({ chainId: CHAIN_ID });
-  const { numberOfTicketsSold, accumulatedRewards, bonusRewards } = useDraft();
+  const {
+    numberOfTicketsSold,
+    accumulatedRewards,
+    bonusRewards,
+    draftState,
+    winner,
+    numberOfTicketsBurned,
+  } = useDraft();
   const { coreumPrice } = usePriceData();
   const isSoldOut = numberOfTicketsSold?.tickets_remaining === "0";
 
@@ -59,6 +67,18 @@ const HeroSection = () => {
       dispatch(setIsConnectModalOpen(true));
     }
   };
+
+  const timeStampToDate = (timeStamp: number) => {
+    const date = new Date(timeStamp * 1000);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const isBurnable =
+    draftState?.state === "UndelegationCompletedTokensCanBeBurned";
 
   return (
     <section className="relative w-full py-8 sm:py-10 px-4 sm:px-6 lg:px-8">
@@ -105,59 +125,119 @@ const HeroSection = () => {
               </span>
               <span className="text-gray-300 text-sm sm:text-base">sold</span>
             </div>
+            <div className="w-px h-5 sm:h-6 bg-gray-600"></div>
+            <div className="flex items-center gap-1.5 sm:gap-1.5">
+              <span className="text-primary text-xl sm:text-2xl font-bold">
+                {numberOfTicketsBurned?.total_burned || 0}
+              </span>
+              <span className="text-gray-300 text-sm sm:text-base">burned</span>
+            </div>
           </div>
 
           {/* Podcast & Winner Selection Info */}
-          <div className="flex flex-col items-center bg-indigo-900/50 rounded-xl px-3 sm:px-4 py-2 w-full max-w-xl mx-auto ">
-            <div className="flex flex-col sm:flex-row sm:justify-between items-center w-full gap-1.5 sm:gap-0 mb-1">
-              <div className="flex flex-col  items-center  gap-1.5 sm:gap-2 flex-1 sm:justify-start ">
-                <span className="sm:hidden text-gray-200 text-base whitespace-nowrap text-center sm:text-left">
-                  Winner Selection on
-                </span>
-                <span className="hidden sm:block text-gray-200 text-base font-semibold  text-center">
-                  Winner Selection on The Superledger Podcast
-                </span>
 
-                {/* <div className="hidden sm:block w-px h-6 bg-gray-700 mx-2" /> */}
-              </div>
-
-              <img
-                src={superledger_podcast_logo.src}
-                alt="The Superledger Podcast Logo"
-                className="w-12 h-12 sm:w-15 sm:h-15 rounded-lg shadow bg-black mx-auto sm:ml-4"
-              />
-              <span className="sm:hidden text-gray-200 text-center text-base font-semibold whitespace-nowrap text-center sm:text-left">
-                The Superledger Podcast
+          {draftState?.state === "WinnerSelectedUndelegationInProcess" && (
+            <div className="flex flex-col items-center bg-indigo-900/50 rounded-xl px-3 sm:px-4 py-2 w-full max-w-xl mx-auto ">
+              <img src={winner_shark.src} alt="Winner" className="w-40" />
+              <span className="text-gray-200 text-base  font-semibold text-center">
+                Winner:{" "}
+                <span className="text-primary">
+                  {winner?.winner || "Not selected yet"}
+                </span>
+              </span>
+              <span className="text-gray-200 text-base  font-semibold text-center">
+                Rewards:{" "}
+                <span className="text-primary">
+                  {Number(winner?.rewards) * 10 ** -6} $COREUM
+                </span>
               </span>
             </div>
-            <div className="flex flex-col sm:flex-row items-center gap-1.5 sm:gap-2 text-sm mt-0.5 justify-center">
-              <span className="font-bold text-primary">25 of Mai 2025</span>
-              <span className="text-gray-400">on X</span>
-              <a
-                href="https://x.com/i/spaces/1zqKVjRaompKB"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-primary hover:text-primary/80 transition-colors font-medium group text-sm"
-              >
-                Register Here
-                <svg
-                  className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
-              </a>
-            </div>
-          </div>
+          )}
 
-          <button
+          {draftState?.state === "WinnerSelectedUndelegationInProcess" && (
+            <div className="flex flex-col items-center bg-indigo-900/50 rounded-xl px-3 sm:px-4 py-2 w-full max-w-xl mx-auto ">
+              <span className="text-gray-200 text-base  font-semibold text-center">
+                Token can be burned on:
+                <span className="ml-2 text-primary">
+                  {timeStampToDate(
+                    draftState?.undelegation_done_timestamp || 0
+                  )}
+                </span>
+              </span>
+              <button
+                onClick={handleOpenModal}
+                disabled={!isBurnable}
+                className={`relative group w-full sm:w-auto min-w-[240px] my-5 ${
+                  !isBurnable ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-secondary via-primary to-[#f6d447] rounded-lg blur-sm group-hover:blur-md transition-all duration-300 animate-background bg-[length:_400%_400%] [animation-duration:_6s]"></div>
+                <a
+                  href="#"
+                  className={`relative block rounded-lg bg-[#171b5e]/90 px-6 py-3 text-base font-semibold text-white text-center transition-all duration-300 ${
+                    isSoldOut
+                      ? "hover:bg-[#171b5e]/90"
+                      : "hover:bg-[#171b5e]/80 hover:scale-[1.02]"
+                  }`}
+                >
+                  Burn Tickets 🔥
+                </a>
+              </button>
+            </div>
+          )}
+
+          {draftState?.state === "TicketsSoldOutAccumulationInProgress" && (
+            <div className="flex flex-col items-center bg-indigo-900/50 rounded-xl px-3 sm:px-4 py-2 w-full max-w-xl mx-auto ">
+              <div className="flex flex-col sm:flex-row sm:justify-between items-center w-full gap-1.5 sm:gap-0 mb-1">
+                <div className="flex flex-col  items-center  gap-1.5 sm:gap-2 flex-1 sm:justify-start ">
+                  <span className="sm:hidden text-gray-200 text-base whitespace-nowrap text-center sm:text-left">
+                    Winner Selection on
+                  </span>
+                  <span className="hidden sm:block text-gray-200 text-base font-semibold  text-center">
+                    Winner Selection on The Superledger Podcast
+                  </span>
+
+                  {/* <div className="hidden sm:block w-px h-6 bg-gray-700 mx-2" /> */}
+                </div>
+
+                <img
+                  src={superledger_podcast_logo.src}
+                  alt="The Superledger Podcast Logo"
+                  className="w-12 h-12 sm:w-15 sm:h-15 rounded-lg shadow bg-black mx-auto sm:ml-4"
+                />
+                <span className="sm:hidden text-gray-200 text-center text-base font-semibold whitespace-nowrap text-center sm:text-left">
+                  The Superledger Podcast
+                </span>
+              </div>
+              <div className="flex flex-col sm:flex-row items-center gap-1.5 sm:gap-2 text-sm mt-0.5 justify-center">
+                <span className="font-bold text-primary">25 of Mai 2025</span>
+                <span className="text-gray-400">on X</span>
+                <a
+                  href="https://x.com/i/spaces/1zqKVjRaompKB"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-primary hover:text-primary/80 transition-colors font-medium group text-sm"
+                >
+                  Register Here
+                  <svg
+                    className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          )}
+
+          {/* <button
             onClick={handleOpenModal}
             disabled={isSoldOut}
             className={`relative group w-full sm:w-auto min-w-[240px] ${
@@ -175,7 +255,7 @@ const HeroSection = () => {
             >
               {isSoldOut ? "Tickets Sold Out 🎫" : "BUY Ticket to WIN 🎉"}
             </a>
-          </button>
+          </button> */}
         </div>
       </div>
     </section>
