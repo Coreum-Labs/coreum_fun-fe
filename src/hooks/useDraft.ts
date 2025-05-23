@@ -25,6 +25,8 @@ import {
   UserTicketsResponse,
   UserWinChanceResponse,
   TicketHoldersResponse,
+  WinnerResponse,
+  TotalBurnedResponse,
 } from "../ts/CoreumDotFun.types";
 
 export const useDraft = () => {
@@ -46,6 +48,37 @@ export const useDraft = () => {
     };
     initializeCoreumDotFunClient();
   }, [coswasmClient]);
+
+  // Get Winner 
+  const { data: winner, refetch: refetchWinner } = useQuery<WinnerResponse>({
+    queryKey: ["winner"],
+    queryFn: async () => {
+      if (coreumDotFunClient) {
+        const result = await coreumDotFunClient.getWinner();
+        return result;
+      }
+      return { winner: "", rewards: "0" };
+    },
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    enabled: !!coreumDotFunClient,
+  });
+
+  // Get number of tickets burned 
+  const { data: numberOfTicketsBurned, refetch: refetchNumberOfTicketsBurned } = useQuery<TotalBurnedResponse>({
+    queryKey: ["numberOfTicketsBurned"],
+    queryFn: async () => {
+      if (coreumDotFunClient) {
+        const result = await coreumDotFunClient.getTotalTicketsBurned();
+        return result;
+      }
+      return { total_burned: "0" };
+    },
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    enabled: !!coreumDotFunClient,
+  });
+  
 
   // Get participants
   const { data: ticketHolders, refetch: refetchTicketHolders } = useQuery<TicketHoldersResponse>({
@@ -216,6 +249,8 @@ export const useDraft = () => {
     numberOfTicketsSold,
     userTickets,
     userWinChance,
+    winner,
+    numberOfTicketsBurned,
     // Individual refetch functions
     refetchTicketHolders,
     refetchDraftState,
@@ -226,6 +261,8 @@ export const useDraft = () => {
     refetchNumberOfTicketsSold,
     refetchUserTickets,
     refetchUserWinChance,
+    refetchWinner,
+    refetchNumberOfTicketsBurned,
     // Refetch all data
     refetchAll,
   };
