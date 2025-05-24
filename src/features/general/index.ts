@@ -15,6 +15,7 @@ export interface GeneralState {
   isManageCurrencyModalOpen: boolean;
   isDisclaimerModalOpen: boolean;
   isBuyTicketModalOpen: boolean;
+  isBurnTicketModalOpen: boolean;
 }
 
 export const initialGeneralState: GeneralState = {
@@ -26,6 +27,7 @@ export const initialGeneralState: GeneralState = {
   isManageCurrencyModalOpen: false,
   isDisclaimerModalOpen: true,
   isBuyTicketModalOpen: false,
+  isBurnTicketModalOpen: false,
 };
 
 const generalSlice = createSlice({
@@ -52,6 +54,9 @@ const generalSlice = createSlice({
     setIsBuyTicketModalOpen(state, action: PayloadAction<boolean>) {
       state.isBuyTicketModalOpen = action.payload;
     },
+    setIsBurnTicketModalOpen(state, action: PayloadAction<boolean>) {
+      state.isBurnTicketModalOpen = action.payload;
+    },
   },
 });
 
@@ -62,6 +67,7 @@ export const {
   setIsTxExecuting,
   setIsManageCurrencyModalOpen,
   setIsBuyTicketModalOpen,
+  setIsBurnTicketModalOpen,
 } = generalSlice.actions;
 export const generalReducer = generalSlice.reducer;
 export default generalSlice.reducer;

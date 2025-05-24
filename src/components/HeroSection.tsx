@@ -3,6 +3,7 @@
 import coreum_logo from "../../public/coreum.svg";
 
 import {
+  setIsBurnTicketModalOpen,
   setIsBuyTicketModalOpen,
   setIsConnectModalOpen,
 } from "../features/general";
@@ -63,6 +64,14 @@ const HeroSection = () => {
     if (isSoldOut) return;
     if (isConnected) {
       dispatch(setIsBuyTicketModalOpen(true));
+    } else {
+      dispatch(setIsConnectModalOpen(true));
+    }
+  };
+
+  const handleOpenBurnTicketsModal = () => {
+    if (isConnected) {
+      dispatch(setIsBurnTicketModalOpen(true));
     } else {
       dispatch(setIsConnectModalOpen(true));
     }
@@ -165,7 +174,7 @@ const HeroSection = () => {
                 </span>
               </span>
               <button
-                onClick={handleOpenModal}
+                onClick={() => handleOpenBurnTicketsModal()}
                 disabled={!isBurnable}
                 className={`relative group w-full sm:w-auto min-w-[240px] my-5 ${
                   !isBurnable ? "opacity-50 cursor-not-allowed" : ""
