@@ -99,7 +99,7 @@ const HeroSection = () => {
     <section className="relative w-full py-8 sm:py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
         <div className="flex flex-col items-center space-y-4 sm:space-y-6">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center leading-tight">
+          {/* <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center leading-tight">
             Enter with{" "}
             <span className="inline-flex items-center mx-1.5">
               <img
@@ -119,6 +119,14 @@ const HeroSection = () => {
               }}
             >
               ${displayedAmount.toLocaleString()}
+            </span>
+          </h1> */}
+
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center leading-tight">
+            <span className="text-secondary">Congratulations!</span>{" "}
+            <span className="text-primary">Winner</span> Takes Home{" "}
+            <span className="text-primary">
+              {Math.floor(Number(winner?.rewards) * 10 ** -6)} $COREUM
             </span>
           </h1>
 
