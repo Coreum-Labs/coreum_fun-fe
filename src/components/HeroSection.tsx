@@ -15,6 +15,7 @@ import { usePriceData } from "../hooks/usePriceData";
 import { CHAIN_ID } from "@/constants";
 import superledger_podcast_logo from "../assets/superledger_podcast.webp";
 import winner_shark from "../assets/shark_winner.webp";
+import Link from "next/link";
 
 const HeroSection = () => {
   const dispatch = useAppDispatch();
@@ -86,6 +87,11 @@ const HeroSection = () => {
     });
   };
 
+  const truncateAddress = (address: string | null | undefined) => {
+    if (!address) return "Not selected yet";
+    return `${address.slice(0, 10)}...${address.slice(-10)}`;
+  };
+
   const isBurnable =
     draftState?.state === "UndelegationCompletedTokensCanBeBurned";
 
@@ -150,9 +156,15 @@ const HeroSection = () => {
               <img src={winner_shark.src} alt="Winner" className="w-40" />
               <span className="text-gray-200 text-base  font-semibold text-center">
                 Winner:{" "}
-                <span className="text-primary">
-                  {winner?.winner || "Not selected yet"}
-                </span>
+                <Link
+                  href={`https://explorer.coreum.com/coreum/accounts/${winner?.winner}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span className="text-primary">
+                    {truncateAddress(winner?.winner)}
+                  </span>
+                </Link>
               </span>
               <span className="text-gray-200 text-base  font-semibold text-center">
                 Rewards:{" "}
