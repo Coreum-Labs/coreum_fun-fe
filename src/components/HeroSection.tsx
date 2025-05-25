@@ -15,6 +15,7 @@ import { usePriceData } from "../hooks/usePriceData";
 import { CHAIN_ID } from "@/constants";
 import superledger_podcast_logo from "../assets/superledger_podcast.webp";
 import winner_shark from "../assets/shark_winner.webp";
+import Link from "next/link";
 
 const HeroSection = () => {
   const dispatch = useAppDispatch();
@@ -86,6 +87,11 @@ const HeroSection = () => {
     });
   };
 
+  const truncateAddress = (address: string | null | undefined) => {
+    if (!address) return "Not selected yet";
+    return `${address.slice(0, 10)}...${address.slice(-10)}`;
+  };
+
   const isBurnable =
     draftState?.state === "UndelegationCompletedTokensCanBeBurned";
 
@@ -93,7 +99,7 @@ const HeroSection = () => {
     <section className="relative w-full py-8 sm:py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
         <div className="flex flex-col items-center space-y-4 sm:space-y-6">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center leading-tight">
+          {/* <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center leading-tight">
             Enter with{" "}
             <span className="inline-flex items-center mx-1.5">
               <img
@@ -113,6 +119,13 @@ const HeroSection = () => {
               }}
             >
               ${displayedAmount.toLocaleString()}
+            </span>
+          </h1> */}
+
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center leading-tight">
+            <span className="text-primary">Winner</span> Takes Home{" "}
+            <span className="text-primary">
+              {Math.floor(Number(winner?.rewards) * 10 ** -6)} $COREUM!
             </span>
           </h1>
 
@@ -150,9 +163,15 @@ const HeroSection = () => {
               <img src={winner_shark.src} alt="Winner" className="w-40" />
               <span className="text-gray-200 text-base  font-semibold text-center">
                 Winner:{" "}
-                <span className="text-primary">
-                  {winner?.winner || "Not selected yet"}
-                </span>
+                <Link
+                  href={`https://explorer.coreum.com/coreum/accounts/${winner?.winner}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span className="text-primary">
+                    {truncateAddress(winner?.winner)}
+                  </span>
+                </Link>
               </span>
               <span className="text-gray-200 text-base  font-semibold text-center">
                 Rewards:{" "}
