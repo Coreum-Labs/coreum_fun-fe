@@ -44,13 +44,8 @@ export const BurnTicketModal: React.FC = () => {
   const maxBurnable = Number(userTickets?.tickets || 0);
 
   useEffect(() => {
-    if (burnCount > maxBurnable) setBurnCount(maxBurnable);
-    if (burnCount < 1) setBurnCount(1);
+    setBurnCount(maxBurnable);
   }, [maxBurnable]);
-
-  const handleBurnSelect = (count: number) => {
-    setBurnCount(count);
-  };
 
   const handleBurnTickets = useCallback(async () => {
     if (!isConnected) {
@@ -82,7 +77,10 @@ export const BurnTicketModal: React.FC = () => {
 
       const funds: Coin = {
         denom: TICKET_TOKEN_TESTNET.denom,
-        amount: (10 ** 6 * burnCount).toString(),
+        amount: (
+          10 ** (TICKET_TOKEN_TESTNET.precision || 6) *
+          maxBurnable
+        ).toString(),
       };
 
       const coreumDotFunClient = new CoreumDotFunClient(
@@ -93,7 +91,7 @@ export const BurnTicketModal: React.FC = () => {
 
       const result = await coreumDotFunClient.burnTickets(
         {
-          numberOfTickets: burnCount.toString(),
+          numberOfTickets: maxBurnable.toString(),
         },
         fee,
         account.bech32Address,
@@ -102,7 +100,7 @@ export const BurnTicketModal: React.FC = () => {
       if (result.transactionHash) {
         setLastTxHash(result.transactionHash);
       }
-      setLastBurnCount(burnCount);
+      setLastBurnCount(maxBurnable);
       toast.success("Tickets burned successfully!", {
         id: "burn-tickets",
         icon: React.createElement("img", {
@@ -130,7 +128,7 @@ export const BurnTicketModal: React.FC = () => {
       dispatch(setIsTxExecuting(false));
     }
   }, [
-    burnCount,
+    maxBurnable,
     isConnected,
     dispatch,
     signingClient,
@@ -169,26 +167,7 @@ export const BurnTicketModal: React.FC = () => {
               height={24}
               className="mr-2"
             />
-            <label className="text-white">Number of tickets to burn</label>
-          </div>
-          <div className="grid grid-cols-5 gap-2">
-            {Array.from(
-              { length: Math.min(5, maxBurnable) },
-              (_, i) => i + 1
-            ).map((num) => (
-              <button
-                key={num}
-                onClick={() => handleBurnSelect(num)}
-                className={`py-2 rounded-lg ${
-                  burnCount === num
-                    ? "bg-primary text-white"
-                    : "bg-indigo-700/50 text-gray-300 hover:bg-indigo-600/80 ease-in-out duration-300"
-                }`}
-                disabled={num > maxBurnable}
-              >
-                {num}
-              </button>
-            ))}
+            <label className="text-white">Burn all your tickets</label>
           </div>
           <div className="mt-2 text-sm text-gray-400">
             <p>Tickets Owned: {maxBurnable}</p>
@@ -196,10 +175,10 @@ export const BurnTicketModal: React.FC = () => {
         </div>
         <button
           onClick={handleBurnTickets}
-          disabled={!isConnected || burnCount < 1 || burnCount > maxBurnable}
+          disabled={!isConnected || maxBurnable < 1}
           className="w-full py-4 bg-primary/80 hover:bg-primary rounded-lg font-medium text-white transition-colors"
         >
-          BURN {burnCount} TICKET{burnCount > 1 ? "S" : ""}
+          BURN {maxBurnable} TICKET{maxBurnable > 1 ? "S" : ""}
         </button>
       </div>
     </Modal>
