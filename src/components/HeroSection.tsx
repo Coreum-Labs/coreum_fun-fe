@@ -93,7 +93,8 @@ const HeroSection = () => {
   };
 
   const isBurnable =
-    draftState?.state === "UndelegationCompletedTokensCanBeBurned";
+    draftState?.undelegation_done_timestamp &&
+    draftState?.undelegation_done_timestamp * 1000 < Date.now();
 
   return (
     <section className="relative w-full py-8 sm:py-10 px-4 sm:px-6 lg:px-8">
@@ -158,7 +159,9 @@ const HeroSection = () => {
 
           {/* Podcast & Winner Selection Info */}
 
-          {draftState?.state === "WinnerSelectedUndelegationInProcess" && (
+          {(draftState?.state === "WinnerSelectedUndelegationInProcess" ||
+            draftState?.state === "UndelegationCompletedTokensCanBeBurned" ||
+            draftState?.state === "DrawFinished") && (
             <div className="flex flex-col items-center bg-indigo-900/50 rounded-xl px-3 sm:px-4 py-2 w-full max-w-xl mx-auto ">
               <img src={winner_shark.src} alt="Winner" className="w-40" />
               <span className="text-gray-200 text-base  font-semibold text-center">
@@ -182,37 +185,38 @@ const HeroSection = () => {
             </div>
           )}
 
-          {draftState?.state === "WinnerSelectedUndelegationInProcess" && (
-            <div className="flex flex-col items-center bg-indigo-900/50 rounded-xl px-3 sm:px-4 py-2 w-full max-w-xl mx-auto ">
-              <span className="text-gray-200 text-base  font-semibold text-center">
-                Token can be burned on:
-                <span className="ml-2 text-primary">
-                  {timeStampToDate(
-                    draftState?.undelegation_done_timestamp || 0
-                  )}
+          {draftState?.state === "WinnerSelectedUndelegationInProcess" ||
+            (draftState?.state === "UndelegationCompletedTokensCanBeBurned" && (
+              <div className="flex flex-col items-center bg-indigo-900/50 rounded-xl px-3 sm:px-4 py-2 w-full max-w-xl mx-auto ">
+                <span className="text-gray-200 text-base  font-semibold text-center">
+                  Token can be burned on:
+                  <span className="ml-2 text-primary">
+                    {timeStampToDate(
+                      draftState?.undelegation_done_timestamp || 0
+                    )}
+                  </span>
                 </span>
-              </span>
-              <button
-                onClick={() => handleOpenBurnTicketsModal()}
-                disabled={!isBurnable}
-                className={`relative group w-full sm:w-auto min-w-[240px] my-5 ${
-                  !isBurnable ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-secondary via-primary to-[#f6d447] rounded-lg blur-sm group-hover:blur-md transition-all duration-300 animate-background bg-[length:_400%_400%] [animation-duration:_6s]"></div>
-                <a
-                  href="#"
-                  className={`relative block rounded-lg bg-[#171b5e]/90 px-6 py-3 text-base font-semibold text-white text-center transition-all duration-300 ${
-                    isSoldOut
-                      ? "hover:bg-[#171b5e]/90"
-                      : "hover:bg-[#171b5e]/80 hover:scale-[1.02]"
+                <button
+                  onClick={() => handleOpenBurnTicketsModal()}
+                  disabled={!isBurnable}
+                  className={`relative group w-full sm:w-auto min-w-[240px] my-5 ${
+                    !isBurnable ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >
-                  Burn Tickets 🔥
-                </a>
-              </button>
-            </div>
-          )}
+                  <div className="absolute inset-0 bg-gradient-to-r from-secondary via-primary to-[#f6d447] rounded-lg blur-sm group-hover:blur-md transition-all duration-300 animate-background bg-[length:_400%_400%] [animation-duration:_6s]"></div>
+                  <a
+                    href="#"
+                    className={`relative block rounded-lg bg-[#171b5e]/90 px-6 py-3 text-base font-semibold text-white text-center transition-all duration-300 ${
+                      isSoldOut
+                        ? "hover:bg-[#171b5e]/90"
+                        : "hover:bg-[#171b5e]/80 hover:scale-[1.02]"
+                    }`}
+                  >
+                    Burn Tickets 🔥
+                  </a>
+                </button>
+              </div>
+            ))}
 
           {draftState?.state === "TicketsSoldOutAccumulationInProgress" && (
             <div className="flex flex-col items-center bg-indigo-900/50 rounded-xl px-3 sm:px-4 py-2 w-full max-w-xl mx-auto ">
@@ -265,25 +269,27 @@ const HeroSection = () => {
             </div>
           )}
 
-          {/* <button
-            onClick={handleOpenModal}
-            disabled={isSoldOut}
-            className={`relative group w-full sm:w-auto min-w-[240px] ${
-              isSoldOut ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-secondary via-primary to-[#f6d447] rounded-lg blur-sm group-hover:blur-md transition-all duration-300 animate-background bg-[length:_400%_400%] [animation-duration:_6s]"></div>
-            <a
-              href="#"
-              className={`relative block rounded-lg bg-[#171b5e]/90 px-6 py-3 text-base font-semibold text-white text-center transition-all duration-300 ${
-                isSoldOut
-                  ? "hover:bg-[#171b5e]/90"
-                  : "hover:bg-[#171b5e]/80 hover:scale-[1.02]"
+          {draftState?.state === "TicketSalesOpen" && (
+            <button
+              onClick={handleOpenModal}
+              disabled={isSoldOut}
+              className={`relative group w-full sm:w-auto min-w-[240px] ${
+                isSoldOut ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
-              {isSoldOut ? "Tickets Sold Out 🎫" : "BUY Ticket to WIN 🎉"}
-            </a>
-          </button> */}
+              <div className="absolute inset-0 bg-gradient-to-r from-secondary via-primary to-[#f6d447] rounded-lg blur-sm group-hover:blur-md transition-all duration-300 animate-background bg-[length:_400%_400%] [animation-duration:_6s]"></div>
+              <a
+                href="#"
+                className={`relative block rounded-lg bg-[#171b5e]/90 px-6 py-3 text-base font-semibold text-white text-center transition-all duration-300 ${
+                  isSoldOut
+                    ? "hover:bg-[#171b5e]/90"
+                    : "hover:bg-[#171b5e]/80 hover:scale-[1.02]"
+                }`}
+              >
+                {isSoldOut ? "Tickets Sold Out 🎫" : "BUY Ticket to WIN 🎉"}
+              </a>
+            </button>
+          )}
         </div>
       </div>
     </section>
