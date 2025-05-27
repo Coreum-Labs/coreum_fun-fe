@@ -125,7 +125,7 @@ const HeroSection = () => {
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center leading-tight">
             <span className="text-primary">Winner</span> Takes Home{" "}
             <span className="text-primary">
-              {Math.floor(Number(winner?.rewards) * 10 ** -6)} $COREUM!
+              {Math.floor(Number(winner?.rewards || 0) * 10 ** -6)} $COREUM!
             </span>
           </h1>
 
