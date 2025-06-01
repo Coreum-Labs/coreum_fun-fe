@@ -1,10 +1,15 @@
 # Coreum.fun: The No Loss Draft
 
 [![Website](https://img.shields.io/badge/Website-coreum.fun-blue)](https://coreum.fun)
+[![X](https://img.shields.io/badge/X-coreumfun-black)](https://x.com/Coreum_dot_fun)
+[![Workshop](https://img.shields.io/badge/Workshop-x.com-green)](https://x.com/helwan_mande/status/1924473913179824265)
+[![Medium](https://img.shields.io/badge/Medium-article-white)](https://medium.com/@coreumlabs/introducing-coreum-fun-ac28118771a9)
 
 This repository contains the code for the Coreum.fun website and Smart Contract - a simple and easy-to-understand implementation of a No Loss Draft on Coreum, leveraging the Coreum Orderbook DEX and Smart Tokens.
 
 ## 📋 Overview
+
+![coreum_fun](./hero_wide.png)
 
 ### 🎯 Why We Built This
 
@@ -90,6 +95,7 @@ Users can place orders with the following attributes:
   - `good_til_block_height` - max block height to execute the order, or it will be canceled.
   - `good_til_block_time` - max block time to execute the order, or it will be canceled.
 
+![trading_pairs](./trading.png)
 
 #### DEX Parameters
 
@@ -450,7 +456,30 @@ npm run dev
 
 #### Smart Contract Development
 
-TBD
+To work with the smart contract, you can use the provided shell scripts in this repository:
+
+- **Optimize the Contract:**
+  - Run `./optimize.sh` to optimize your smart contract before deployment.
+
+- **Instantiate the Contract:**
+  - Run `./instantiate.sh` to deploy and instantiate your contract on the blockchain.
+
+- **Interact with the Contract:**
+  - Use the following scripts for contract actions:
+    - `./buy_ticket.sh` – Buy tickets in the draft.
+    - `./burn_ticket.sh` – Burn tickets to reclaim your principal.
+    - `./add_bonus_reward.sh` – Add bonus rewards to the contract.
+    - `./select_winner_and_delegate.sh` – Select a winner and delegate rewards.
+    - `./send_funds.sh` and `./send_funds_to_winner.sh` – Send funds as needed.
+    - `./update_state.sh` – Update the contract state.
+    - `./migrate_contract.sh` – Migrate the contract if needed.
+
+> **Tip:** Each script is designed for a specific contract action. Open the script files to review any required arguments or environment variables before running them.
+
+---
+
+**The smart contract source code can be found here:**
+[@https://github.com/Coreum-Labs/coreum_fun-contract/](https://github.com/Coreum-Labs/coreum_fun-contract/)
 
 ## 📄 License
 
