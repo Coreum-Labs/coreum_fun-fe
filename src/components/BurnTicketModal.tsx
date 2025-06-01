@@ -25,6 +25,7 @@ import { toast } from "sonner";
 import { CoreumDotFunClient } from "../ts/CoreumDotFun.client";
 import { useEstimateTxGasFee } from "../hooks/useEstimateTxGasFee";
 import { Coin } from "@cosmjs/amino";
+import BurnTicketSuccessModal from "./BurnTicketSuccessModal";
 
 export const BurnTicketModal: React.FC = () => {
   const { data: account } = useAccount({ chainId: CHAIN_ID });
@@ -38,9 +39,10 @@ export const BurnTicketModal: React.FC = () => {
   const isBurnTicketModalOpen = useAppSelector(
     (state) => state.general.isBurnTicketModalOpen
   );
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [lastBurnCount, setLastBurnCount] = useState<number>(1);
   const [lastTxHash, setLastTxHash] = useState<string>();
+  const [lastAmount, setLastAmount] = useState<number>(0);
 
   const maxBurnable = Number(userTickets?.tickets || 0);
 
@@ -102,6 +104,7 @@ export const BurnTicketModal: React.FC = () => {
         setLastTxHash(result.transactionHash);
       }
       setLastBurnCount(maxBurnable);
+      setLastAmount(maxBurnable * 200); // 200 COREUM per ticket
       toast.success("Tickets burned successfully!", {
         id: "burn-tickets",
         icon: React.createElement("img", {
@@ -111,7 +114,7 @@ export const BurnTicketModal: React.FC = () => {
         }),
       });
       await Promise.all([refetchAll(), refetchBalances()]);
-      setIsSuccess(true);
+      setIsSuccessModalOpen(true);
       handleCloseModal();
     } catch (error) {
       console.error("Failed to burn tickets:", error);
@@ -143,64 +146,73 @@ export const BurnTicketModal: React.FC = () => {
   };
 
   return (
-    <Modal
-      isOpen={isBurnTicketModalOpen}
-      title={"BURN TICKETS"}
-      onClose={handleCloseModal}
-      wrapperClassName="w-[480px] bg-gray-700/90"
-    >
-      <div className="flex flex-col items-center">
-        <div className="mb-6">
-          <Image
-            src={dollorSign.src}
-            alt="Ticket"
-            width={120}
-            height={120}
-            className="mx-auto"
-          />
-        </div>
-        <div className="w-full mb-6">
-          <div className="flex items-center mb-2">
+    <>
+      <Modal
+        isOpen={isBurnTicketModalOpen}
+        title={"BURN TICKETS"}
+        onClose={handleCloseModal}
+        wrapperClassName="w-[480px] bg-gray-700/90"
+      >
+        <div className="flex flex-col items-center">
+          <div className="mb-6">
             <Image
-              src={ticketIcon.src}
+              src={dollorSign.src}
               alt="Ticket"
-              width={24}
-              height={24}
-              className="mr-2"
+              width={120}
+              height={120}
+              className="mx-auto"
             />
-            <label className="text-white">Burn all your tickets</label>
           </div>
-          <div className="mt-2 text-sm text-gray-400">
-            <p>Tickets Owned: {maxBurnable}</p>
-            <p className="mt-1 text-yellow-400">
-              Don't forget to cancel your orders
-            </p>
-            <div className="mt-2 flex items-center gap-2">
-              <span>You will get back:</span>
-              <div className="flex items-center gap-1">
-                <span className="text-primary font-semibold">
-                  {maxBurnable * 200}
-                </span>
-                <Image
-                  src={coreum_logo.src}
-                  alt="Coreum Logo"
-                  width={16}
-                  height={16}
-                  className="align-middle"
-                />
+          <div className="w-full mb-6">
+            <div className="flex items-center mb-2">
+              <Image
+                src={ticketIcon.src}
+                alt="Ticket"
+                width={24}
+                height={24}
+                className="mr-2"
+              />
+              <label className="text-white">Burn all your tickets</label>
+            </div>
+            <div className="mt-2 text-sm text-gray-400">
+              <p>Tickets Owned: {maxBurnable}</p>
+              <p className="mt-1 text-yellow-400">
+                Don't forget to cancel your orders
+              </p>
+              <div className="mt-2 flex items-center gap-2">
+                <span>You will get back:</span>
+                <div className="flex items-center gap-1">
+                  <span className="text-primary font-semibold">
+                    {maxBurnable * 200}
+                  </span>
+                  <Image
+                    src={coreum_logo.src}
+                    alt="Coreum Logo"
+                    width={16}
+                    height={16}
+                    className="align-middle"
+                  />
+                </div>
               </div>
             </div>
           </div>
+          <button
+            onClick={handleBurnTickets}
+            disabled={!isConnected || maxBurnable < 1}
+            className="w-full py-4 bg-primary/80 hover:bg-primary rounded-lg font-medium text-white transition-colors"
+          >
+            BURN {maxBurnable} TICKET{maxBurnable > 1 ? "S" : ""}
+          </button>
         </div>
-        <button
-          onClick={handleBurnTickets}
-          disabled={!isConnected || maxBurnable < 1}
-          className="w-full py-4 bg-primary/80 hover:bg-primary rounded-lg font-medium text-white transition-colors"
-        >
-          BURN {maxBurnable} TICKET{maxBurnable > 1 ? "S" : ""}
-        </button>
-      </div>
-    </Modal>
+      </Modal>
+      <BurnTicketSuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        ticketCount={lastBurnCount}
+        amount={lastAmount}
+        txHash={lastTxHash}
+      />
+    </>
   );
 };
 
