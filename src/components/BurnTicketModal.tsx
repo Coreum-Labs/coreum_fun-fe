@@ -10,6 +10,7 @@ import {
 import Image from "next/image";
 import ticketIcon from "../assets/ticket.webp";
 import dollorSign from "../../public/dollar_sign.gif";
+import coreum_logo from "../../public/coreum.svg";
 
 import {
   CHAIN_ID,
@@ -171,6 +172,24 @@ export const BurnTicketModal: React.FC = () => {
           </div>
           <div className="mt-2 text-sm text-gray-400">
             <p>Tickets Owned: {maxBurnable}</p>
+            <p className="mt-1 text-yellow-400">
+              Don't forget to cancel your orders
+            </p>
+            <div className="mt-2 flex items-center gap-2">
+              <span>You will get back:</span>
+              <div className="flex items-center gap-1">
+                <span className="text-primary font-semibold">
+                  {maxBurnable * 200}
+                </span>
+                <Image
+                  src={coreum_logo.src}
+                  alt="Coreum Logo"
+                  width={16}
+                  height={16}
+                  className="align-middle"
+                />
+              </div>
+            </div>
           </div>
         </div>
         <button
